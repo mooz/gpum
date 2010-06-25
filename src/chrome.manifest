@@ -1,0 +1,10 @@
+content	gmml	content/
+
+skin	gmml	classic/1.0	skin/classic/gmml/
+
+locale	gmml	en-US	locale/en-US/
+locale	gmml	ja	locale/ja/
+
+resource	gmml-modules	modules/
+
+overlay	chrome://browser/content/browser.xul	chrome://gmml/content/browser.xul

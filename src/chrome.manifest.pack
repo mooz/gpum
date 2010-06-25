@@ -1,0 +1,10 @@
+content	gmml	jar:chrome/gmml.jar!/content/gmml
+
+skin	gmml	classic/1.0	jar:chrome/gmml.jar!/skin/classic/gmml/
+
+locale	gmml	en-US	jar:chrome/gmml.jar!/locale/en-US/
+locale	gmml	ja	jar:chrome/gmml.jar!/locale/ja/
+
+resource	gmml-modules	modules/
+
+overlay	chrome://browser/content/browser.xul	chrome://gmml/content/browser.xul

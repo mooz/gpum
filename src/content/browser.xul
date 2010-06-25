@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css" ?>
+<?xml-stylesheet href="chrome://gmml/skin/css/popup.css" type="text/css" ?>
+<?xml-stylesheet href="chrome://gmml/skin/css/statusbar.css" type="text/css" ?>
+
+<!DOCTYPE dialog SYSTEM "chrome://gmml/locale/statusbar.dtd">
+
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <statusbar id="status-bar">
+        <statusbarpanel id="gmml-statusbar-panel" align="center" context="gmml-menu">
+            <hbox align="center" flex="1"
+                  onclick="gmml.handleStatusBarIconClick(event);" >
+                <image id="gmml-statusbar-icon"
+	               src="chrome://gmml/skin/icon16/gmail-blue.png" />
+                <label id="gmml-statusbar-count" flex="1" value="-"></label>
+            </hbox>
+        </statusbarpanel>
+
+        <hbox id="gmml-popup-container">
+            <panel id="gmml-popup" noautofocus="true" />
+        </hbox>
+    </statusbar>
+
+    <!-- ============================================================
+         Load Scripts
+         ============================================================ -->
+
+    <script type="application/x-javascript" src="chrome://gmml/content/gmml.js"/>
+
+</overlay>

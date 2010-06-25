@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+    <Description about="urn:mozilla:install-manifest">
+        <em:id>gmml@mooz.github.com</em:id>
+        <em:type>2</em:type>
+        <em:version>0.0.1</em:version>
+        <em:name>gmml</em:name>
+        <em:creator>mooz</em:creator>
+        <em:developer>mooz</em:developer>
+        <em:homepageURL>http://wiki.github.com/mooz/gmml/</em:homepageURL>
+        <em:optionsURL>chrome://gmml/content/preference.xul</em:optionsURL>
+        <em:iconURL>chrome://gmml/skin/icon32/gmml.png</em:iconURL>
+        <!-- en-US -->
+        <em:description>Gmail my lover</em:description>
+        <!-- ja -->
+        <em:localized>
+            <Description>
+                <em:locale>ja</em:locale>
+                <em:name>gmml</em:name>
+                <em:creator>mooz</em:creator>
+                <em:description>Gmail まいらば</em:description>
+                <em:homepageURL>http://wiki.github.com/mooz/gmml/</em:homepageURL>
+            </Description>
+        </em:localized>
+        <!-- Firefox -->
+        <em:targetApplication>
+            <Description>
+                <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+                <em:minVersion>3.0</em:minVersion>
+                <em:maxVersion>3.7a1pre</em:maxVersion>
+            </Description>
+        </em:targetApplication>
+    </Description>
+
+</RDF>
