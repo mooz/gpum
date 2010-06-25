@@ -50,62 +50,6 @@
      }
 
      // ============================================================ //
-
-     function appendEntry(cont, ent) {
-         let container = genElem("vbox");
-
-         // ============================================================ //
-
-         let header = genElem("hbox", { class : "gmml-popup-header"});
-
-         // author name
-         header.appendChild(createDescription("• " + ent.author.name, {
-                                                  class       : "gmml-popup-author",
-                                                  tooltiptext : ent.author.email
-                                              }));
-
-         container.appendChild(header);
-
-         container.appendChild(genElem("spacer"), { flex : 1 });
-
-         // ============================================================ //
-
-         let titleContainer = genElem("hbox", { class : "gmml-popup-title-container" });
-
-         let title = createDescription(ent.title, { class : "gmml-popup-title gmml-link" });
-         titleContainer.appendChild(title);
-
-         container.appendChild(titleContainer);
-
-         // ============================================================ //
-
-         let body = genElem("hbox");
-
-         body.appendChild(createDescription(ent.summary));
-
-         container.appendChild(body);
-
-         // ============================================================ //
-
-         cont.appendChild(container);
-
-         container.addEventListener("click", function (ev) {
-                                        if (ev.button !== 0)
-                                            return;
-
-                                        let target = ev.target;
-
-                                        switch (target) {
-                                        case body:
-                                            break;
-                                        case title:
-                                            let (url = ent.link.@href) util.visitLink(url);
-                                            break;
-                                        }
-                                    }, false);
-     }
-
-     // ============================================================ //
      // Initialization
      // ============================================================ //
 
@@ -128,14 +72,13 @@
              let icon  = $("gmml-statusbar-icon");
              let count = $("gmml-statusbar-count");
 
-             if (!(gmail = util.storage.gmail))
+             if ((gmail = util.storage.gmail))
              {
-                 gmail = util.storage.gmail = new Gmail(
-                     {
-                         // username : "foo@bar",
-                         // password : "foobar"
-                     }
-                 );
+                 handleUpdate();
+             }
+             else
+             {
+                 gmail = util.storage.gmail = new Gmail();
 
                  gmail.setupScheduler();
                  gmail.startScheduler(true);
@@ -156,6 +99,116 @@
                      icon.setAttribute("src", "chrome://gmml/skin/icon16/gmail.png");
                  else
                      icon.setAttribute("src", "chrome://gmml/skin/icon16/gmail-blue.png");
+             }
+
+             function appendEntry(cont, ent) {
+                 let container = genElem("vbox");
+
+                 container.__gmmlTagID__ = ent.id;
+
+                 // ============================================================ //
+
+                 let header = genElem("hbox", { id : "gmml-popup-header", align : "center" });
+
+                 let author = createDescription("• " + ent.author.name, {
+                                                    id          : "gmml-popup-author",
+                                                    tooltiptext : ent.author.email,
+                                                    class       : "gmml-link"
+                                                });
+                 header.appendChild(author);
+
+                 header.appendChild(genElem("spacer", { flex : 1 }));
+
+                 let markAsReadLink = createDescription(util.getLocaleString("markAsReadLink"), { class : "gmml-link" });
+                 let deleteLink     = createDescription(util.getLocaleString("deleteLink"), { class : "gmml-link" });
+                 let markAsSpamLink = createDescription(util.getLocaleString("markAsSpamLink"), { class : "gmml-link" });
+                 let archiveLink    = createDescription(util.getLocaleString("archiveLink"), { class : "gmml-link" });
+
+                 header.appendChild(markAsReadLink);
+                 header.appendChild(deleteLink);
+                 header.appendChild(markAsSpamLink);
+                 header.appendChild(archiveLink);
+
+                 container.appendChild(header);
+
+                 // ============================================================ //
+
+                 let titleContainer = genElem("hbox", { id : "gmml-popup-title-container", align : "center" });
+
+                 let star = genElem("spacer", { id : "gmml-popup-star", class : "gmml-popup-icon",
+                                                tooltiptext : util.getLocaleString("addStar") });
+                 titleContainer.appendChild(star);
+
+                 let title = createDescription(ent.title, { id: "gmml-popup-title", class : "gmml-link" });
+                 titleContainer.appendChild(title);
+
+                 container.appendChild(titleContainer);
+
+                 // ============================================================ //
+
+                 let body = genElem("hbox", { align : "center" });
+
+                 body.appendChild(createDescription(ent.summary));
+
+                 container.appendChild(body);
+
+                 // ============================================================ //
+
+                 cont.appendChild(container);
+
+                 let id = ent.link.@href.toString().replace(/.*message_id=([\d\w]+).*/, "$1");
+
+                 function openLink(url) {
+                     util.visitLink(url);
+                     popup.hidePopup();
+                 }
+
+                 function handleClick(ev) {
+                     if (ev.button !== 0)
+                         return;
+
+                     let target = ev.target;
+
+                     switch (target)
+                     {
+                     case author:
+                         openLink(gmail.getURLRecentFor(ent.author.email));
+                         break;
+                     case markAsReadLink:
+                         gmail.markAsReadThread(id);
+                         destruct();
+                         break;
+                     case deleteLink:
+                         gmail.deleteThread(id);
+                         destruct();
+                         break;
+                     case markAsSpamLink:
+                         gmail.spamThread(id);
+                         destruct();
+                         break;
+                     case archiveLink:
+                         gmail.archiveThread(id);
+                         destruct();
+                         break;
+                     case star:
+                         gmail.starThread(id);
+                         break;
+                     case title:
+                         openLink(ent.link.@href.toString());
+                         destruct();
+                         break;
+                     case body:
+                         break;
+                     }
+                 }
+
+                 function destruct() {
+                     container.removeEventListener("click", handleClick, false);
+                     gmail.removeFromUnreads(ent);
+                     cont.removeChild(container);
+                 }
+
+                 container.addEventListener("click", handleClick, false);
              }
 
              function clearEntries() {

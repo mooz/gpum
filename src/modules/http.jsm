@@ -115,6 +115,8 @@ const http = {
             "Connection"     : "close"
         };
 
+        util.message("post => " + params);
+
         return this.request("POST", url, callback, params, opts);
     }
 };

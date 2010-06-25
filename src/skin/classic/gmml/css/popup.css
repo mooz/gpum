@@ -1,9 +1,11 @@
 .gmml-link {
-    cursor : pointer;
+    cursor         : pointer;
+    padding-bottom : 1px;
 }
 
-gmml-link:hover {
-    text-decoration : underline;
+.gmml-link:hover {
+    padding-bottom  : 0px;
+    border-bottom   : 1px solid;
 }
 
 /* ============================================================
@@ -11,13 +13,14 @@ gmml-link:hover {
    ============================================================ */
 
 #gmml-popup {
+    border           : none;
     background-color : transparent;
 }
 
 #gmml-popup > vbox {
-    width              : 600px;
+    width              : 640px;
+    max-width          : 640px;
     height             : 400px;
-    max-width          : 600px;
     max-height         : 400px;
     overflow           : auto;
     background-color   : white;
@@ -29,28 +32,47 @@ gmml-link:hover {
 
 #gmml-popup description {
     font-size : 12px;
-    width     : 570px;
 }
 
-.gmml-popup-header {
+#gmml-popup-header {
     color      : white;
     background : -moz-linear-gradient(
         center bottom,
-        rgb(73,117,135) 47%,
-        rgb(111,155,168) 90%
+        rgb(56,82,92) 9%,
+        rgb(69,106,112) 41%
+        /* rgb(73,117,135) 47%, */
+        /* rgb(111,155,168) 90% */
     )
 }
 
-.gmml-popup-author {
+#gmml-popup-author {
     font-weight : bold;
 }
 
-.gmml-popup-title-container {
+#gmml-popup-title-container {
     border-bottom  : 1px dashed #2266b3;
     padding-bottom : 3px;
 }
 
-.gmml-popup-title {
+#gmml-popup-title {
     font-weight : bold;
+}
+
+.gmml-popup-icon {
+    background-repeat   : no-repeat;
+    background-position : center center;
+    width               : 16px;
+    height              : 16px;
+    margin              : 0 2px;
+}
+
+#gmml-popup-star {
+    cursor           : pointer;
+    opacity          : 0.5;
+    background-image : url("chrome://gmml/skin/icon16/star.png");
+}
+
+#gmml-popup-star:hover {
+    opacity : 1.0;
 }
 

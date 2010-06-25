@@ -76,18 +76,21 @@ function Gmail(args) {
 }
 
 Gmail.prototype = {
+    getURLRecentFor:
+    function getURLRecentFor(addr) {
+        let query = encodeURIComponent(util.format("from:(%s)+OR+to:(%s)", addr, addr));
+
+        return this.mailURL + "#search/" + query;
+    },
+
     processUnreads:
     function processUnreads(callback, onerror) {
         const self = this;
 
         let (reqURL = self.mailURL + "feed/atom" + self.atomLabel)
         {
-            // util.messageDebug("requesting :: " + reqURL);
-
             http.get(reqURL,
                      function (req) {
-                         // util.messageDebug("got response :: " + req.status);
-
                          if (req.status === 200)
                              callback(req);
                          else
@@ -102,11 +105,11 @@ Gmail.prototype = {
     },
 
     post:
-    function post(args) {
+    function post(args, next) {
         const self = this;
 
         if (!self.gmailAt)
-            self.getAt(function () { self.post(args); });
+            self.getAt(function () { self.post(args, next); });
         else
         {
             let threadID = args.threadID;
@@ -115,11 +118,10 @@ Gmail.prototype = {
             let postURL = self.mailURL.replace("http:", "https:");
             postURL += "h/" + Math.ceil(1000000 * Math.random()) + "/";
 
-            util.message(postURL);
+            util.message("threadID : " + threadID);
 
             http.post(postURL, function (req) {
-                          // refresh
-                          inspectObject(req);
+                          if (typeof next === "function") next(req);
                       },
                       {
                           t   : threadID,
@@ -133,7 +135,7 @@ Gmail.prototype = {
     function getAt(callback) {
         const self = this;
 
-        let getURL = mailURL + "h/" + Math.ceil(1000000 * Math.random()) + "/?ui=html&zy=c";
+        let getURL = self.mailURL + "h/" + Math.ceil(1000000 * Math.random()) + "/?ui=html&zy=c";
 
         http.get(getURL, function (req) {
                      let matches = req.responseText.match(/\?at=([^"]+)/);
@@ -147,6 +149,44 @@ Gmail.prototype = {
                              callback();
                      }
                  });
+    },
+
+    // ============================================================ //
+    // Actions
+    // ============================================================ //
+
+    markAsReadThread:
+    function markAsReadThread(threadID, next) {
+        this.post({ "threadID" : threadID, "action" : "rd" }, next);
+    },
+
+    markAsUnReadThread:
+    function markAsUnReadThread(threadID, next) {
+        this.post({ "threadID" : threadID, "action" : "ur" }, next);
+    },
+
+    archiveThread:
+    function archiveThread(threadID, next) {
+        this.post({ "threadID" : threadID, "action" : "arch" }, next);
+    },
+
+    deleteThread:
+    function deleteThread(threadID, next) {
+        const self = this;
+
+        self.post({ "threadID" : threadID, "action" : "rd" }, function () {
+                      self.post({ "threadID" : threadID, "action" : "tr" }, next);
+                  });
+    },
+
+    spamThread:
+    function spamThread(threadID, next) {
+        this.post({ "threadID" : threadID, "action" : "sp" }, next);
+    },
+
+    starThread:
+    function spamThread(threadID, next) {
+        this.post({ "threadID" : threadID, "action" : "st" }, next);
     },
 
     // ============================================================ //
@@ -228,6 +268,19 @@ Gmail.prototype = {
                 continue;
 
             self.unreads.push(entry);
+        }
+    },
+
+    removeFromUnreads:
+    function removeFromUnreads(unread) {
+        let pos;
+
+        if ((pos = this.unreads.indexOf(unread)) >= 0)
+        {
+            this.unreads.splice(pos, 1);
+            this.unreadCount = this.unreads.length;
+
+            this.dispatchEvents(this.registeredWindows);
         }
     },
 

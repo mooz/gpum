@@ -129,6 +129,29 @@ const util = {
         }
     },
 
+    // ============================================================ //
+    // i18n
+    // ============================================================ //
+
+    getLocaleString:
+    function getLocaleString(key, replace) {
+        try
+        {
+            if (replace)
+                return this.stringBundle.formatStringFromName(key, replace, replace.length);
+            else
+                return this.stringBundle.GetStringFromName(key);
+        }
+        catch (e)
+        {
+            return key;
+        }
+    },
+
+    // ============================================================ //
+    // Clipboard
+    // ============================================================ //
+
     clipboardSet:
     function clipboardSet(aText) {
         const { ss, trans, clipboard } = service;
@@ -272,6 +295,12 @@ const util = {
         return new XML(src);
     }
 };
+
+util.lazy(util, "stringBundle", function () {
+              const bundleURI = "chrome://gmml/locale/gmml.properties";
+              let bundleSvc = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService);
+              return bundleSvc.createBundle(bundleURI);
+          });
 
 const service = {};
 
