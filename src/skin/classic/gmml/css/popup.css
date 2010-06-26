@@ -14,6 +14,7 @@
    ============================================================ */
 
 #gmml-popup {
+    -moz-appearance  : none;
     border           : none;
     background-color : transparent;
 }
@@ -25,22 +26,21 @@
     max-height         : 400px;
     overflow           : auto;
     background-color   : white;
-    margin             : 5px;
-    -moz-border-radius : 3px;
     border             : 1px solid #2266b3;
     -moz-box-shadow    : 0px 0px 7px #353535;
 }
 
 #gmml-popup label {
     font-size : 12px;
+    text-decoration : underline;
 }
 
 #gmml-popup-header {
     color      : white;
     background : -moz-linear-gradient(
         center bottom,
-        rgb(56,82,92) 9%,
-        rgb(69,106,112) 41%
+        rgb(81,119,156) 0%,
+        rgb(125,148,171) 61%
     )
 }
 
@@ -53,7 +53,14 @@
     padding-bottom : 3px;
 }
 
+#gmml-popup-summary {
+    width       : 565px;
+    max-width   : 565px;
+}
+
 #gmml-popup-title {
+    width       : 565px;
+    max-width   : 565px;
     font-weight : bold;
 }
 
