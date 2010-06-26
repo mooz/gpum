@@ -277,7 +277,7 @@ Gmail.prototype = {
             if (self.unreads.some(function (senior) id === senior.id.text().toString()))
                 continue;
 
-            self.unreads.push(entry);
+            self.unreads.unshift(entry);
         }
     },
 
