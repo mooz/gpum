@@ -225,7 +225,7 @@
 
                  function destruct() {
                      entryContainer.removeEventListener("click", handleClick, false);
-                     gmail.removeFromUnreads(entry);
+                     gmail.removeFromUnreads(unread);
                      scrollBox.removeChild(entryContainer);
                  }
 
