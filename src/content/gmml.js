@@ -96,10 +96,21 @@
              let unreadContainer = genElem("vbox", { flex : 1 });
              popup.appendChild(unreadContainer);
 
+             // ============================================================ //
+
              let title = genElem("hbox", { id : "gmml-popup-title" });
 
-             let inboxIcon = createIcon("gmml-popup-icon-inbox");
-             title.appendChild(inboxIcon);
+             // let inboxIcon = createIcon("gmml-popup-icon-inbox");
+             // title.appendChild(inboxIcon);
+
+             let composeMailIcon = createIcon("gmml-popup-icon-compose", util.getLocaleString("composeMail"));
+             title.appendChild(composeMailIcon);
+
+             composeMailIcon.addEventListener("click", function (ev) {
+                                             if (ev.button !== 0)
+                                                 return;
+                                             openLink(gmail.composeURL);
+                                         }, false);
 
              let inboxLabel = createDescription("", { class : "gmml-link" });
              title.appendChild(inboxLabel);
@@ -192,7 +203,7 @@
 
                  let bodyContainer = genElem("hbox", { align : "center" });
 
-                 let summary = createDescription(entry.summary);
+                 let summary = createDescription(entry.summary, { class : "gmml-popup-summary" });
 
                  bodyContainer.appendChild(summary);
 

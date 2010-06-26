@@ -93,9 +93,21 @@
     cursor              : pointer;
 }
 
+/* ============================================================
+   Icons
+   ============================================================ */
+
 .gmml-popup-icon-inbox {
     background-image : url("chrome://gmml/skin/icon16/gmail.png");
 }
+
+.gmml-popup-icon-compose {
+    background-image : url("chrome://gmml/skin/icon16/email_edit.png");
+}
+
+/* ============================================================
+   Icons for each entry
+   ============================================================ */
 
 .gmml-popup-star {
     opacity          : 0.5;

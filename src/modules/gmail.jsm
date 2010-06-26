@@ -79,6 +79,7 @@ function Gmail(args) {
 }
 
 Gmail.prototype = {
+    get composeURL() this.mailURL + "#compose",
     get simpleModeURL() this.mailURL + "h/" + ~~(1000000 * Math.random()) + "/",
 
     getURLRecentFor:
