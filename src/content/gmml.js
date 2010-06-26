@@ -41,7 +41,7 @@
      }
 
      function createDescription(msg, attr) {
-         let description = genElem("description", attr);
+         let description = genElem("label", attr);
          let textNode    = document.createTextNode(msg);
 
          description.appendChild(textNode);
@@ -101,10 +101,10 @@
                      icon.setAttribute("src", "chrome://gmml/skin/icon16/gmail-blue.png");
              }
 
-             function appendEntry(cont, ent) {
-                 let container = genElem("vbox");
+             function appendEntry(scrollBox, ent) {
+                 let entryContainer = genElem("vbox");
 
-                 container.__gmmlTagID__ = ent.id;
+                 entryContainer.__gmmlTagID__ = ent.id;
 
                  // ============================================================ //
 
@@ -129,7 +129,7 @@
                  header.appendChild(markAsSpamLink);
                  header.appendChild(archiveLink);
 
-                 container.appendChild(header);
+                 entryContainer.appendChild(header);
 
                  // ============================================================ //
 
@@ -142,19 +142,23 @@
                  let title = createDescription(ent.title, { id: "gmml-popup-title", class : "gmml-link" });
                  titleContainer.appendChild(title);
 
-                 container.appendChild(titleContainer);
+                 titleContainer.appendChild(genElem("spacer", { flex : 1 }));
+
+                 entryContainer.appendChild(titleContainer);
 
                  // ============================================================ //
 
-                 let body = genElem("hbox", { align : "center" });
+                 let bodyContainer = genElem("hbox", { align : "center" });
 
-                 body.appendChild(createDescription(ent.summary));
+                 let summary = createDescription(ent.summary);
 
-                 container.appendChild(body);
+                 bodyContainer.appendChild(summary);
+
+                 entryContainer.appendChild(bodyContainer);
 
                  // ============================================================ //
 
-                 cont.appendChild(container);
+                 scrollBox.appendChild(entryContainer);
 
                  let id = ent.link.@href.toString().replace(/.*message_id=([\d\w]+).*/, "$1");
 
@@ -168,6 +172,8 @@
                          return;
 
                      let target = ev.target;
+
+                     util.killEvent(ev);
 
                      switch (target)
                      {
@@ -197,18 +203,21 @@
                          openLink(ent.link.@href.toString());
                          destruct();
                          break;
-                     case body:
+                     case summary:
+                         gmail.getThreadBody(id, function (body) {
+
+                                             });
                          break;
                      }
                  }
 
                  function destruct() {
-                     container.removeEventListener("click", handleClick, false);
+                     entryContainer.removeEventListener("click", handleClick, false);
                      gmail.removeFromUnreads(ent);
-                     cont.removeChild(container);
+                     scrollBox.removeChild(entryContainer);
                  }
 
-                 container.addEventListener("click", handleClick, false);
+                 entryContainer.addEventListener("click", handleClick, false);
              }
 
              function clearEntries() {

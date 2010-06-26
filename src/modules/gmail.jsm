@@ -76,6 +76,8 @@ function Gmail(args) {
 }
 
 Gmail.prototype = {
+    get simpleModeURL() this.mailURL + "h/" + ~~(1000000 * Math.random()) + "/",
+
     getURLRecentFor:
     function getURLRecentFor(addr) {
         let query = encodeURIComponent(util.format("from:(%s)+OR+to:(%s)", addr, addr));
@@ -115,10 +117,7 @@ Gmail.prototype = {
             let threadID = args.threadID;
             let action   = args.action;
 
-            let postURL = self.mailURL.replace("http:", "https:");
-            postURL += "h/" + Math.ceil(1000000 * Math.random()) + "/";
-
-            util.message("threadID : " + threadID);
+            let postURL = this.simpleModeURL.replace("^http:", "https:");
 
             http.post(postURL, function (req) {
                           if (typeof next === "function") next(req);
@@ -135,7 +134,7 @@ Gmail.prototype = {
     function getAt(callback) {
         const self = this;
 
-        let getURL = self.mailURL + "h/" + Math.ceil(1000000 * Math.random()) + "/?ui=html&zy=c";
+        let getURL = this.simpleModeURL + "?ui=html&zy=c";
 
         http.get(getURL, function (req) {
                      let matches = req.responseText.match(/\?at=([^"]+)/);
@@ -143,7 +142,6 @@ Gmail.prototype = {
                      if (matches && matches.length > 0)
                      {
                          self.gmailAt = matches[1];
-                         util.message(self.gmailAt);
 
                          if (typeof callback === "function")
                              callback();
@@ -189,6 +187,18 @@ Gmail.prototype = {
         this.post({ "threadID" : threadID, "action" : "st" }, next);
     },
 
+    getThreadBody:
+    function getThreadBody(threadID, next) {
+        const self = this;
+
+        let getURL = this.simpleModeURL + "?v=pt&th=" + threadID;
+
+        http.get(getURL, function (req) {
+                     if (typeof next === "function")
+                         next(threadID, req.responseText);
+                 });
+    },
+
     // ============================================================ //
     // Scheduler
     // ============================================================ //
@@ -213,7 +223,7 @@ Gmail.prototype = {
             function (req) {
                 // success
                 let src = req.responseText;
-                src = src.replace(/xmlns=".*"/, "");
+                src = src.replace(/xmlns="[^"]*"/, "");
                 let xml = util.createXML(src);
 
                 self.updateUnreads(xml);

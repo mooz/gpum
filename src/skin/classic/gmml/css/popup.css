@@ -1,6 +1,7 @@
 .gmml-link {
     cursor         : pointer;
     padding-bottom : 1px;
+    padding-top    : 2px;
 }
 
 .gmml-link:hover {
@@ -30,7 +31,7 @@
     -moz-box-shadow    : 0px 0px 7px #353535;
 }
 
-#gmml-popup description {
+#gmml-popup label {
     font-size : 12px;
 }
 
@@ -40,8 +41,6 @@
         center bottom,
         rgb(56,82,92) 9%,
         rgb(69,106,112) 41%
-        /* rgb(73,117,135) 47%, */
-        /* rgb(111,155,168) 90% */
     )
 }
 
