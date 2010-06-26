@@ -36,6 +36,25 @@
     text-decoration : underline;
 }
 
+/* ============================================================
+   Title
+   ============================================================ */
+
+#gmml-popup-title {
+    border             : 1px solid #2266b3;
+    -moz-border-radius : 4px;
+    padding            : 3px 3px;
+    margin             : 4px;
+}
+
+#gmml-popup-title > label {
+    font-weight : bold;
+}
+
+/* ============================================================
+   Each entry
+   ============================================================ */
+
 .gmml-popup-header {
     color      : white;
     background : -moz-linear-gradient(
@@ -72,6 +91,10 @@
     height              : 16px;
     margin              : 0 2px;
     cursor              : pointer;
+}
+
+.gmml-popup-icon-inbox {
+    background-image : url("chrome://gmml/skin/icon16/gmail.png");
 }
 
 .gmml-popup-star {

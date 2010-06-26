@@ -93,6 +93,35 @@
              gmail.registerWindow(window);
              document.addEventListener(gmail.UPDATE_EVENT, handleUpdate, false);
 
+             let unreadContainer = genElem("vbox", { flex : 1 });
+             popup.appendChild(unreadContainer);
+
+             let title = genElem("hbox", { id : "gmml-popup-title" });
+
+             let inboxIcon = createIcon("gmml-popup-icon-inbox");
+             title.appendChild(inboxIcon);
+
+             let inboxLabel = createDescription("", { class : "gmml-link" });
+             title.appendChild(inboxLabel);
+
+             inboxLabel.addEventListener("click", function (ev) {
+                                             if (ev.button !== 0)
+                                                 return;
+                                             openLink(gmail.xml.link.@href.toString());
+                                         }, false);
+
+             unreadContainer.appendChild(title);
+
+             // ============================================================ //
+
+             let scrollBox = genElem("vbox", { flex : 1 });
+             unreadContainer.appendChild(scrollBox);
+
+             function openLink(url) {
+                 util.visitLink(url);
+                 popup.hidePopup();
+             }
+
              function handleUpdate() {
                  let unreadCount = gmail.unreadCount;
 
@@ -111,8 +140,6 @@
                  let entry = unread.entry;
 
                  let entryContainer = genElem("vbox");
-
-                 entryContainer.__gmmlTagID__ = entry.id;
 
                  // ============================================================ //
 
@@ -177,14 +204,16 @@
 
                  let id = entry.link.@href.toString().replace(/.*message_id=([\d\w]+).*/, "$1");
 
-                 function openLink(url) {
-                     util.visitLink(url);
-                     popup.hidePopup();
-                 }
-
                  function handleClick(ev) {
                      if (ev.button !== 0)
+                     {
+                         window.openDialog("chrome://gmml/content/account-manager.xul",
+                                           "AccountManager",
+                                           "chrome,titlebar,toolbar,centerscreen,resizable,scrollbars",
+                                           "GmmlAccountManager");
+
                          return;
+                     }
 
                      let target = ev.target;
 
@@ -224,16 +253,22 @@
                  }
 
                  function destruct() {
-                     entryContainer.removeEventListener("click", handleClick, false);
                      gmail.removeFromUnreads(unread);
+                     removeNode();
+                 }
+
+                 function removeNode() {
+                     entryContainer.removeEventListener("click", handleClick, false);
                      scrollBox.removeChild(entryContainer);
                  }
+
+                 entryContainer.__gmmlDestroy__ = removeNode;
 
                  entryContainer.addEventListener("click", handleClick, false);
              }
 
              function clearEntries() {
-                 util.removeAllChilds(popup);
+                 Array.map(scrollBox.childNodes, function (e) e.__gmmlDestroy__).forEach(function (f) f && f());
              }
 
              window.gmml = {
@@ -245,10 +280,11 @@
                      util.killEvent(ev);
 
                      clearEntries();
-                     let scrollBox = genElem("vbox", { flex : 1 });
+
                      for each (let unread in gmail.unreads)
                          appendEntry(scrollBox, unread);
-                     popup.appendChild(scrollBox);
+
+                     inboxLabel.textContent = gmail.xml.title.text().toString().replace(/^Gmail - /, "");
 
                      popup.openPopup(icon, "start_after", 0, 0, false, false);
                  },

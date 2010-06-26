@@ -45,17 +45,17 @@ function Gmail(args) {
 
     let inboxLabel, atomLabel, unreadLabel;
 
-    if (true)
-    {
-        inboxLabel  = "#inbox";
-        unreadLabel = "#inbox";
-        atomLabel   = "";
-    }
-    else
+    if (args.checkAllMail)
     {
         inboxLabel  = "#all";
         unreadLabel = "#search/l:unread";
         atomLabel   = "unread";
+    }
+    else
+    {
+        inboxLabel  = "#inbox";
+        unreadLabel = "#inbox";
+        atomLabel   = "";
     }
 
     // export
@@ -113,8 +113,12 @@ Gmail.prototype = {
     function post(args, next) {
         const self = this;
 
-        if (!self.gmailAt)
+        function refreshAtCode() {
             self.getAt(function () { self.post(args, next); });
+        }
+
+        if (!self.gmailAt)
+            refreshAtCode();
         else
         {
             let threadID = args.threadID;
@@ -123,7 +127,9 @@ Gmail.prototype = {
             let postURL = this.simpleModeURL.replace("^http:", "https:");
 
             http.post(postURL, function (req) {
-                          if (typeof next === "function") next(req);
+                          if (req.status !== 200)
+                              refreshAtCode();
+                          else if (typeof next === "function") next(req);
                       },
                       {
                           t   : threadID,
@@ -231,6 +237,8 @@ Gmail.prototype = {
 
                 self.updateUnreads(xml);
                 self.dispatchEvents(self.registeredWindows);
+
+                self.xml = xml;
             },
             function (req) {
                 // error
@@ -273,6 +281,8 @@ Gmail.prototype = {
 
         self.unreadCount = Number(xml.fullcount);
 
+        self.updatedUnreads = [];
+
         for each (let entry in xml.entry)
         {
             let id = entry.id.toString();
@@ -293,14 +303,15 @@ Gmail.prototype = {
                     if (modified >= unreads[i].time)
                     {
                         unreads.splice(i, 0, unread);
+                        self.updatedUnreads.push(unread);
                         break;
                     }
                     else if (i === len - 1)
-                        unreads.push(unread);
+                        unreads.push(unread), self.updatedUnreads.push(unread);
                 }
             }
             else
-                unreads.push(unread);
+                unreads.push(unread), self.updatedUnreads.push(unread);
         }
     },
 
@@ -311,7 +322,7 @@ Gmail.prototype = {
         if ((pos = this.unreads.indexOf(unread)) >= 0)
         {
             this.unreads.splice(pos, 1);
-            this.unreadCount = this.unreads.length;
+            this.unreadCount--;
 
             this.dispatchEvents(this.registeredWindows);
         }

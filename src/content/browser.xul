@@ -18,6 +18,13 @@
             </hbox>
         </statusbarpanel>
 
+        <menupopup id="gmml-context-menu" onpopupshowing="gmml.updateContextMenu();">
+	    <menuitem id="gmml-menu-test"
+                      label="foo"
+		      oncommand="KeySnail.UserScript.reload();" />
+            <menuseparator/>
+        </menupopup>
+
         <hbox id="gmml-popup-container">
             <panel id="gmml-popup" noautofocus="true" />
         </hbox>
