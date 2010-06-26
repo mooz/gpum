@@ -4,10 +4,11 @@
  * @author mooz <stillpedant@gmail.com>
  * @license The MIT License
  * @requires util.jsm
- * @requires http.js
+ * @requires http.jsm
+ * @requires ISO8601DateUtils.jsm
  */
 
-const EXPORTED_SYMBOLS = ["Gmail", "gmail"];
+const EXPORTED_SYMBOLS = ["Gmail"];
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
@@ -19,7 +20,7 @@ function loadScript(path, context) {
 function loadModule(name, context) {
     context = context || this;
 
-    let path = "resource://gmml-modules/" + name;
+    let path = name.indexOf("://") >= 0 ? name : "resource://gmml-modules/" + name;
 
     try {
         if (name.lastIndexOf(".jsm") !== -1)
@@ -31,6 +32,8 @@ function loadModule(name, context) {
 
 loadModule("util.jsm");
 loadModule("http.jsm");
+
+loadModule("resource://gre/modules/ISO8601DateUtils.jsm");
 
 function Gmail(args) {
     args = args || {};
@@ -272,12 +275,32 @@ Gmail.prototype = {
 
         for each (let entry in xml.entry)
         {
-            let id = entry.id.text().toString();
+            let id = entry.id.toString();
 
-            if (self.unreads.some(function (senior) id === senior.id.text().toString()))
+            if (self.unreads.some(function (senior) id === senior.entry.id.toString()))
                 continue;
 
-            self.unreads.unshift(entry);
+            let modified = ISO8601DateUtils.parse(entry.modified.toString());
+            let unread   = { entry : entry, time : modified };
+
+            let unreads = self.unreads;
+            let len     = unreads.length;
+
+            if (len > 0)
+            {
+                for (let i = 0; i < len; ++i)
+                {
+                    if (modified >= unreads[i].time)
+                    {
+                        unreads.splice(i, 0, unread);
+                        break;
+                    }
+                    else if (i === len - 1)
+                        unreads.push(unread);
+                }
+            }
+            else
+                unreads.push(unread);
         }
     },
 
