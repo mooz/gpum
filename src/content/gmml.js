@@ -49,6 +49,12 @@
          return description;
      }
 
+     function createIcon(cls, tooltiptext) {
+         return genElem("spacer", { class       : "gmml-popup-icon" + " " + cls,
+                                    tooltiptext : tooltiptext || ""
+                                  });
+     }
+
      // ============================================================ //
      // Initialization
      // ============================================================ //
@@ -101,45 +107,54 @@
                      icon.setAttribute("src", "chrome://gmml/skin/icon16/gmail-blue.png");
              }
 
-             function appendEntry(scrollBox, ent) {
+             function appendEntry(scrollBox, unread) {
+                 let entry = unread.entry;
+
                  let entryContainer = genElem("vbox");
 
-                 entryContainer.__gmmlTagID__ = ent.id;
+                 entryContainer.__gmmlTagID__ = entry.id;
 
                  // ============================================================ //
 
-                 let header = genElem("hbox", { id : "gmml-popup-header", align : "center" });
+                 let header = genElem("hbox", { class : "gmml-popup-header", align : "center" });
 
-                 let author = createDescription("• " + ent.author.name, {
-                                                    id          : "gmml-popup-author",
-                                                    tooltiptext : ent.author.email,
-                                                    class       : "gmml-link"
+                 let author = createDescription("• " + entry.author.name, {
+                                                    class       : "gmml-popup-author gmml-link",
+                                                    tooltiptext : entry.author.email
                                                 });
                  header.appendChild(author);
 
                  header.appendChild(genElem("spacer", { flex : 1 }));
 
-                 let markAsReadLink = createDescription(util.getLocaleString("markAsReadLink"), { class : "gmml-link" });
-                 let deleteLink     = createDescription(util.getLocaleString("deleteLink"), { class : "gmml-link" });
-                 let markAsSpamLink = createDescription(util.getLocaleString("markAsSpamLink"), { class : "gmml-link" });
-                 let archiveLink    = createDescription(util.getLocaleString("archiveLink"), { class : "gmml-link" });
+                 let modifiedLabel  = createDescription(unread.time.toLocaleDateString(), {
+                                                            tooltiptext : unread.time.toString()
+                                                        });
+                 header.appendChild(modifiedLabel);
 
-                 header.appendChild(markAsReadLink);
-                 header.appendChild(deleteLink);
-                 header.appendChild(markAsSpamLink);
-                 header.appendChild(archiveLink);
+                 let actionIconContainer = genElem("hbox", { class : "gmml-popup-action-icon-container", align : "center" });
+
+                 let markAsReadLink = createIcon("gmml-popup-icon-markread", util.getLocaleString("markAsReadLink"));
+                 let deleteLink     = createIcon("gmml-popup-icon-delete", util.getLocaleString("deleteLink"));
+                 let markAsSpamLink = createIcon("gmml-popup-icon-markspam", util.getLocaleString("markAsSpamLink"));
+                 let archiveLink    = createIcon("gmml-popup-icon-archive", util.getLocaleString("archiveLink"));
+
+                 actionIconContainer.appendChild(markAsReadLink);
+                 actionIconContainer.appendChild(deleteLink);
+                 actionIconContainer.appendChild(markAsSpamLink);
+                 actionIconContainer.appendChild(archiveLink);
+
+                 header.appendChild(actionIconContainer);
 
                  entryContainer.appendChild(header);
 
                  // ============================================================ //
 
-                 let titleContainer = genElem("hbox", { id : "gmml-popup-title-container", align : "center" });
+                 let titleContainer = genElem("hbox", { class : "gmml-popup-title-container", align : "center" });
 
-                 let star = genElem("spacer", { id : "gmml-popup-star", class : "gmml-popup-icon",
-                                                tooltiptext : util.getLocaleString("addStar") });
+                 let star = createIcon("gmml-popup-star", util.getLocaleString("addStar"));
                  titleContainer.appendChild(star);
 
-                 let title = createDescription(ent.title, { id: "gmml-popup-title", class : "gmml-link" });
+                 let title = createDescription(entry.title, { class : "gmml-popup-title gmml-link" });
                  titleContainer.appendChild(title);
 
                  titleContainer.appendChild(genElem("spacer", { flex : 1 }));
@@ -150,7 +165,7 @@
 
                  let bodyContainer = genElem("hbox", { align : "center" });
 
-                 let summary = createDescription(ent.summary);
+                 let summary = createDescription(entry.summary);
 
                  bodyContainer.appendChild(summary);
 
@@ -160,7 +175,7 @@
 
                  scrollBox.appendChild(entryContainer);
 
-                 let id = ent.link.@href.toString().replace(/.*message_id=([\d\w]+).*/, "$1");
+                 let id = entry.link.@href.toString().replace(/.*message_id=([\d\w]+).*/, "$1");
 
                  function openLink(url) {
                      util.visitLink(url);
@@ -178,7 +193,7 @@
                      switch (target)
                      {
                      case author:
-                         openLink(gmail.getURLRecentFor(ent.author.email));
+                         openLink(gmail.getURLRecentFor(entry.author.email));
                          break;
                      case markAsReadLink:
                          gmail.markAsReadThread(id);
@@ -200,20 +215,17 @@
                          gmail.starThread(id);
                          break;
                      case title:
-                         openLink(ent.link.@href.toString());
+                         openLink(entry.link.@href.toString());
                          destruct();
                          break;
                      case summary:
-                         gmail.getThreadBody(id, function (body) {
-
-                                             });
                          break;
                      }
                  }
 
                  function destruct() {
                      entryContainer.removeEventListener("click", handleClick, false);
-                     gmail.removeFromUnreads(ent);
+                     gmail.removeFromUnreads(entry);
                      scrollBox.removeChild(entryContainer);
                  }
 
@@ -233,10 +245,10 @@
                      util.killEvent(ev);
 
                      clearEntries();
-                     let cont = genElem("vbox", { flex : 1 });
-                     for each (let ent in gmail.unreads)
-                         appendEntry(cont, ent);
-                     popup.appendChild(cont);
+                     let scrollBox = genElem("vbox", { flex : 1 });
+                     for each (let unread in gmail.unreads)
+                         appendEntry(scrollBox, unread);
+                     popup.appendChild(scrollBox);
 
                      popup.openPopup(icon, "start_after", 0, 0, false, false);
                  },
