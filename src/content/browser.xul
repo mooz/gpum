@@ -9,7 +9,7 @@
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <statusbar id="status-bar">
-        <statusbarpanel id="gmml-statusbar-panel" align="center" context="gmml-menu">
+        <statusbarpanel id="gmml-statusbar-panel" align="center" context="gmml-context-menu">
             <hbox align="center" flex="1"
                   onclick="gmml.handleStatusBarIconClick(event);" >
                 <image id="gmml-statusbar-icon"
@@ -19,10 +19,13 @@
         </statusbarpanel>
 
         <menupopup id="gmml-context-menu" onpopupshowing="gmml.updateContextMenu();">
-	    <menuitem id="gmml-menu-test"
-                      label="foo"
-		      oncommand="KeySnail.UserScript.reload();" />
+	    <menuitem id="gmml-menu-check-mail"
+                      label="Check mail now"
+		      oncommand="gmml.checkMailNow();" />
             <menuseparator/>
+	    <menuitem id="gmml-menu-open-settings"
+                      label="Settings"
+		      oncommand="gmml.openSettings();" />
         </menupopup>
 
         <hbox id="gmml-popup-container">

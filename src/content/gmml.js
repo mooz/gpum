@@ -103,6 +103,11 @@
              // let inboxIcon = createIcon("gmml-popup-icon-inbox");
              // title.appendChild(inboxIcon);
 
+             let inboxLabel = createDescription("", { class : "gmml-link" });
+             title.appendChild(inboxLabel);
+
+             title.appendChild(genElem("spacer", { flex : 1 }));
+
              let composeMailIcon = createIcon("gmml-popup-icon-compose", util.getLocaleString("composeMail"));
              title.appendChild(composeMailIcon);
 
@@ -111,9 +116,6 @@
                                                  return;
                                              openLink(gmail.composeURL);
                                          }, false);
-
-             let inboxLabel = createDescription("", { class : "gmml-link" });
-             title.appendChild(inboxLabel);
 
              inboxLabel.addEventListener("click", function (ev) {
                                              if (ev.button !== 0)
@@ -128,23 +130,38 @@
              let scrollBox = genElem("vbox", { flex : 1 });
              unreadContainer.appendChild(scrollBox);
 
-             function openLink(url) {
-                 util.visitLink(url);
-                 popup.hidePopup();
+             function handleUpdate(ev) {
+                 updateStatusbarCount();
              }
 
-             function handleUpdate() {
+             function openLink(url, cont) {
+                 util.visitLink(url);
+                 if (!cont)
+                     popup.hidePopup();
+             }
+
+             function updateStatusbarCount() {
                  let unreadCount = gmail.unreadCount;
 
                  count.setAttribute("value", unreadCount);
-                 setIconStatus();
+                 refreshIconColor();
              }
 
-             function setIconStatus() {
+             function refreshIconColor() {
                  if (gmail.unreadCount > 0)
                      icon.setAttribute("src", "chrome://gmml/skin/icon16/gmail.png");
                  else
                      icon.setAttribute("src", "chrome://gmml/skin/icon16/gmail-blue.png");
+             }
+
+             function refreshStatusbarIcon(loading) {
+                 if (loading)
+                 {
+                     icon.setAttribute("src", "chrome://gmml/skin/icon16/loading.png");
+                     count.setAttribute("value", "");
+                 }
+                 else
+                     updateStatusbarCount();
              }
 
              function appendEntry(scrollBox, unread) {
@@ -217,14 +234,7 @@
 
                  function handleClick(ev) {
                      if (ev.button !== 0)
-                     {
-                         window.openDialog("chrome://gmml/content/account-manager.xul",
-                                           "AccountManager",
-                                           "chrome,titlebar,toolbar,centerscreen,resizable,scrollbars",
-                                           "GmmlAccountManager");
-
                          return;
-                     }
 
                      let target = ev.target;
 
@@ -237,33 +247,33 @@
                          break;
                      case markAsReadLink:
                          gmail.markAsReadThread(id);
-                         destruct();
+                         destroy();
                          break;
                      case deleteLink:
                          gmail.deleteThread(id);
-                         destruct();
+                         destroy();
                          break;
                      case markAsSpamLink:
                          gmail.spamThread(id);
-                         destruct();
+                         destroy();
                          break;
                      case archiveLink:
                          gmail.archiveThread(id);
-                         destruct();
+                         destroy();
                          break;
                      case star:
                          gmail.starThread(id);
                          break;
                      case title:
                          openLink(entry.link.@href.toString());
-                         destruct();
+                         destroy();
                          break;
                      case summary:
                          break;
                      }
                  }
 
-                 function destruct() {
+                 function destroy() {
                      gmail.removeFromUnreads(unread);
                      removeNode();
                  }
@@ -283,9 +293,37 @@
              }
 
              window.gmml = {
+                 _nowChecking: false,
+                 set nowChecking(v) {
+                     refreshStatusbarIcon(v);
+                     this._nowChecking = v;
+                 },
+                 get nowChecking() this._nowChecking,
+
+                 checkMailNow:
+                 function refreshMail() {
+                     const self = this;
+
+                     this.nowChecking = true;
+
+                     gmail.processUnreads(
+                         function (req) {
+                             inspectObject(req.getAllResponseHeaders().split(/\r?\n/));
+                             self.nowChecking = false;
+                             gmail.processResponse(req);
+                         },
+                         function (req) {
+                             self.nowChecking = false;
+                         }
+                     );
+                 },
+
                  handleStatusBarIconClick:
                  function handleStatusBarIconClick(ev) {
                      if (ev.button !== 0)
+                         return;
+
+                     if (this.nowChecking)
                          return;
 
                      util.killEvent(ev);

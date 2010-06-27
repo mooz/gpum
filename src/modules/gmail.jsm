@@ -43,30 +43,13 @@ function Gmail(args) {
 
     let mailURL = protocol + base + (args.domain ? "/a/" + args.domain + "/" : "/mail/");
 
-    let inboxLabel, atomLabel, unreadLabel;
-
-    if (args.checkAllMail)
-    {
-        inboxLabel  = "#all";
-        unreadLabel = "#search/l:unread";
-        atomLabel   = "unread";
-    }
-    else
-    {
-        inboxLabel  = "#inbox";
-        unreadLabel = "#inbox";
-        atomLabel   = "";
-    }
+    this.checkAllMail = args.checkAllMail;
 
     // export
     this.username = args.username;
     this.password = args.password;
 
     this.mailURL = mailURL;
-
-    this.inboxLabel  = inboxLabel;
-    this.unreadLabel = unreadLabel;
-    this.atomLabel   = atomLabel;
 
     this.unreads = [];
 
@@ -79,7 +62,24 @@ function Gmail(args) {
 }
 
 Gmail.prototype = {
+    get checkAllMail() this._checkAllMail || false,
+    set checkAllMail(v) {
+        if (v)
+        {
+            this.inboxLabel  = "#all";
+            this.unreadLabel = "#search/l:unread";
+            this.atomLabel   = "unread";
+        }
+        else
+        {
+            this.inboxLabel  = "#inbox";
+            this.unreadLabel = "#inbox";
+            this.atomLabel   = "";
+        }
+    },
+
     get composeURL() this.mailURL + "#compose",
+    get contacsURL() this.mailURL + "#contacts",
     get simpleModeURL() this.mailURL + "h/" + ~~(1000000 * Math.random()) + "/",
 
     getURLRecentFor:
@@ -220,10 +220,22 @@ Gmail.prototype = {
         if (this.timer)
             this.stopScheduler();
         this._schedulerInterval = Math.max(~~value, this.SCHEDULER_INTERVAL_MIN);
-        this.startScheduler();
+        this.startScheduler(true);
     },
 
     get schedulerInterval() this._schedulerInterval,
+
+    processResponse:
+    function processResponse(req) {
+        let src = req.responseText;
+        src = src.replace(/xmlns="[^"]*"/, "");
+        let xml = util.createXML(src);
+
+        this.updateUnreads(xml);
+        this.dispatchEvents(this.registeredWindows);
+
+        this.xml = xml;
+    },
 
     updater:
     function updater() {
@@ -231,18 +243,9 @@ Gmail.prototype = {
 
         self.processUnreads(
             function (req) {
-                // success
-                let src = req.responseText;
-                src = src.replace(/xmlns="[^"]*"/, "");
-                let xml = util.createXML(src);
-
-                self.updateUnreads(xml);
-                self.dispatchEvents(self.registeredWindows);
-
-                self.xml = xml;
+                self.processResponse(req);
             },
             function (req) {
-                // error
                 util.messageDebug("UPDATE ERROR => " + req.responseText);
             }
         );

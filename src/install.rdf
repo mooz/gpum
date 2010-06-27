@@ -11,7 +11,7 @@
         <em:creator>mooz</em:creator>
         <em:developer>mooz</em:developer>
         <em:homepageURL>http://wiki.github.com/mooz/gmml/</em:homepageURL>
-        <em:optionsURL>chrome://gmml/content/preference.xul</em:optionsURL>
+        <em:optionsURL>chrome://gmml/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://gmml/skin/icon32/gmml.png</em:iconURL>
         <!-- en-US -->
         <em:description>Gmail my lover</em:description>

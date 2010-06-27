@@ -312,3 +312,5 @@ util.lazyService(service, "trans", "@mozilla.org/widget/transferable;1", "nsITra
 util.lazyService(service, "clipboard", "@mozilla.org/widget/clipboard;1", "nsIClipboard");
 util.lazyService(service, "prompts", "@mozilla.org/embedcomp/prompt-service;1", "nsIPromptService");
 util.lazyService(service, "console", "@mozilla.org/consoleservice;1", "nsIConsoleService");
+util.lazyService(service, "cm", "@mozilla.org/cookiemanager;1", "nsICookieManager");
+util.lazyService(service, "sdr", "@mozilla.org/security/sdr;1", "nsISecretDecoderRing");

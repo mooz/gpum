@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+<?xml-stylesheet href="chrome://gmml/skin/css/config.css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://gmml/locale/config.dtd">
+
+<prefwindow id="gmml-config"
+            xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            xmlns:html="http://www.w3.org/1999/xhtml"
+            title="&config.title;"
+            ondialogcancel="return gmmlConfig.onFinish();"
+            ondialogaccept="return gmmlConfig.onFinish();"
+            windowtype="Gmml:Config">
+
+    <prefpane id="prefpane-general" label="&config.general;" flex="1" onpaneload="">
+        <preferences>
+            <preference id="extensions.gmml.update_interval"
+                        name="extensions.gmml.update_interval"
+                        type="int" />
+            <preference id="extensions.gmml.always_use_ssl"
+                        name="extensions.gmml.always_use_ssl"
+                        type="bool" />
+            <preference id="extensions.gmml.check_all"
+                        name="extensions.gmml.check_all"
+                        type="bool" />
+        </preferences>
+
+        
+    </prefpane>
+
+    <prefpane id="prefpane-about" label="&config.about;" flex="1">
+        <preferences></preferences>
+        <spacer flex="1"/>
+        <vbox align="center" flex="1">
+            <description class="addon-name">gmml - Gmail my lover</description>
+            <spacer height="10px" />
+            <description>mooz &lt;stillpedant@gmail.com&gt; &#169; 2010</description>
+            <description class="text-link"
+                         onclick="util.visitLink('http://wiki.github.com/mooz/gmml/')">gmml on GitHub</description>
+            <hbox class="fam-fam-fam"
+                  onclick="util.visitLink('http://www.famfamfam.com/lab/icons/silk/')">
+                <description style="color:#fe0b5b">FAM</description>
+                <description style="color:#0bcdfe">FAM</description>
+                <description style="color:#aae71b">FAM</description>
+            </hbox>
+        </vbox>
+        <spacer flex="1"/>
+    </prefpane>
+
+    <script type="application/x-javascript" src="chrome://gmml/content/config.js"/>
+</prefwindow>
