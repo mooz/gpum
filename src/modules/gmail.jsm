@@ -56,7 +56,7 @@ function Gmail(args) {
     this.registeredWindows  = [];
     this.timer              = null;
     this.timerEvent         = null;
-    this._schedulerInterval = this.SCHEDULER_INTERVAL_MIN;
+    this._schedulerInterval = args.interval || this.SCHEDULER_INTERVAL_MIN;
 
     this.unreadCount = -1;
 }
@@ -220,7 +220,7 @@ Gmail.prototype = {
         if (this.timer)
             this.stopScheduler();
         this._schedulerInterval = Math.max(~~value, this.SCHEDULER_INTERVAL_MIN);
-        this.startScheduler(true);
+        this.startScheduler();
     },
 
     get schedulerInterval() this._schedulerInterval,

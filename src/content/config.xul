@@ -9,24 +9,36 @@
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             xmlns:html="http://www.w3.org/1999/xhtml"
             title="&config.title;"
-            ondialogcancel="return gmmlConfig.onFinish();"
             ondialogaccept="return gmmlConfig.onFinish();"
             windowtype="Gmml:Config">
 
     <prefpane id="prefpane-general" label="&config.general;" flex="1" onpaneload="">
         <preferences>
-            <preference id="extensions.gmml.update_interval"
-                        name="extensions.gmml.update_interval"
+            <preference id="extensions.gmml.updateInterval"
+                        name="extensions.gmml.updateInterval"
                         type="int" />
-            <preference id="extensions.gmml.always_use_ssl"
-                        name="extensions.gmml.always_use_ssl"
+            <preference id="extensions.gmml.alwaysUseSSL"
+                        name="extensions.gmml.alwaysUseSSL"
                         type="bool" />
-            <preference id="extensions.gmml.check_all"
-                        name="extensions.gmml.check_all"
+            <preference id="extensions.gmml.checkAll"
+                        name="extensions.gmml.checkAll"
+                        type="bool" />
+            <preference id="extensions.gmml.openLinkClosePopup"
+                        name="extensions.gmml.openLinkClosePopup"
                         type="bool" />
         </preferences>
-
-        
+        <groupbox orient="vertical">
+            <caption label="&config.general;" />
+            <vbox flex="1">
+                <hbox align="center">
+                    <label >&config.updateInterval;: </label>
+                    <textbox id="config.updateInterval" type="number" preference="extensions.gmml.updateInterval" min="1" />
+                </hbox>
+                <checkbox id="config.alwaysUseSSL" label="&config.alwaysUseSSL;" preference="extensions.gmml.alwaysUseSSL" />
+                <checkbox id="config.checkAll" label="&config.checkAll;" preference="extensions.gmml.checkAll" />
+                <checkbox id="config.openLinkClosePopup" label="&config.openLinkClosePopup;" preference="extensions.gmml.openLinkClosePopup" />
+            </vbox>
+        </groupbox>
     </prefpane>
 
     <prefpane id="prefpane-about" label="&config.about;" flex="1">

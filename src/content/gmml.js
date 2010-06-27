@@ -26,6 +26,8 @@
      }
 
      // ============================================================ //
+     // DOM Utils
+     // ============================================================ //
 
      function setAttributes(aElem, aAttributes) {
          if (aAttributes)
@@ -69,6 +71,8 @@
      Gmail = modules.Gmail;
 
      // ============================================================ //
+     // Arrange gmml
+     // ============================================================ //
 
      window.addEventListener(
          "load", function () {
@@ -84,7 +88,12 @@
              }
              else
              {
-                 gmail = util.storage.gmail = new Gmail();
+                 gmail = util.storage.gmail = new Gmail(
+                     {
+                         checkAllMail : util.getBoolPref(util.getPrefKey("checkAll"), false),
+                         interval     : 1000 * 60 * util.getIntPref(util.getPrefKey("updateInterval"), 0)
+                     }
+                 );
 
                  gmail.setupScheduler();
                  gmail.startScheduler(true);
@@ -158,7 +167,7 @@
                  if (loading)
                  {
                      icon.setAttribute("src", "chrome://gmml/skin/icon16/loading.png");
-                     count.setAttribute("value", "");
+                     count.setAttribute("value", "-");
                  }
                  else
                      updateStatusbarCount();
@@ -265,7 +274,8 @@
                          gmail.starThread(id);
                          break;
                      case title:
-                         openLink(entry.link.@href.toString());
+                         openLink(entry.link.@href.toString(),
+                                  !util.getBoolPref(util.getPrefKey("openLinkClosePopup"), false));
                          destroy();
                          break;
                      case summary:
@@ -276,6 +286,14 @@
                  function destroy() {
                      gmail.removeFromUnreads(unread);
                      removeNode();
+
+                     if (scrollBox.childNodes.length < 1)
+                     {
+                         gmml.checkMailNow(function () {
+                                               if (gmail.unreads.length)
+                                                   gmml.handleStatusBarIconClick({ button : 0 });
+                                           });
+                     }
                  }
 
                  function removeNode() {
@@ -301,16 +319,18 @@
                  get nowChecking() this._nowChecking,
 
                  checkMailNow:
-                 function refreshMail() {
+                 function checkMailNow(next) {
                      const self = this;
 
                      this.nowChecking = true;
 
                      gmail.processUnreads(
                          function (req) {
-                             inspectObject(req.getAllResponseHeaders().split(/\r?\n/));
                              self.nowChecking = false;
                              gmail.processResponse(req);
+
+                             if (typeof next === "function")
+                                 next(req);
                          },
                          function (req) {
                              self.nowChecking = false;
@@ -336,6 +356,18 @@
                      inboxLabel.textContent = gmail.xml.title.text().toString().replace(/^Gmail - /, "");
 
                      popup.openPopup(icon, "start_after", 0, 0, false, false);
+                 },
+
+                 openConfig:
+                 function openConfig() {
+                     let opened = util.getWindow("Gmml:Config");
+
+                     if (opened)
+                         opened.focus();
+                     else
+                         window.openDialog("chrome://gmml/content/config.xul",
+                                           "GmmlConfig",
+                                           "chrome,titlebar,toolbar,centerscreen,resizable,scrollbars");
                  },
 
                  modules: modules

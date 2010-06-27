@@ -3,3 +3,7 @@
 <!ENTITY config.general "一般">
 <!ENTITY config.about "情報">
 
+<!ENTITY config.updateInterval "更新間隔 (分)">
+<!ENTITY config.alwaysUseSSL "全ての接続で SSL (セキュアな接続) を使用する">
+<!ENTITY config.checkAll "受信箱以外の未読メールももチェックする">
+<!ENTITY config.openLinkClosePopup "メールを開く際にポップアップを閉じる">

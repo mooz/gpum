@@ -23,9 +23,9 @@
                       label="Check mail now"
 		      oncommand="gmml.checkMailNow();" />
             <menuseparator/>
-	    <menuitem id="gmml-menu-open-settings"
+	    <menuitem id="gmml-menu-open-config"
                       label="Settings"
-		      oncommand="gmml.openSettings();" />
+		      oncommand="gmml.openConfig();" />
         </menupopup>
 
         <hbox id="gmml-popup-container">

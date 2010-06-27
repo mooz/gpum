@@ -1,5 +1,9 @@
-<!ENTITY config.title "Gmml の設定">
+<!ENTITY config.title "Gmml settings">
 
-<!ENTITY config.general "一般">
-<!ENTITY config.about "情報">
+<!ENTITY config.general "General">
+<!ENTITY config.about "About">
 
+<!ENTITY config.updateInterval "Update interval (minute)">
+<!ENTITY config.alwaysUseSSL "Always use SSL">
+<!ENTITY config.checkAll "Check all mails">
+<!ENTITY config.openLinkClosePopup "Close popup before opening mail">

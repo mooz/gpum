@@ -278,8 +278,8 @@ const util = {
 
     killEvent:
     function killEvent(ev) {
-        ev.stopPropagation();
-        ev.preventDefault();
+        ev.stopPropagation && ev.stopPropagation();
+        ev.preventDefault && ev.preventDefault();
     },
 
     removeAllChilds:
