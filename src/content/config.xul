@@ -23,6 +23,9 @@
             <preference id="extensions.gmml.checkAll"
                         name="extensions.gmml.checkAll"
                         type="bool" />
+            <preference id="extensions.gmml.useSimpleModeForLink"
+                        name="extensions.gmml.useSimpleModeForLink"
+                        type="bool" />
             <preference id="extensions.gmml.openLinkClosePopup"
                         name="extensions.gmml.openLinkClosePopup"
                         type="bool" />
@@ -36,7 +39,12 @@
                 </hbox>
                 <checkbox id="config.alwaysUseSSL" label="&config.alwaysUseSSL;" preference="extensions.gmml.alwaysUseSSL" />
                 <checkbox id="config.checkAll" label="&config.checkAll;" preference="extensions.gmml.checkAll" />
-                <checkbox id="config.openLinkClosePopup" label="&config.openLinkClosePopup;" preference="extensions.gmml.openLinkClosePopup" />
+
+                <groupbox orient="vertical">
+                    <caption label="&config.message;" />
+                    <!-- <checkbox id="config.useSimpleModeForLink" label="&config.useSimpleModeForLink;" preference="extensions.gmml.useSimpleModeForLink" /> -->
+                    <checkbox id="config.openLinkClosePopup" label="&config.openLinkClosePopup;" preference="extensions.gmml.openLinkClosePopup" />
+                </groupbox>
             </vbox>
         </groupbox>
     </prefpane>

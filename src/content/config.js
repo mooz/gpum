@@ -32,10 +32,11 @@
 
      let gmail = util.storage.gmail;
 
-     let updateInterval     = $("config.updateInterval");
-     let alwaysUseSSL       = $("config.alwaysUseSSL");
-     let checkAll           = $("config.checkAll");
-     let openLinkClosePopup = $("config.openLinkClosePopup");
+     let updateInterval       = $("config.updateInterval");
+     let alwaysUseSSL         = $("config.alwaysUseSSL");
+     let checkAll             = $("config.checkAll");
+     // let useSimpleModeForLink = $("config.useSimpleModeForLink");
+     let openLinkClosePopup   = $("config.openLinkClosePopup");
 
      window.gmmlConfig = {
          onFinish:

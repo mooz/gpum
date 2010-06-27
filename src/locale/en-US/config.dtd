@@ -6,4 +6,10 @@
 <!ENTITY config.updateInterval "Update interval (minute)">
 <!ENTITY config.alwaysUseSSL "Always use SSL">
 <!ENTITY config.checkAll "Check all mails">
+
+<!-- {{ -->
+<!ENTITY config.message "Message">
+<!ENTITY config.useSimpleModeForLink "Access simple mode in Gmail">
 <!ENTITY config.openLinkClosePopup "Close popup before opening mail">
+<!-- }} -->
+

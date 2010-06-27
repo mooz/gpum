@@ -144,6 +144,8 @@
              }
 
              function openLink(url, cont) {
+                 util.message(url);
+
                  util.visitLink(url);
                  if (!cont)
                      popup.hidePopup();
@@ -274,8 +276,11 @@
                          gmail.starThread(id);
                          break;
                      case title:
-                         openLink(entry.link.@href.toString(),
-                                  !util.getBoolPref(util.getPrefKey("openLinkClosePopup"), false));
+                         // let (url = util.getBoolPref(util.getPrefKey("useSimpleModeForLink"), false)
+                         //      ? gmail.simpleModeURL + "?v=c&s=a&th=" + id
+                         //      : entry.link.@href.toString())
+                         let (url = entry.link.@href.toString())
+                             openLink(url, !util.getBoolPref(util.getPrefKey("openLinkClosePopup"), false));
                          destroy();
                          break;
                      case summary:
