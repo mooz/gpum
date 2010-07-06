@@ -6,18 +6,18 @@ setopt nonomatch
 ## ================================ ##
 
 # create jar file
-rm -f chrome/gmml.jar
-jar cv0f chrome/gmml.jar \
+rm -f chrome/gpum.jar
+jar cv0f chrome/gpum.jar \
     content/*.{js,xul}~(*~|.svn/*) \
     locale/**/*~(*~|.svn/*) \
     skin/**/*.*~(*~|*.svg|.svn/*)
 
 # create xpi file
-rm -f gmml.xpi
-zip -r -9 gmml.xpi \
-    chrome/gmml.jar \
+rm -f gpum.xpi
+zip -r -9 gpum.xpi \
+    chrome/gpum.jar \
     defaults/**/*.*~(*~|.svn/*) \
     install.rdf \
     modules/*.jsm~(*~|.svn/*)
 cp chrome.manifest.pack /tmp/chrome.manifest
-zip -j -9 gmml.xpi /tmp/chrome.manifest
+zip -j -9 gpum.xpi /tmp/chrome.manifest

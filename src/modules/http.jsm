@@ -17,7 +17,7 @@ function loadScript(path, context) {
 function loadModule(name, context) {
     context = context || this;
 
-    let path = "resource://gmml-modules/" + name;
+    let path = "resource://gpum-modules/" + name;
 
     try {
         if (name.lastIndexOf(".jsm") !== -1)
@@ -114,8 +114,6 @@ const http = {
             "Content-length" : params.length,
             "Connection"     : "close"
         };
-
-        util.message("post => " + params);
 
         return this.request("POST", url, callback, params, opts);
     }

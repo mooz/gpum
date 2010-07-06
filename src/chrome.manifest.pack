@@ -1,10 +1,10 @@
-content	gmml	jar:chrome/gmml.jar!/content/gmml
+content	gpum	jar:chrome/gpum.jar!/content/gpum
 
-skin	gmml	classic/1.0	jar:chrome/gmml.jar!/skin/classic/gmml/
+skin	gpum	classic/1.0	jar:chrome/gpum.jar!/skin/classic/gpum/
 
-locale	gmml	en-US	jar:chrome/gmml.jar!/locale/en-US/
-locale	gmml	ja	jar:chrome/gmml.jar!/locale/ja/
+locale	gpum	en-US	jar:chrome/gpum.jar!/locale/en-US/
+locale	gpum	ja	jar:chrome/gpum.jar!/locale/ja/
 
-resource	gmml-modules	modules/
+resource	gpum-modules	modules/
 
-overlay	chrome://browser/content/browser.xul	chrome://gmml/content/browser.xul
+overlay	chrome://browser/content/browser.xul	chrome://gpum/content/browser.xul

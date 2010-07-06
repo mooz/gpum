@@ -1,10 +1,10 @@
-content	gmml	content/
+content	gpum	content/
 
-skin	gmml	classic/1.0	skin/classic/gmml/
+skin	gpum	classic/1.0	skin/classic/gpum/
 
-locale	gmml	en-US	locale/en-US/
-locale	gmml	ja	locale/ja/
+locale	gpum	en-US	locale/en-US/
+locale	gpum	ja	locale/ja/
 
-resource	gmml-modules	modules/
+resource	gpum-modules	modules/
 
-overlay	chrome://browser/content/browser.xul	chrome://gmml/content/browser.xul
+overlay	chrome://browser/content/browser.xul	chrome://gpum/content/browser.xul

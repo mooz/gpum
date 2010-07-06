@@ -1,5 +1,5 @@
-pref("extensions.gmml.updateInterval", 3);
-pref("extensions.gmml.alwaysUseSSL", true);
-pref("extensions.gmml.checkAll", false);
-pref("extensions.gmml.useSimpleModeForLink", false);
-pref("extensions.gmml.openLinkClosePopup", true);
+pref("extensions.gpum.updateInterval", 3);
+pref("extensions.gpum.alwaysUseSSL", true);
+pref("extensions.gpum.checkAll", false);
+pref("extensions.gpum.useSimpleModeForLink", false);
+pref("extensions.gpum.openLinkClosePopup", true);

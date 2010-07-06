@@ -1,33 +1,34 @@
 <?xml version="1.0"?>
 
 <?xml-stylesheet href="chrome://global/skin" type="text/css"?>
-<?xml-stylesheet href="chrome://gmml/skin/css/config.css"?>
+<?xml-stylesheet href="chrome://gpum/skin/css/config.css"?>
 
-<!DOCTYPE dialog SYSTEM "chrome://gmml/locale/config.dtd">
+<!DOCTYPE dialog SYSTEM "chrome://gpum/locale/config.dtd">
 
-<prefwindow id="gmml-config"
+<prefwindow id="gpum-config"
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             xmlns:html="http://www.w3.org/1999/xhtml"
             title="&config.title;"
-            ondialogaccept="return gmmlConfig.onFinish();"
-            windowtype="Gmml:Config">
+            ondialogaccept="return gpumConfig.onFinish();"
+            ondialogcancel="return gpumConfig.onFinish(true);"
+            windowtype="Gpum:Config">
 
     <prefpane id="prefpane-general" label="&config.general;" flex="1" onpaneload="">
         <preferences>
-            <preference id="extensions.gmml.updateInterval"
-                        name="extensions.gmml.updateInterval"
+            <preference id="extensions.gpum.updateInterval"
+                        name="extensions.gpum.updateInterval"
                         type="int" />
-            <preference id="extensions.gmml.alwaysUseSSL"
-                        name="extensions.gmml.alwaysUseSSL"
+            <preference id="extensions.gpum.alwaysUseSSL"
+                        name="extensions.gpum.alwaysUseSSL"
                         type="bool" />
-            <preference id="extensions.gmml.checkAll"
-                        name="extensions.gmml.checkAll"
+            <preference id="extensions.gpum.checkAll"
+                        name="extensions.gpum.checkAll"
                         type="bool" />
-            <preference id="extensions.gmml.useSimpleModeForLink"
-                        name="extensions.gmml.useSimpleModeForLink"
+            <preference id="extensions.gpum.useSimpleModeForLink"
+                        name="extensions.gpum.useSimpleModeForLink"
                         type="bool" />
-            <preference id="extensions.gmml.openLinkClosePopup"
-                        name="extensions.gmml.openLinkClosePopup"
+            <preference id="extensions.gpum.openLinkClosePopup"
+                        name="extensions.gpum.openLinkClosePopup"
                         type="bool" />
         </preferences>
         <groupbox orient="vertical">
@@ -35,15 +36,14 @@
             <vbox flex="1">
                 <hbox align="center">
                     <label >&config.updateInterval;: </label>
-                    <textbox id="config.updateInterval" type="number" preference="extensions.gmml.updateInterval" min="1" />
+                    <textbox id="config.updateInterval" type="number" preference="extensions.gpum.updateInterval" min="1" />
                 </hbox>
-                <checkbox id="config.alwaysUseSSL" label="&config.alwaysUseSSL;" preference="extensions.gmml.alwaysUseSSL" />
-                <checkbox id="config.checkAll" label="&config.checkAll;" preference="extensions.gmml.checkAll" />
+                <checkbox id="config.alwaysUseSSL" label="&config.alwaysUseSSL;" preference="extensions.gpum.alwaysUseSSL" />
+                <checkbox id="config.checkAll" label="&config.checkAll;" preference="extensions.gpum.checkAll" />
 
                 <groupbox orient="vertical">
                     <caption label="&config.message;" />
-                    <!-- <checkbox id="config.useSimpleModeForLink" label="&config.useSimpleModeForLink;" preference="extensions.gmml.useSimpleModeForLink" /> -->
-                    <checkbox id="config.openLinkClosePopup" label="&config.openLinkClosePopup;" preference="extensions.gmml.openLinkClosePopup" />
+                    <checkbox id="config.openLinkClosePopup" label="&config.openLinkClosePopup;" preference="extensions.gpum.openLinkClosePopup" />
                 </groupbox>
             </vbox>
         </groupbox>
@@ -51,22 +51,17 @@
 
     <prefpane id="prefpane-about" label="&config.about;" flex="1">
         <preferences></preferences>
-        <spacer flex="1"/>
         <vbox align="center" flex="1">
-            <description class="addon-name">gmml - Gmail my lover</description>
-            <spacer height="10px" />
-            <description>mooz &lt;stillpedant@gmail.com&gt; &#169; 2010</description>
-            <description class="text-link"
-                         onclick="util.visitLink('http://wiki.github.com/mooz/gmml/')">gmml on GitHub</description>
-            <hbox class="fam-fam-fam"
-                  onclick="util.visitLink('http://www.famfamfam.com/lab/icons/silk/')">
-                <description style="color:#fe0b5b">FAM</description>
-                <description style="color:#0bcdfe">FAM</description>
-                <description style="color:#aae71b">FAM</description>
-            </hbox>
+            <description id="addon-name">Gmail Popup Unread Manager</description>
+            <description class="copyright">mooz &lt;stillpedant@gmail.com&gt; &#169; 2010</description>
+            <vbox id="special-thanks">
+                <label class="link"
+                       onclick="gpumConfig.visitLink(this);"
+                       url="http://paularmstrongdesigns.com/projects/bwpx-icns/"
+                       value="http://paularmstrongdesigns.com/projects/bwpx-icns/"></label>
+            </vbox>
         </vbox>
-        <spacer flex="1"/>
     </prefpane>
 
-    <script type="application/x-javascript" src="chrome://gmml/content/config.js"/>
+    <script type="application/x-javascript" src="chrome://gpum/content/config.js"/>
 </prefwindow>

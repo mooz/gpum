@@ -1,35 +1,39 @@
 <?xml version="1.0"?>
 
 <?xml-stylesheet href="chrome://global/skin/global.css" type="text/css" ?>
-<?xml-stylesheet href="chrome://gmml/skin/css/popup.css" type="text/css" ?>
-<?xml-stylesheet href="chrome://gmml/skin/css/statusbar.css" type="text/css" ?>
+<?xml-stylesheet href="chrome://gpum/skin/css/popup.css" type="text/css" ?>
+<?xml-stylesheet href="chrome://gpum/skin/css/statusbar.css" type="text/css" ?>
 
-<!DOCTYPE dialog SYSTEM "chrome://gmml/locale/statusbar.dtd">
+<!DOCTYPE dialog SYSTEM "chrome://gpum/locale/statusbar.dtd">
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <statusbar id="status-bar">
-        <statusbarpanel id="gmml-statusbar-panel" align="center" context="gmml-context-menu">
+        <statusbarpanel id="gpum-statusbar-panel" align="center" context="gpum-context-menu">
             <hbox align="center" flex="1"
-                  onclick="gmml.handleStatusBarIconClick(event);" >
-                <image id="gmml-statusbar-icon"
-	               src="chrome://gmml/skin/icon16/gmail-blue.png" />
-                <label id="gmml-statusbar-count" flex="1" value="-"></label>
+                  onclick="gpum.handleStatusBarIconClick(event);" >
+                <image id="gpum-statusbar-icon"
+	               src="chrome://gpum/skin/icon16/gmail-blue.png" />
+                <label id="gpum-statusbar-count" flex="1" value="-"></label>
             </hbox>
         </statusbarpanel>
 
-        <menupopup id="gmml-context-menu" onpopupshowing="gmml.updateContextMenu();">
-	    <menuitem id="gmml-menu-check-mail"
-                      label="Check mail now"
-		      oncommand="gmml.checkMailNow();" />
-            <menuseparator/>
-	    <menuitem id="gmml-menu-open-config"
+        <menupopup id="gpum-context-menu" onpopupshowing="gpum.updateContextMenu();">
+	    <menuitem id="gpum-menu-open-config"
                       label="Settings"
-		      oncommand="gmml.openConfig();" />
+		      oncommand="gpum.openConfig();" />
+            <menuseparator/>
+	    <menuitem id="gpum-menu-login-logout"
+                      label=""
+		      oncommand="gpum.loginLogout();" />
+            <menuseparator/>
+	    <menuitem id="gpum-menu-check-mail"
+                      label="Check mail now"
+		      oncommand="gpum.checkMailNow();" />
         </menupopup>
 
-        <hbox id="gmml-popup-container">
-            <panel id="gmml-popup" noautofocus="true" />
+        <hbox id="gpum-popup-container">
+            <panel id="gpum-popup" noautofocus="true" />
         </hbox>
     </statusbar>
 
@@ -37,6 +41,6 @@
          Load Scripts
          ============================================================ -->
 
-    <script type="application/x-javascript" src="chrome://gmml/content/gmml.js"/>
+    <script type="application/x-javascript" src="chrome://gpum/content/gpum.js"/>
 
 </overlay>

@@ -13,7 +13,7 @@
      }
 
      function loadModule(name, context) {
-         let path = "resource://gmml-modules/" + name;
+         let path = "resource://gpum-modules/" + name;
 
          try {
              if (name.lastIndexOf(".jsm") !== -1)
@@ -38,14 +38,22 @@
      // let useSimpleModeForLink = $("config.useSimpleModeForLink");
      let openLinkClosePopup   = $("config.openLinkClosePopup");
 
-     window.gmmlConfig = {
+     window.gpumConfig = {
          onFinish:
-         function onFinish() {
+         function onFinish(canceled) {
+             if (canceled && util.isWindows)
+                 return true;
+
              gmail.schedulerInterval = 1000 * 60 * ~~updateInterval.value;
              gmail.checkAllMail      = checkAll.checked;
              gmail.alwaysUseSSL      = alwaysUseSSL.checked;
 
              return true;
+         },
+
+         visitLink:
+         function visitLink(elem) {
+             util.visitLink(elem.getAttribute("url"));
          }
      };
  })();

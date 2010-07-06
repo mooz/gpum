@@ -10,7 +10,7 @@ const EXPORTED_SYMBOLS = ["util", "service"];
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 
-const PREF_ROOT = "extensions.gmml";
+const PREF_ROOT = "extensions.gpum";
 
 const util = {
     storage: {},
@@ -273,7 +273,7 @@ const util = {
     function visitLink(aURI, aBackGround) {
         let mainWindow = util.getWindow("navigator:browser");
 
-        mainWindow.gBrowser.loadOneTab(aURI, null, null, null, aBackGround || false, false);
+        mainWindow.openUILinkIn(aURI, aBackGround ? "tabshifted" : "tab");
     },
 
     killEvent:
@@ -288,6 +288,48 @@ const util = {
             elem.removeChild(elem.firstChild);
     },
 
+    // ============================================================ //
+    //  File
+    // ============================================================ //
+
+    uriFromFile:
+    function uriFromFile(file) {
+        let { ios } = service;
+        return ios.newFileURI(file);
+    },
+
+    uriFromSpec:
+    function uriFromSpec(spec, charset, base) {
+        let { ios } = service;
+        return ios.newURI(spec, charset || null, base || null);
+    },
+
+    // ============================================================ //
+    //  Directory
+    // ============================================================ //
+
+    getSpecialDir:
+    function getSpecialDir(prop) {
+        let { ds } = service;
+
+        return ds.get(prop, Ci.nsILocalFile);
+    },
+
+    // ============================================================ //
+    //  Sound
+    // ============================================================ //
+
+    playSound:
+    function playSound(prop) {
+        let { sound } = service;
+
+        sound.play(util.uriFromSpec("chrome://gpum/content/sound/sexy.mp3"));
+    },
+
+    // ============================================================ //
+    //  E4X
+    // ============================================================ //
+
     createXML:
     function createXML(src) {
         // https://bugzilla.mozilla.org/show_bug.cgi?id=336551
@@ -296,14 +338,20 @@ const util = {
     }
 };
 
+util.lazy(util, "isWindows", function () {
+              let xulRuntime = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime);
+              return /windows/i.test(xulRuntime.OS);
+          });
+
 util.lazy(util, "stringBundle", function () {
-              const bundleURI = "chrome://gmml/locale/gmml.properties";
+              const bundleURI = "chrome://gpum/locale/gpum.properties";
               let bundleSvc = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService);
               return bundleSvc.createBundle(bundleURI);
           });
 
 const service = {};
 
+util.lazyService(service, "ds", "@mozilla.org/file/directory_service;1", "nsIProperties");
 util.lazyService(service, "wm", "@mozilla.org/appshell/window-mediator;1", "nsIWindowMediator");
 util.lazyService(service, "uconv", "@mozilla.org/intl/scriptableunicodeconverter", "nsIScriptableUnicodeConverter");
 util.lazyService(service, "prefbranch", "@mozilla.org/preferences-service;1", "nsIPrefBranch");
@@ -314,3 +362,6 @@ util.lazyService(service, "prompts", "@mozilla.org/embedcomp/prompt-service;1", 
 util.lazyService(service, "console", "@mozilla.org/consoleservice;1", "nsIConsoleService");
 util.lazyService(service, "cm", "@mozilla.org/cookiemanager;1", "nsICookieManager");
 util.lazyService(service, "sdr", "@mozilla.org/security/sdr;1", "nsISecretDecoderRing");
+util.lazyService(service, "ios", "@mozilla.org/network/io-service;1", "nsIIOService");
+
+util.lazy(service, "sound", function () Cc["@mozilla.org/sound;1"].createInstance(Ci.nsISound));

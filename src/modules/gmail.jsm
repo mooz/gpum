@@ -20,7 +20,7 @@ function loadScript(path, context) {
 function loadModule(name, context) {
     context = context || this;
 
-    let path = name.indexOf("://") >= 0 ? name : "resource://gmml-modules/" + name;
+    let path = name.indexOf("://") >= 0 ? name : "resource://gpum-modules/" + name;
 
     try {
         if (name.lastIndexOf(".jsm") !== -1)
@@ -64,6 +64,8 @@ function Gmail(args) {
 Gmail.prototype = {
     get checkAllMail() this._checkAllMail || false,
     set checkAllMail(v) {
+        util.message("v is " + v);
+
         if (v)
         {
             this.inboxLabel  = "#all";
@@ -93,8 +95,9 @@ Gmail.prototype = {
     function processUnreads(callback, onerror) {
         const self = this;
 
-        let (reqURL = self.mailURL + "feed/atom" + self.atomLabel)
+        let (reqURL = this.mailURL + "feed/atom" + this.atomLabel)
         {
+            util.message("reqURL : " + reqURL);
             http.get(reqURL,
                      function (req) {
                          if (req.status === 200)
@@ -214,7 +217,7 @@ Gmail.prototype = {
     // ============================================================ //
 
     get SCHEDULER_INTERVAL_MIN() 120 * 1000, // 2 minutes
-    get UPDATE_EVENT() "GmmlUpdateEvent",
+    get UPDATE_EVENT() "GpumUpdateEvent",
 
     set schedulerInterval(value) {
         if (this.timer)
@@ -286,36 +289,39 @@ Gmail.prototype = {
         self.unreadCount = Number(xml.fullcount);
 
         self.updatedUnreads = [];
+        self.unreads        = [];
 
         for each (let entry in xml.entry)
         {
             let id = entry.id.toString();
 
-            if (self.unreads.some(function (senior) id === senior.entry.id.toString()))
-                continue;
+            // if (self.unreads.some(function (senior) id === senior.entry.id.toString()))
+            //     continue;
 
             let modified = ISO8601DateUtils.parse(entry.modified.toString());
             let unread   = { entry : entry, time : modified };
 
-            let unreads = self.unreads;
-            let len     = unreads.length;
+            self.unreads.push(unread);
 
-            if (len > 0)
-            {
-                for (let i = 0; i < len; ++i)
-                {
-                    if (modified >= unreads[i].time)
-                    {
-                        unreads.splice(i, 0, unread);
-                        self.updatedUnreads.push(unread);
-                        break;
-                    }
-                    else if (i === len - 1)
-                        unreads.push(unread), self.updatedUnreads.push(unread);
-                }
-            }
-            else
-                unreads.push(unread), self.updatedUnreads.push(unread);
+            // let unreads = self.unreads;
+            // let len     = unreads.length;
+
+            // if (len > 0)
+            // {
+            //     for (let i = 0; i < len; ++i)
+            //     {
+            //         if (modified >= unreads[i].time)
+            //         {
+            //             unreads.splice(i, 0, unread);
+            //             self.updatedUnreads.push(unread);
+            //             break;
+            //         }
+            //         else if (i === len - 1)
+            //             unreads.push(unread), self.updatedUnreads.push(unread);
+            //     }
+            // }
+            // else
+            //     unreads.push(unread), self.updatedUnreads.push(unread);
         }
     },
 
@@ -362,6 +368,32 @@ Gmail.prototype = {
                                          self.registeredWindows.splice(pos, 1);
                                  }, false);
         }
+    },
+
+    // ============================================================ //
+    // Login, Logout
+    // ============================================================ //
+
+    login:
+    function login() {
+    },
+
+    openLoginPage:
+    function openLoginPage() {
+        util.visitLink(this.mailURL);
+    },
+
+    logout:
+    function logout(next) {
+        let self = this;
+
+        http.get(this.mailURL + "?logout", function (req) {
+                     self.unreads     = [];
+                     self.unreadCount = -1;
+                     self.dispatchEvents(self.registeredWindows);
+
+                     if (typeof next === "function") next(req);
+                 });
     }
 };
 

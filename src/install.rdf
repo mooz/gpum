@@ -4,25 +4,25 @@
      xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 
     <Description about="urn:mozilla:install-manifest">
-        <em:id>gmml@mooz.github.com</em:id>
+        <em:id>gpum@mooz.github.com</em:id>
         <em:type>2</em:type>
-        <em:version>0.0.1</em:version>
-        <em:name>gmml</em:name>
+        <em:version>0.0.2</em:version>
+        <em:name>Gmail Popup Unread Manager</em:name>
         <em:creator>mooz</em:creator>
         <em:developer>mooz</em:developer>
-        <em:homepageURL>http://wiki.github.com/mooz/gmml/</em:homepageURL>
-        <em:optionsURL>chrome://gmml/content/config.xul</em:optionsURL>
-        <em:iconURL>chrome://gmml/skin/icon32/gmml.png</em:iconURL>
+        <em:homepageURL>http://wiki.github.com/mooz/gpum/</em:homepageURL>
+        <em:optionsURL>chrome://gpum/content/config.xul</em:optionsURL>
+        <em:iconURL>chrome://gpum/skin/icon32/gpum.png</em:iconURL>
         <!-- en-US -->
-        <em:description>Gmail my lover</em:description>
+        <em:description>Manage unread mail in Gmail</em:description>
         <!-- ja -->
         <em:localized>
             <Description>
                 <em:locale>ja</em:locale>
-                <em:name>gmml</em:name>
+                <em:name>Gmail Popup Unread Manager</em:name>
                 <em:creator>mooz</em:creator>
-                <em:description>Gmail まいらば</em:description>
-                <em:homepageURL>http://wiki.github.com/mooz/gmml/</em:homepageURL>
+                <em:description>Gmail の未読メールをポップアップで管理</em:description>
+                <em:homepageURL>http://wiki.github.com/mooz/gpum/</em:homepageURL>
             </Description>
         </em:localized>
         <!-- Firefox -->
