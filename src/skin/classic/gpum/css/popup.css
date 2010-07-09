@@ -98,6 +98,7 @@
     cursor      : alias;
     width       : 565px;
     max-width   : 565px;
+    padding     : 6px 0;
 }
 
 .gpum-popup-title {

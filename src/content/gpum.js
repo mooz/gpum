@@ -62,8 +62,9 @@
      // ============================================================ //
 
      function safenBrowser(iframe) {
-         let { docShell } = iframe;
+         let { docShell, contentWindow } = iframe;
 
+         contentWindow.print = function () {};
          docShell.allowJavascript = docShell.allowPlugins = docShell.allowSubframes = false;
      }
 
