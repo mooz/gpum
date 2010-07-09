@@ -16,6 +16,10 @@
 #gpum-popup4preview {
 }
 
+#gpum-popup4preview-header {
+    padding : 3px;
+}
+
 #gpum-popup4preview-frame {
     width  : 600px;
     height : 400px;

@@ -58,6 +58,16 @@
      }
 
      // ============================================================ //
+     // Iframe
+     // ============================================================ //
+
+     function safenBrowser(iframe) {
+         let { docShell } = iframe;
+
+         docShell.allowJavascript = docShell.allowPlugins = docShell.allowSubframes = false;
+     }
+
+     // ============================================================ //
      // Initialization
      // ============================================================ //
 
@@ -140,7 +150,7 @@
              unreadContainer.appendChild(scrollBox);
 
              let iframe = $('gpum-popup4preview-frame');
-             iframe.docShell.allowJavascript = false;
+             safenBrowser(iframe);
              iframe.addEventListener("click", function (ev) {
                                          let elem = ev.target;
 
@@ -303,10 +313,11 @@
                              let popup  = $('gpum-popup4preview');
                              let iframe = $('gpum-popup4preview-frame');
 
-                             iframe.docShell.allowJavascript = false;
+                             safenBrowser(iframe);
                              iframe.setAttribute("src", url);
+                             safenBrowser(iframe);
 
-                             popup.openPopup(summary, "start_after", 0, 0, false, false);
+                             popup.openPopup(entryContainer, "start_after", 0, 0, false, false);
                          };
                          break;
                      }
