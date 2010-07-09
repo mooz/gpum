@@ -4,7 +4,7 @@
 <?xml-stylesheet href="chrome://gpum/skin/css/popup.css" type="text/css" ?>
 <?xml-stylesheet href="chrome://gpum/skin/css/statusbar.css" type="text/css" ?>
 
-<!DOCTYPE dialog SYSTEM "chrome://gpum/locale/statusbar.dtd">
+<!DOCTYPE dialog SYSTEM "chrome://gpum/locale/browser.dtd">
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
@@ -20,20 +20,32 @@
 
         <menupopup id="gpum-context-menu" onpopupshowing="gpum.updateContextMenu();">
 	    <menuitem id="gpum-menu-open-config"
-                      label="Settings"
+                      label="&menu.settings;"
 		      oncommand="gpum.openConfig();" />
             <menuseparator/>
 	    <menuitem id="gpum-menu-login-logout"
-                      label=""
 		      oncommand="gpum.loginLogout();" />
             <menuseparator/>
 	    <menuitem id="gpum-menu-check-mail"
-                      label="Check mail now"
+                      label="&menu.checkMail;"
 		      oncommand="gpum.checkMailNow();" />
         </menupopup>
 
         <hbox id="gpum-popup-container">
             <panel id="gpum-popup" noautofocus="true" />
+            <panel id="gpum-popup4preview" noautofocus="true">
+                <vbox>
+                    <hbox>
+                        <spacer flex="1" />
+                        <toolbarbutton id="gpum-popup4preview-close-button"
+                                       class="tab-close-button"
+                                       tooltiptext="&preview.close;"
+                                       oncommand="gpum.closePreview();" />
+                    </hbox>
+                    <iframe id="gpum-popup4preview-frame" type="content">
+                    </iframe>
+                </vbox>
+            </panel>
         </hbox>
     </statusbar>
 

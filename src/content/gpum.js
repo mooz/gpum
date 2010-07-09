@@ -139,6 +139,24 @@
              let scrollBox = genElem("vbox", { flex : 1 });
              unreadContainer.appendChild(scrollBox);
 
+             let iframe = $('gpum-popup4preview-frame');
+             iframe.docShell.allowJavascript = false;
+             iframe.addEventListener("click", function (ev) {
+                                         let elem = ev.target;
+
+                                         util.killEvent(ev);
+
+                                         if (ev.button !== 0)
+                                             return;
+
+                                         if (elem.localName.toLowerCase() === "a")
+                                         {
+                                             let href = elem.getAttribute("href");
+                                             if (/^(https?|ftp):\/\//.test(href))
+                                                 openLink(href, true);
+                                         }
+                                     }, true);
+
              function handleUpdate(ev) {
                  updateStatusbarCount();
              }
@@ -229,7 +247,8 @@
 
                  let bodyContainer = genElem("hbox", { align : "center" });
 
-                 let summary = createDescription(entry.summary, { class : "gpum-popup-summary" });
+                 let summary = createDescription(entry.summary, { class : "gpum-popup-summary",
+                                                                  tooltiptext : util.getLocaleString("displayPreview") });
 
                  bodyContainer.appendChild(summary);
 
@@ -279,15 +298,21 @@
                          destroy();
                          break;
                      case summary:
-                         gmail.getThreadBody(id, function (id, str) {
-                                                 // let path = createTMPFile(str, "gpum_msg_body.html");
+                         let (url = gmail.getThreadBodyURL(id))
+                         {
+                             let popup  = $('gpum-popup4preview');
+                             let iframe = $('gpum-popup4preview-frame');
 
-                                                 // let frame = genElem("iframe", { src : path, type : "content", flex : 1 });
+                             iframe.docShell.allowJavascript = false;
+                             iframe.setAttribute("src", url);
 
-                                                 // bodyContainer.parentNode.insertBefore(frame, bodyContainer);
-                                             });
+                             popup.openPopup(summary, "start_after", 0, 0, false, false);
+                         };
                          break;
                      }
+
+                     if (target !== summary)
+                         $('gpum-popup4preview').hidePopup();
                  }
 
                  function createTMPFile(cont, name) {
@@ -418,7 +443,13 @@
 
                  updateContextMenu:
                  function updateContextMenu() {
-                     $("gpum-menu-login-logout").setAttribute("label", gmail.unreadCount < 0 ? "Login" : "Logout");
+                     $("gpum-menu-login-logout").setAttribute("label",
+                                                              util.getLocaleString(gmail.unreadCount < 0 ? "login" : "logout"));
+                 },
+
+                 closePreview:
+                 function closePreview() {
+                     $('gpum-popup4preview').hidePopup();
                  },
 
                  modules: modules

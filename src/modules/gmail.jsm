@@ -212,6 +212,9 @@ Gmail.prototype = {
                  });
     },
 
+    getThreadBodyURL:
+    function getThreadBodyURL(threadID) this.simpleModeURL + "?v=pt&th=" + threadID,
+
     // ============================================================ //
     // Scheduler
     // ============================================================ //
