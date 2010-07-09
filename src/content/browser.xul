@@ -36,6 +36,7 @@
             <panel id="gpum-popup4preview" noautofocus="true">
                 <vbox>
                     <hbox id="gpum-popup4preview-header">
+                        <label id="gpum-popup4preview-header-title" class="gpum-link" align="center"></label>
                         <spacer flex="1" />
                         <toolbarbutton align="center"
                                        id="gpum-popup4preview-close-button"

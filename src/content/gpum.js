@@ -149,23 +149,39 @@
              let scrollBox = genElem("vbox", { flex : 1 });
              unreadContainer.appendChild(scrollBox);
 
-             let iframe = $('gpum-popup4preview-frame');
-             safenBrowser(iframe);
-             iframe.addEventListener("click", function (ev) {
-                                         let elem = ev.target;
+             let (previewTitle = $('gpum-popup4preview-header-title'))
+                 previewTitle.addEventListener("click", function (ev) {
+                                                   if (ev.button !== 0)
+                                                       return;
+                                                   $('gpum-popup4preview').hidePopup();
+                                                   openLink(previewTitle.getAttribute("url"));
 
-                                         util.killEvent(ev);
+                                                   if (typeof previewTitle.__gpumDestroy__ === "function")
+                                                   {
+                                                       previewTitle.__gpumDestroy__();
+                                                       previewTitle.__gpumDestroy__ = null;
+                                                   }
+                                               }, false);
 
-                                         if (ev.button !== 0)
-                                             return;
+             let (iframe = $('gpum-popup4preview-frame'))
+             {
+                 safenBrowser(iframe);
+                 iframe.addEventListener("click", function (ev) {
+                                             let elem = ev.target;
 
-                                         if (elem.localName.toLowerCase() === "a")
-                                         {
-                                             let href = elem.getAttribute("href");
-                                             if (/^(https?|ftp):\/\//.test(href))
-                                                 openLink(href, true);
-                                         }
-                                     }, true);
+                                             util.killEvent(ev);
+
+                                             if (ev.button !== 0)
+                                                 return;
+
+                                             if (elem.localName.toLowerCase() === "a")
+                                             {
+                                                 let href = elem.getAttribute("href");
+                                                 if (/^(https?|ftp):\/\//.test(href))
+                                                     openLink(href, true);
+                                             }
+                                         }, true);
+             };
 
              function handleUpdate(ev) {
                  updateStatusbarCount();
@@ -312,6 +328,14 @@
                          {
                              let popup  = $('gpum-popup4preview');
                              let iframe = $('gpum-popup4preview-frame');
+                             let title  = $('gpum-popup4preview-header-title');
+
+                             if (title.hasChildNodes())
+                                 title.removeChild(title.firstChild);
+                             title.appendChild(document.createTextNode(entry.title));
+
+                             title.setAttribute("url", entry.link.@href.toString());
+                             title.__gpumDestroy__ = destroy;
 
                              safenBrowser(iframe);
                              iframe.setAttribute("src", url);
@@ -352,14 +376,6 @@
                  function destroy() {
                      gmail.removeFromUnreads(unread);
                      removeNode();
-
-                     // if (scrollBox.childNodes.length < 1)
-                     // {
-                     //     gpum.checkMailNow(function () {
-                     //                           if (gmail.unreads.length)
-                     //                               gpum.handleStatusBarIconClick({ button : 0 });
-                     //                       });
-                     // }
                  }
 
                  function removeNode() {
