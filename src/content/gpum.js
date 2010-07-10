@@ -64,7 +64,7 @@
      function safenBrowser(iframe) {
          let { docShell, contentWindow } = iframe;
 
-         contentWindow.print = function () {};
+         contentWindow.print = contentWindow.wrappedJSObject.print = function () {};
          docShell.allowJavascript = docShell.allowPlugins = docShell.allowSubframes = false;
      }
 
