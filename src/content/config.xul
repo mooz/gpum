@@ -9,6 +9,7 @@
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             xmlns:html="http://www.w3.org/1999/xhtml"
             title="&config.title;"
+            onload="gpumConfig.onLoad();"
             ondialogaccept="return gpumConfig.onFinish();"
             ondialogcancel="return gpumConfig.onFinish(true);"
             windowtype="Gpum:Config">
@@ -30,6 +31,12 @@
             <preference id="extensions.gpum.openLinkClosePopup"
                         name="extensions.gpum.openLinkClosePopup"
                         type="bool" />
+            <preference id="extensions.gpum.markAsReadOnPreview"
+                        name="extensions.gpum.markAsReadOnPreview"
+                        type="bool" />
+            <preference id="extensions.gpum.previewPosition"
+                        name="extensions.gpum.previewPosition"
+                        type="string" />
         </preferences>
         <groupbox orient="vertical">
             <caption label="&config.general;" />
@@ -43,7 +50,14 @@
 
                 <groupbox orient="vertical">
                     <caption label="&config.message;" />
-                    <checkbox id="config.openLinkClosePopup" label="&config.openLinkClosePopup;" preference="extensions.gpum.openLinkClosePopup" />
+                    <checkbox id="config.openLinkClosePopup" label="&config.openLinkClosePopup;"
+                              preference="extensions.gpum.openLinkClosePopup" />
+                </groupbox>
+
+                <groupbox orient="vertical">
+                    <caption label="&config.preview;" />
+                    <checkbox id="config.markAsReadOnPreview" label="&config.markAsReadOnPreview;"
+                              preference="extensions.gpum.markAsReadOnPreview" />
                 </groupbox>
             </vbox>
         </groupbox>

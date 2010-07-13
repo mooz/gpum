@@ -58,17 +58,6 @@
      }
 
      // ============================================================ //
-     // Iframe
-     // ============================================================ //
-
-     function safenBrowser(iframe) {
-         let { docShell, contentWindow } = iframe;
-
-         contentWindow.print = contentWindow.wrappedJSObject.print = function () {};
-         docShell.allowJavascript = docShell.allowPlugins = docShell.allowSubframes = false;
-     }
-
-     // ============================================================ //
      // Initialization
      // ============================================================ //
 
@@ -166,7 +155,29 @@
 
              let (iframe = $('gpum-popup4preview-frame'))
              {
-                 safenBrowser(iframe);
+                 const onLocationChange = {
+                     QueryInterface: function (aIID) {
+                         if (aIID.equals(Ci.nsIWebProgressListener)   ||
+                             aIID.equals(Ci.nsISupportsWeakReference) ||
+                             aIID.equals(Ci.nsISupports))
+                             return onLocationChange;
+                         throw Components.results.NS_NOINTERFACE;
+                     },
+
+                     onLocationChange: function (aProgress, aRequest, aURI) {
+                         let { docShell, contentWindow } = iframe;
+                         docShell.allowJavascript = docShell.allowPlugins = docShell.allowSubframes = false;
+                         contentWindow.wrappedJSObject.print = contentWindow.print = function () {};
+                     },
+
+                     onStateChange       : function () {},
+                     onProgressChange    : function () {},
+                     onStatusChange      : function () {},
+                     onSecurityChange    : function () {},
+                     onLinkIconAvailable : function () {}
+                 };
+                 iframe.addProgressListener(onLocationChange, Ci.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+
                  iframe.addEventListener("click", function (ev) {
                                              let elem = ev.target;
 
@@ -338,12 +349,18 @@
                              title.setAttribute("url", entry.link.@href.toString());
                              title.__gpumDestroy__ = destroy;
 
-                             safenBrowser(iframe);
                              iframe.setAttribute("src", url);
-                             safenBrowser(iframe);
 
-                             popup.openPopup(entryContainer, "start_after", 0, 0, false, false);
+                             if (util.getBoolPref(util.getPrefKey("markAsReadOnPreview"), false))
+                             {
+                                 gmail.markAsReadThread(id);
+                                 destroy();
+                             }
+
+                             // let popupPosition = util.getUnicharPref(util.getPrefKey("previewPosition"), "start_after");
+                             popup.openPopup(null, "start_after", 0, 0, false, false);
                          };
+
                          break;
                      }
 
@@ -477,6 +494,7 @@
 
                  closePreview:
                  function closePreview() {
+                     $('gpum-popup4preview-frame').setAttribute("src", "about:blank");
                      $('gpum-popup4preview').hidePopup();
                  },
 

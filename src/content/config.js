@@ -32,13 +32,25 @@
 
      let gmail = util.storage.gmail;
 
-     let updateInterval       = $("config.updateInterval");
-     let alwaysUseSSL         = $("config.alwaysUseSSL");
-     let checkAll             = $("config.checkAll");
-     // let useSimpleModeForLink = $("config.useSimpleModeForLink");
-     let openLinkClosePopup   = $("config.openLinkClosePopup");
+     let prefWindow         = $("gpum-config");
+     let prefPaneGeneral    = $("prefpane-general");
+
+     let updateInterval     = $("config.updateInterval");
+     let alwaysUseSSL       = $("config.alwaysUseSSL");
+     let checkAll           = $("config.checkAll");
+     let openLinkClosePopup = $("config.openLinkClosePopup");
+     // let previewPosition    = $("config.previewPosition");
 
      window.gpumConfig = {
+         onLoad:
+         function onLoad() {
+             // if (previewPosition.selectedIndex < 0)
+             // {
+             //     previewPosition.selectedIndex = 0;
+             //     prefPaneGeneral.userChangedValue(previewPosition);
+             // }
+         },
+
          onFinish:
          function onFinish(canceled) {
              if (canceled && util.isWindows)

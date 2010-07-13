@@ -44,8 +44,8 @@
                                        tooltiptext="&preview.close;"
                                        oncommand="gpum.closePreview();" />
                     </hbox>
-                    <iframe id="gpum-popup4preview-frame" type="content">
-                    </iframe>
+                    <browser id="gpum-popup4preview-frame" type="content">
+                    </browser>
                 </vbox>
             </panel>
         </hbox>

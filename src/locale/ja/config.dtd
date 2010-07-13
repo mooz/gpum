@@ -12,3 +12,12 @@
 <!ENTITY config.useSimpleModeForLink "メッセージを開く際 Gmail には簡易表示モードでアクセスする">
 <!ENTITY config.openLinkClosePopup "メッセージを開く際にポップアップを閉じる">
 <!-- }} -->
+
+<!-- {{ -->
+<!ENTITY config.preview "プレビュー">
+<!ENTITY config.markAsReadOnPreview "プレビュー時にメッセージを既読にする">
+<!ENTITY config.previewPosition "プレビューの位置">
+<!ENTITY config.previewPosition.startAfter "メッセージの左">
+<!ENTITY config.previewPosition.overlap "メッセージに重なるように">
+<!-- }} -->
+

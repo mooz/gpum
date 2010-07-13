@@ -13,3 +13,10 @@
 <!ENTITY config.openLinkClosePopup "Close popup before opening mail">
 <!-- }} -->
 
+<!-- {{ -->
+<!ENTITY config.preview "Preview">
+<!ENTITY config.markAsReadOnPreview "Mark as read on preview">
+<!ENTITY config.previewPosition "Position of the preview">
+<!ENTITY config.previewPosition.startAfter "on left">
+<!ENTITY config.previewPosition.overlap "overlap">
+<!-- }} -->
