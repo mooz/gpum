@@ -143,7 +143,7 @@
                  previewTitle.addEventListener("click", function (ev) {
                                                    if (ev.button !== 0)
                                                        return;
-                                                   $('gpum-popup4preview').hidePopup();
+                                                   gpum.closePreview();
                                                    openLink(previewTitle.getAttribute("url"));
 
                                                    if (typeof previewTitle.__gpumDestroy__ === "function")
@@ -365,7 +365,7 @@
                      }
 
                      if (target !== summary)
-                         $('gpum-popup4preview').hidePopup();
+                         gpum.closePreview();
                  }
 
                  function createTMPFile(cont, name) {
