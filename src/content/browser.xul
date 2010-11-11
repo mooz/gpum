@@ -8,16 +8,7 @@
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-    <statusbar id="status-bar">
-        <statusbarpanel id="gpum-statusbar-panel" align="center" context="gpum-context-menu">
-            <hbox align="center" flex="1"
-                  onclick="gpum.handleStatusBarIconClick(event);" >
-                <image id="gpum-statusbar-icon"
-	               src="chrome://gpum/skin/icon16/gmail-blue.png" />
-                <label id="gpum-statusbar-count" flex="1" value="-"></label>
-            </hbox>
-        </statusbarpanel>
-
+    <popupset id="mainPopupSet">
         <menupopup id="gpum-context-menu" onpopupshowing="gpum.updateContextMenu();">
 	    <menuitem id="gpum-menu-open-config"
                       label="&menu.settings;"
@@ -31,24 +22,33 @@
 		      oncommand="gpum.checkMailNow();" />
         </menupopup>
 
-        <hbox id="gpum-popup-container">
-            <panel id="gpum-popup" noautofocus="true" />
-            <panel id="gpum-popup4preview" noautofocus="true">
-                <vbox>
-                    <hbox id="gpum-popup4preview-header">
-                        <label id="gpum-popup4preview-header-title" class="gpum-link" align="center"></label>
-                        <spacer flex="1" />
-                        <toolbarbutton align="center"
-                                       id="gpum-popup4preview-close-button"
-                                       class="tab-close-button"
-                                       tooltiptext="&preview.close;"
-                                       oncommand="gpum.closePreview();" />
-                    </hbox>
-                    <browser id="gpum-popup4preview-frame" type="content">
-                    </browser>
-                </vbox>
-            </panel>
-        </hbox>
+        <panel id="gpum-popup" noautofocus="true" />
+        <panel id="gpum-popup4preview" noautofocus="true">
+            <vbox>
+                <hbox id="gpum-popup4preview-header">
+                    <label id="gpum-popup4preview-header-title" class="gpum-link" align="center"></label>
+                    <spacer flex="1" />
+                    <toolbarbutton align="center"
+                                   id="gpum-popup4preview-close-button"
+                                   class="tab-close-button"
+                                   tooltiptext="&preview.close;"
+                                   oncommand="gpum.closePreview();" />
+                </hbox>
+                <browser id="gpum-popup4preview-frame" type="content">
+                </browser>
+            </vbox>
+        </panel>
+    </popupset>
+
+    <statusbar id="status-bar">
+        <statusbarpanel id="gpum-statusbar-panel" align="center" context="gpum-context-menu">
+            <hbox align="center" flex="1"
+                  onclick="gpum.handleStatusBarIconClick(event);" >
+                <image id="gpum-statusbar-icon"
+	               src="chrome://gpum/skin/icon16/gmail-blue.png" />
+                <label id="gpum-statusbar-count" flex="1" value="-"></label>
+            </hbox>
+        </statusbarpanel>
     </statusbar>
 
     <!-- ============================================================
