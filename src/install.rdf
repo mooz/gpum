@@ -6,7 +6,7 @@
     <Description about="urn:mozilla:install-manifest">
         <em:id>gpum@mooz.github.com</em:id>
         <em:type>2</em:type>
-        <em:version>0.0.8</em:version>
+        <em:version>0.0.9</em:version>
         <em:name>gpum - Gmail Popup Unread Manager</em:name>
         <em:creator>mooz</em:creator>
         <em:developer>mooz</em:developer>
