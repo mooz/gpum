@@ -66,7 +66,7 @@
     <prefpane id="prefpane-about" label="&config.about;" flex="1">
         <preferences></preferences>
         <vbox align="center" flex="1">
-            <description id="addon-name">Gmail Popup Unread Manager</description>
+            <description id="addon-name">Google mail Popup Unread Manager</description>
             <description class="copyright">mooz &lt;stillpedant@gmail.com&gt; &#169; 2010</description>
             <vbox id="special-thanks">
                 <label class="link"

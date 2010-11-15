@@ -14,14 +14,14 @@
         <em:optionsURL>chrome://gpum/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://gpum/skin/icon32/gpum.png</em:iconURL>
         <!-- en-US -->
-        <em:description>Manage unread mail in the Google Mail</em:description>
+        <em:description>Manage unread mail in the Google mail</em:description>
         <!-- ja -->
         <em:localized>
             <Description>
                 <em:locale>ja</em:locale>
                 <em:name>gpum - Google mail Popup Unread Manager</em:name>
                 <em:creator>mooz</em:creator>
-                <em:description>Google-Mail の未読メールをポップアップで管理</em:description>
+                <em:description>Google mail の未読メールをポップアップで管理</em:description>
                 <em:homepageURL>http://github.com/mooz/gpum/</em:homepageURL>
             </Description>
         </em:localized>
