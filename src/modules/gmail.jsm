@@ -414,7 +414,7 @@ Gmail.prototype = {
             params.PersistentCookie = "yes";
 
             http.post(self.authURL, function (req) {
-                if (typeof nexe === "function") next(req);
+                if (typeof next === "function") next(req);
             }, params);
         });
     },
@@ -437,11 +437,9 @@ Gmail.prototype = {
 
         let doc = this.registeredWindows[0].document;
 
-        util.message("doc :: " + doc);
-
         http.get(this.loginURL, function (req) {
             let str = req.responseText;
-            let doc = util.htmlFromString(str, doc);
+            let html = util.htmlFromString(str, doc);
             let params = ["#service",
                           "#dsh",
                           "#timeStmp",
@@ -450,7 +448,7 @@ Gmail.prototype = {
                           "#Email",
                           "#Passwd",
                           "input[name=rmShown]"]
-                .map(function (s) doc.querySelector(s))
+                .map(function (s) html.querySelector(s))
                 .filter(function (e) e)
                 .reduce(function (params, e) {
                     params[e.getAttribute("name")] = e.getAttribute("value");

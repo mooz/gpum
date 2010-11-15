@@ -503,10 +503,10 @@
                          let username = elem.getAttribute("label");
                          let password = elem.getAttribute("value");
 
+                         let self = this;
                          if (password)
                              gmail.login(username, password, function () {
-                                 alert("LOGGED IN!!!");
-                                 gmail.updater();
+                                 self.checkMailNow();
                              });
                          else
                              gmail.openLoginPage();
