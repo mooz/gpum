@@ -413,8 +413,12 @@ Gmail.prototype = {
             params.Passwd = pass;
             params.PersistentCookie = "yes";
 
+            // authenticate
             http.post(self.authURL, function (req) {
-                if (typeof next === "function") next(req);
+                // get cookie
+                http.get(self.simpleModeURL, function (req) {
+                    if (typeof next === "function") next(req);
+                });
             }, params);
         });
     },
