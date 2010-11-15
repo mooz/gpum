@@ -505,12 +505,14 @@
                          let username = elem.getAttribute("label");
                          let password = elem.getAttribute("value");
 
-                         if (password)
+                         if (password) {
+                             self.nowChecking = true;
                              gmail.login(username, password, function () {
                                  self.checkMailNow();
                              });
-                         else
+                         } else {
                              gmail.openLoginPage();
+                         }
                      }, false);
 
                      popup.addEventListener("popuphidden", function (ev) {
