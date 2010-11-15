@@ -490,7 +490,7 @@
                      }
 
                      popup.appendChild(genElem("menuitem", {
-                         label : "Open login page"
+                         label : util.getLocaleString("openLoginPage")
                      }));
 
                      document.documentElement.appendChild(popup);
