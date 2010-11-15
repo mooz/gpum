@@ -495,6 +495,8 @@
 
                      document.documentElement.appendChild(popup);
 
+                     let self = this;
+
                      popup.addEventListener("command", function (ev) {
                          popup.removeEventListener("command", arguments.callee, false);
 
@@ -503,7 +505,6 @@
                          let username = elem.getAttribute("label");
                          let password = elem.getAttribute("value");
 
-                         let self = this;
                          if (password)
                              gmail.login(username, password, function () {
                                  self.checkMailNow();
