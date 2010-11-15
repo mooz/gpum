@@ -63,19 +63,24 @@ function Gmail(args) {
 
 Gmail.prototype = {
     get cmgr() Cc["@mozilla.org/cookiemanager;1"].getService().QueryInterface(Ci.nsICookieManager),
-    get isLoggedIn() {
+    get cookies() {
         let iter = this.cmgr.enumerator;
+        let cookies = [];
 
         while (iter.hasMoreElements()) {
             let cookie = iter.getNext();
             if (cookie instanceof Ci.nsICookie &&
-                cookie.host.indexOf("mail.google.com") >= 0 &&
-                cookie.name === "GX")
-                return true;
+                cookie.host.indexOf("mail.google.com") >= 0)
+                cookies.push(cookie);
         }
 
-        return false;
+        return cookies;
     },
+    get isLoggedIn() this.cookies.some(function (cookie) cookie.name === "GX"),
+    get gmailAt() this.cookies.reduce(function (at, cand) {
+        return at ? at :
+            cand.name === "GMAIL_AT" ? cand.value : at;
+    }, null),
     get checkAllMail() this._checkAllMail || false,
     set checkAllMail(v) {
         if (v)
@@ -128,32 +133,18 @@ Gmail.prototype = {
 
     post:
     function post(args, next) {
-        const self = this;
+        let threadID = args.threadID;
+        let action   = args.action;
 
-        function refreshAtCode() {
-            self.getAt(function () { self.post(args, next); });
-        }
+        let postURL = this.simpleModeURL.replace("^http:", "https:");
 
-        if (!self.gmailAt)
-            refreshAtCode();
-        else
-        {
-            let threadID = args.threadID;
-            let action   = args.action;
-
-            let postURL = this.simpleModeURL.replace("^http:", "https:");
-
-            http.post(postURL, function (req) {
-                          if (req.status !== 200)
-                              refreshAtCode();
-                          else if (typeof next === "function") next(req);
-                      },
-                      {
-                          t   : threadID,
-                          at  : self.gmailAt,
-                          act : action
-                      });
-        }
+        http.post(postURL, function (req) {
+            if (typeof next === "function") next(req);
+        }, {
+            t   : threadID,
+            at  : this.gmailAt,
+            act : action
+        });
     },
 
     getAt:
