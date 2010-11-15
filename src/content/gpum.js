@@ -82,10 +82,10 @@
              let icon  = $("gpum-statusbar-icon");
              let count = $("gpum-statusbar-count");
 
+             let iconBox = $("gpum-statusbar-icon-box");
+
              if ((gmail = util.storage.gmail))
-             {
                  handleUpdate();
-             }
              else
              {
                  gmail = util.storage.gmail = new Gmail(
@@ -98,6 +98,8 @@
                  gmail.setupScheduler();
                  gmail.startScheduler(true);
              }
+
+             refreshIconBoxTooltip();
 
              gmail.registerWindow(window);
              document.addEventListener(gmail.UPDATE_EVENT, handleUpdate, false);
@@ -210,13 +212,29 @@
 
                  count.setAttribute("value", unreadCount >= 0 ? unreadCount : "-");
                  refreshIconColor();
+                 refreshIconBoxTooltip();
+             }
+
+             function refreshIconBoxTooltip() {
+                 let tooltip;
+
+                 if (gmail.unreadCount > 0)
+                     tooltip = util.getLocaleString("thereAreUnreadMails", gmail.unreadCount);
+                 else if (gmail.unreadCount === 0)
+                     tooltip = util.getLocaleString("thereAreNoUnreadMails");
+                 else // not logged in
+                     tooltip = util.getLocaleString("notLoggedIn");
+
+                 iconBox.setAttribute("tooltiptext", tooltip);
              }
 
              function refreshIconColor() {
                  if (gmail.unreadCount > 0)
                      icon.setAttribute("src", "chrome://gpum/skin/icon16/gmail.png");
-                 else
+                 else if (gmail.unreadCount === 0)
                      icon.setAttribute("src", "chrome://gpum/skin/icon16/gmail-blue.png");
+                 else // not logged in
+                     icon.setAttribute("src", "chrome://gpum/skin/icon16/gmail-gray.png");
              }
 
              function refreshStatusbarIcon(loading) {
@@ -358,7 +376,7 @@
                              }
 
                              // let popupPosition = util.getUnicharPref(util.getPrefKey("previewPosition"), "start_after");
-                             popup.openPopup(null, "start_after", 0, 0, false, false);
+                             popup.openPopup(null, "after_pointer", 0, 0, false, false);
                          };
 
                          break;

@@ -43,9 +43,10 @@
     <statusbar id="status-bar">
         <statusbarpanel id="gpum-statusbar-panel" align="center" context="gpum-context-menu">
             <hbox align="center" flex="1"
+                  id="gpum-statusbar-icon-box"
                   onclick="gpum.handleStatusBarIconClick(event);" >
                 <image id="gpum-statusbar-icon"
-	               src="chrome://gpum/skin/icon16/gmail-blue.png" />
+	               src="chrome://gpum/skin/icon16/gmail-gray.png" />
                 <label id="gpum-statusbar-count" flex="1" value="-"></label>
             </hbox>
         </statusbarpanel>
