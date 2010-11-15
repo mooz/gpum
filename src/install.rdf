@@ -6,22 +6,22 @@
     <Description about="urn:mozilla:install-manifest">
         <em:id>gpum@mooz.github.com</em:id>
         <em:type>2</em:type>
-        <em:version>0.0.9</em:version>
-        <em:name>gpum - Gmail Popup Unread Manager</em:name>
+        <em:version>0.1.0</em:version>
+        <em:name>gpum - Google mail Popup Unread Manager</em:name>
         <em:creator>mooz</em:creator>
         <em:developer>mooz</em:developer>
         <em:homepageURL>http://github.com/mooz/gpum/</em:homepageURL>
         <em:optionsURL>chrome://gpum/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://gpum/skin/icon32/gpum.png</em:iconURL>
         <!-- en-US -->
-        <em:description>Manage unread mail in Gmail</em:description>
+        <em:description>Manage unread mail in the Google Mail</em:description>
         <!-- ja -->
         <em:localized>
             <Description>
                 <em:locale>ja</em:locale>
-                <em:name>gpum - Gmail Popup Unread Manager</em:name>
+                <em:name>gpum - Google mail Popup Unread Manager</em:name>
                 <em:creator>mooz</em:creator>
-                <em:description>Gmail の未読メールをポップアップで管理</em:description>
+                <em:description>Google-Mail の未読メールをポップアップで管理</em:description>
                 <em:homepageURL>http://github.com/mooz/gpum/</em:homepageURL>
             </Description>
         </em:localized>
