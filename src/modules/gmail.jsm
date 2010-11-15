@@ -62,6 +62,20 @@ function Gmail(args) {
 }
 
 Gmail.prototype = {
+    get cmgr() Cc["@mozilla.org/cookiemanager;1"].getService().QueryInterface(Ci.nsICookieManager),
+    get isLoggedIn() {
+        let iter = this.cmgr.enumerator;
+
+        while (iter.hasMoreElements()) {
+            let cookie = iter.getNext();
+            if (cookie instanceof Ci.nsICookie &&
+                cookie.host.indexOf("mail.google.com") >= 0 &&
+                cookie.name === "GX")
+                return true;
+        }
+
+        return false;
+    },
     get checkAllMail() this._checkAllMail || false,
     set checkAllMail(v) {
         util.message("v is " + v);
@@ -83,6 +97,8 @@ Gmail.prototype = {
     get composeURL() this.mailURL + "#compose",
     get contacsURL() this.mailURL + "#contacts",
     get simpleModeURL() this.mailURL + "h/" + ~~(1000000 * Math.random()) + "/",
+    get loginURL() "https://www.google.com/accounts/ServiceLogin?service=mail",
+    get authURL() "https://www.google.com/accounts/ServiceLoginAuth",
 
     getURLRecentFor:
     function getURLRecentFor(addr) {
@@ -247,14 +263,19 @@ Gmail.prototype = {
     function updater() {
         const self = this;
 
-        self.processUnreads(
-            function (req) {
-                self.processResponse(req);
-            },
-            function (req) {
-                util.messageDebug("UPDATE ERROR => " + req.responseText);
-            }
-        );
+        if (this.isLoggedIn) {
+            self.processUnreads(
+                function (req) {
+                    self.processResponse(req);
+                },
+                function (req) {
+                    util.messageDebug("UPDATE ERROR => " + req.responseText);
+                }
+            );
+        } else {
+            // not logged in
+            this.resetLoginStatus();
+        }
     },
 
     setupScheduler:
@@ -351,7 +372,6 @@ Gmail.prototype = {
             util.message("send " + this.UPDATE_EVENT);
 
             ev.initEvent(this.UPDATE_EVENT, true, false);
-
             doc.dispatchEvent(ev);
         }
     },
@@ -377,13 +397,26 @@ Gmail.prototype = {
     // Login, Logout
     // ============================================================ //
 
-    login:
-    function login() {
+    resetLoginStatus:
+    function resetLoginStatus() {
+        this.unreads     = [];
+        this.unreadCount = -1;
+        this.dispatchEvents(this.registeredWindows);
     },
 
-    openLoginPage:
-    function openLoginPage() {
-        util.visitLink(this.mailURL);
+    login:
+    function login(mail, pass, next) {
+        let self = this;
+
+        this.getLoginInfoThen(function (params) {
+            params.Email = mail;
+            params.Passwd = pass;
+            params.PersistentCookie = "yes";
+
+            http.post(self.authURL, function (req) {
+                if (typeof nexe === "function") next(req);
+            }, params);
+        });
     },
 
     logout:
@@ -391,12 +424,46 @@ Gmail.prototype = {
         let self = this;
 
         http.get(this.mailURL + "?logout", function (req) {
-                     self.unreads     = [];
-                     self.unreadCount = -1;
-                     self.dispatchEvents(self.registeredWindows);
+            self.resetLoginStatus();
 
-                     if (typeof next === "function") next(req);
-                 });
+            if (typeof next === "function") next(req);
+        });
+    },
+
+    getLoginInfoThen:
+    function getLoginInfoThen(next) {
+        if (!this.registeredWindows.length)
+            throw "No window is registered.";
+
+        let doc = this.registeredWindows[0].document;
+
+        util.message("doc :: " + doc);
+
+        http.get(this.loginURL, function (req) {
+            let str = req.responseText;
+            let doc = util.htmlFromString(str, doc);
+            let params = ["#service",
+                          "#dsh",
+                          "#timeStmp",
+                          "#secTok",
+                          "input[name=GALX]",
+                          "#Email",
+                          "#Passwd",
+                          "input[name=rmShown]"]
+                .map(function (s) doc.querySelector(s))
+                .filter(function (e) e)
+                .reduce(function (params, e) {
+                    params[e.getAttribute("name")] = e.getAttribute("value");
+                    return params;
+                }, {});
+
+            next(params);
+        });
+    },
+
+    openLoginPage:
+    function openLoginPage() {
+        util.visitLink(this.mailURL);
     }
 };
 

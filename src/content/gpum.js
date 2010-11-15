@@ -452,7 +452,12 @@
                      util.killEvent(ev);
 
                      if (gmail.unreadCount < 0)
-                         gmail.openLoginPage();
+                     {
+                         if (gmail.isLoggedIn)
+                             this.checkMailNow();
+                         else
+                             this.loginWithMenu();
+                     }
                      else
                      {
                          clearEntries();
@@ -466,10 +471,59 @@
                      }
                  },
 
+                 loginWithMenu:
+                 function loginWithMenu() {
+                     let logins = Gmail.getLogins().filter(function (l) l.username && l.password);
+
+                     let popup = genElem("menupopup");
+
+                     if (logins.length) {
+                         for (let [, { username, password }] in Iterator(logins)) {
+                             let menuItem = genElem("menuitem", {
+                                 label : username,
+                                 value : password
+                             });
+
+                             popup.appendChild(menuItem);
+                         }
+                         popup.appendChild(genElem("menuseparator"));
+                     }
+
+                     popup.appendChild(genElem("menuitem", {
+                         label : "Open login page"
+                     }));
+
+                     document.documentElement.appendChild(popup);
+
+                     popup.addEventListener("command", function (ev) {
+                         popup.removeEventListener("command", arguments.callee, false);
+
+                         let elem  = ev.target;
+
+                         let username = elem.getAttribute("label");
+                         let password = elem.getAttribute("value");
+
+                         if (password)
+                             gmail.login(username, password, function () {
+                                 alert("LOGGED IN!!!");
+                                 gmail.updater();
+                             });
+                         else
+                             gmail.openLoginPage();
+                     }, false);
+
+                     popup.addEventListener("popuphidden", function (ev) {
+                         popup.removeEventListener("popuphidden", arguments.callee, false);
+                         document.documentElement.removeChild(popup);
+                     }, false);
+
+                     popup.openPopup(icon, "after_end", 0, 0, true);
+                 },
+
                  loginLogout:
                  function loginLogout() {
                      if (gmail.unreadCount < 0)
-                         gmail.openLoginPage();
+                         this.loginWithMenu();
                      else
                          gmail.logout();
                  },
@@ -498,7 +552,8 @@
                      $('gpum-popup4preview').hidePopup();
                  },
 
-                 modules: modules
+                 modules: modules,
+                 gmail: gmail
              };
          }, false);
  })();

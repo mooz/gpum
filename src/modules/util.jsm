@@ -327,6 +327,25 @@ const util = {
     },
 
     // ============================================================ //
+    //  DOM
+    // ============================================================ //
+
+    htmlFromString:
+    function htmlFromString(str, doc) {
+        util.message("doc :: " + doc);
+
+        let html = doc.implementation.createDocument("http://www.w3.org/1999/xhtml", "html", null),
+        body = doc.createElementNS("http://www.w3.org/1999/xhtml", "body");
+        html.documentElement.appendChild(body);
+
+        body.appendChild(Cc["@mozilla.org/feed-unescapehtml;1"]
+                         .getService(Ci.nsIScriptableUnescapeHTML)
+                         .parseFragment(str, false, null, body));
+
+        return html;
+    },
+
+    // ============================================================ //
     //  E4X
     // ============================================================ //
 
