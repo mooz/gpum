@@ -78,8 +78,6 @@ Gmail.prototype = {
     },
     get checkAllMail() this._checkAllMail || false,
     set checkAllMail(v) {
-        util.message("v is " + v);
-
         if (v)
         {
             this.inboxLabel  = "#all";
@@ -113,7 +111,6 @@ Gmail.prototype = {
 
         let (reqURL = this.mailURL + "feed/atom" + this.atomLabel)
         {
-            util.message("reqURL : " + reqURL);
             http.get(reqURL,
                      function (req) {
                          if (req.status === 200)
@@ -369,8 +366,6 @@ Gmail.prototype = {
             let doc = win.document;
             let ev  = doc.createEvent("Events");
 
-            util.message("send " + this.UPDATE_EVENT);
-
             ev.initEvent(this.UPDATE_EVENT, true, false);
             doc.dispatchEvent(ev);
         }
@@ -429,7 +424,6 @@ Gmail.prototype = {
 
         http.get(this.mailURL + "?logout", function (req) {
             self.resetLoginStatus();
-
             if (typeof next === "function") next(req);
         });
     },
