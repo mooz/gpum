@@ -428,7 +428,7 @@
                  Array.map(scrollBox.childNodes, function (e) e.__gpumDestroy__).forEach(function (f) f && f());
              }
 
-             window.gpum = {
+             let gpum = window.gpum = {
                  _nowChecking: false,
                  set nowChecking(v) {
                      refreshStatusbarIcon(v);
@@ -438,20 +438,18 @@
 
                  checkMailNow:
                  function checkMailNow(next) {
-                     const self = this;
-
                      this.nowChecking = true;
 
                      gmail.processUnreads(
                          function (req) {
-                             self.nowChecking = false;
+                             gpum.nowChecking = false;
                              gmail.processResponse(req);
 
                              if (typeof next === "function")
                                  next(req);
                          },
                          function (req) {
-                             self.nowChecking = false;
+                             gpum.nowChecking = false;
                          }
                      );
                  },
@@ -513,8 +511,6 @@
 
                      document.documentElement.appendChild(popup);
 
-                     let self = this;
-
                      popup.addEventListener("command", function (ev) {
                          popup.removeEventListener("command", arguments.callee, false);
 
@@ -523,14 +519,10 @@
                          let username = elem.getAttribute("label");
                          let password = elem.getAttribute("value");
 
-                         if (password) {
-                             self.nowChecking = true;
-                             gmail.login(username, password, function () {
-                                 self.checkMailNow();
-                             });
-                         } else {
+                         if (password)
+                             gpum.login(username, password);
+                         else
                              gmail.openLoginPage();
-                         }
                      }, false);
 
                      popup.addEventListener("popuphidden", function (ev) {
@@ -541,12 +533,30 @@
                      popup.openPopup(icon, "after_end", 0, 0, true);
                  },
 
+                 login:
+                 function login(name, password) {
+                     this.nowChecking = true;
+                     gmail.login(username, password, function () {
+                         gpum.checkMailNow();
+                     });
+                 },
+
+                 logout:
+                 function logout() {
+                     this.nowChecking = true;
+                     gmail.logout(function () {
+                         gpum.nowChecking = false;
+                     });
+                 },
+
                  loginLogout:
                  function loginLogout() {
-                     if (gmail.unreadCount < 0)
+                     if (gmail.unreadCount < 0) {
+                         $("gpum-context-menu").hidePopup();
                          this.loginWithMenu();
+                     }
                      else
-                         gmail.logout();
+                         this.logout();
                  },
 
                  openConfig:

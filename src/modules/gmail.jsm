@@ -64,6 +64,7 @@ function Gmail(args) {
 Gmail.prototype = {
     get cmgr() Cc["@mozilla.org/cookiemanager;1"].getService().QueryInterface(Ci.nsICookieManager),
     get cookies() {
+        // TODO: cache this
         let iter = this.cmgr.enumerator;
         let cookies = [];
 
@@ -75,6 +76,17 @@ Gmail.prototype = {
         }
 
         return cookies;
+    },
+    get cookie() {
+        let gx = this.cookies
+            .filter(function (cookie) cookie.name === "GX")
+            .reduce(function (recent, gx) (!recent ? gx :
+                                           recent.expires < gx.expires ? gx : recent),
+                    null);
+        if (!gx)
+            return gx;
+
+        return 'GX="' + gx.value + '";';
     },
     get isLoggedIn() this.cookies.some(function (cookie) cookie.name === "GX"),
     get gmailAt() this.cookies.reduce(function (at, cand) {
@@ -124,7 +136,10 @@ Gmail.prototype = {
                              onerror(req);
                      }, null,
                      {
-                         header   : { "Content-type" : "application/xml" },
+                         header : {
+                             "Content-type" : "application/xml",
+                             "Cookie"       : this.cookie
+                         },
                          username : self.username,
                          password : self.password
                      });
@@ -144,7 +159,7 @@ Gmail.prototype = {
             t   : threadID,
             at  : this.gmailAt,
             act : action
-        });
+        }, { header : { "Cookie" : this.cookie } });
     },
 
     getAt:
@@ -211,9 +226,9 @@ Gmail.prototype = {
         let getURL = this.simpleModeURL + "?v=pt&th=" + threadID;
 
         http.get(getURL, function (req) {
-                     if (typeof next === "function")
-                         next(threadID, req.responseText);
-                 });
+            if (typeof next === "function")
+                next(threadID, req.responseText);
+        }, {}, { header : { "Cookie" : this.cookie } });
     },
 
     getThreadBodyURL:
@@ -415,6 +430,16 @@ Gmail.prototype = {
 
         http.get(this.mailURL + "?logout", function (req) {
             self.resetLoginStatus();
+            try {
+                let { cmgr } = self;
+                self.cookies
+                    .filter(function (cookie) cookie.name === "GX")
+                    .forEach(function (cookie) {
+                        cmgr.remove(cookie.host, cookie.name, cookie.path, false);
+                    });
+            } catch (x) {
+                util.message("Failed to remove cookie :: " + e);
+            }
             if (typeof next === "function") next(req);
         });
     },
