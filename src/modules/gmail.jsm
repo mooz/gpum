@@ -70,7 +70,7 @@ Gmail.prototype = {
         while (iter.hasMoreElements()) {
             let cookie = iter.getNext();
             if (cookie instanceof Ci.nsICookie &&
-                cookie.host.indexOf("mail.google.com") >= 0)
+                /mail\.google\.com$/.test(cookie.host))
                 cookies.push(cookie);
         }
 
