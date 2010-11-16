@@ -534,10 +534,12 @@
                  },
 
                  login:
-                 function login(name, password) {
+                 function login(username, password) {
                      this.nowChecking = true;
                      gmail.login(username, password, function () {
                          gpum.checkMailNow();
+                     }, function (req) {
+                         gpum.nowChecking = false;
                      });
                  },
 

@@ -406,7 +406,7 @@ Gmail.prototype = {
     },
 
     login:
-    function login(mail, pass, next) {
+    function login(mail, pass, next, error) {
         let self = this;
 
         this.getLoginInfoThen(function (params) {
@@ -416,10 +416,12 @@ Gmail.prototype = {
 
             // authenticate
             http.post(self.authURL, function (req) {
-                // get cookie
-                http.get(self.simpleModeURL, function (req) {
-                    if (typeof next === "function") next(req);
-                });
+                if (req.status === 200)
+                    http.get(self.simpleModeURL, function (req) { // get cookie
+                        if (typeof next === "function") next(req);
+                    });
+                else
+                    if (typeof error === "function") error(req);
             }, params);
         });
     },
