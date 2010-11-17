@@ -352,6 +352,7 @@ const util = {
     createXML:
     function createXML(src) {
         // https://bugzilla.mozilla.org/show_bug.cgi?id=336551
+        util.message(src);
         src = src.replace(/^<\?xml\s+version\s*=\s*(["'])[^\1]+\1[^?]*\?>/, "");
         return new XML(src);
     }
