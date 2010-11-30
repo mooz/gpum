@@ -89,10 +89,10 @@ Gmail.prototype = {
         return 'GX="' + gx.value + '";';
     },
     get isLoggedIn() this.cookies.some(function (cookie) cookie.name === "GX"),
-    get gmailAt() this.cookies.reduce(function (at, cand) {
-        return at ? at :
-            cand.name === "GMAIL_AT" ? cand.value : at;
-    }, null),
+    // get gmailAt() this.cookies.reduce(function (at, cand) {
+    //     return at ? at :
+    //         cand.name === "GMAIL_AT" ? cand.value : at;
+    // }, null),
     get checkAllMail() this._checkAllMail || false,
     set checkAllMail(v) {
         if (v)
@@ -153,13 +153,21 @@ Gmail.prototype = {
 
         let postURL = this.simpleModeURL.replace("^http:", "https:");
 
-        http.post(postURL, function (req) {
-            if (typeof next === "function") next(req);
-        }, {
-            t   : threadID,
-            at  : this.gmailAt,
-            act : action
-        }, { header : { "Cookie" : this.cookie } });
+        let self = this;
+        function doPost() {
+            http.post(postURL, function (req) {
+                if (typeof next === "function") next(req);
+            }, {
+                t   : threadID,
+                at  : self.gmailAt,
+                act : action
+            }, { header : { "Cookie" : self.cookie } });
+        }
+
+        if (this.gmailAt)
+            doPost();
+        else
+            this.getAt(doPost);
     },
 
     getAt:
@@ -169,16 +177,15 @@ Gmail.prototype = {
         let getURL = this.simpleModeURL + "?ui=html&zy=c";
 
         http.get(getURL, function (req) {
-                     let matches = req.responseText.match(/\?at=([^"]+)/);
+            let matches = req.responseText.match(/\?at=([^"]+)/);
 
-                     if (matches && matches.length > 0)
-                     {
-                         self.gmailAt = matches[1];
+            if (matches && matches.length > 0) {
+                self.gmailAt = matches[1];
 
-                         if (typeof callback === "function")
-                             callback();
-                     }
-                 });
+                if (typeof callback === "function")
+                    callback();
+            }
+        }, {}, { header : { "Cookie" : this.cookie } });
     },
 
     // ============================================================ //
@@ -402,6 +409,7 @@ Gmail.prototype = {
     function resetLoginStatus() {
         this.unreads     = [];
         this.unreadCount = -1;
+        this.gmailAt     = null;
         this.dispatchEvents(this.registeredWindows);
     },
 
@@ -418,6 +426,7 @@ Gmail.prototype = {
             http.post(self.authURL, function (req) {
                 if (req.status === 200)
                     http.get(self.simpleModeURL, function (req) { // get cookie
+                        self.gmailAt = null;
                         if (typeof next === "function") next(req);
                     });
                 else
