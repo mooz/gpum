@@ -5,7 +5,7 @@
 
 <!ENTITY config.updateInterval "Update interval (minute)">
 <!ENTITY config.alwaysUseSSL "Always use SSL">
-<!ENTITY config.checkAll "Check all mails">
+<!ENTITY config.checkAll "Check all unread mails">
 
 <!-- {{ -->
 <!ENTITY config.message "Message">
