@@ -156,7 +156,11 @@ Gmail.prototype = {
         let self = this;
         function doPost() {
             http.post(postURL, function (req) {
-                if (typeof next === "function") next(req);
+                if (req.status === 200) {
+                    if (typeof next === "function") next(req);
+                } else {
+                    self.getAt(doPost);
+                }
             }, {
                 t   : threadID,
                 at  : self.gmailAt,
