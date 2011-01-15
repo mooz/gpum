@@ -29,21 +29,22 @@
     // DOM Utils
     // ============================================================ //
 
-    function setAttributes(aElem, aAttributes) {
-        if (aAttributes)
-            for (let [key, value] in Iterator(aAttributes))
-                if (key && value)
-                    aElem.setAttribute(key, value);
-    }
+    function $E(name, attrs, childs) {
+        let elem = document.createElement(name);
 
-    function genElem(aName, aAttributes) {
-        let elem = document.createElement(aName);
-        setAttributes(elem, aAttributes);
+        if (attrs)
+            for (let [k, v] in Iterator(attrs))
+                elem.setAttribute(k, v);
+
+        if (childs)
+            for (let [, child] in Iterator(childs))
+                elem.appendChild(child);
+
         return elem;
     }
 
     function createDescription(msg, attr) {
-        let description = genElem("label", attr);
+        let description = $E("label", attr);
         let textNode    = document.createTextNode(msg);
 
         description.appendChild(textNode);
@@ -52,7 +53,7 @@
     }
 
     function createIcon(cls, tooltiptext) {
-        return genElem("spacer", {
+        return $E("spacer", {
             class       : "gpum-popup-icon" + " " + cls,
             tooltiptext : tooltiptext || ""
         });
@@ -102,12 +103,12 @@
         gmail.registerWindow(window);
         document.addEventListener(gmail.UPDATE_EVENT, handleUpdate, false);
 
-        let unreadContainer = genElem("vbox", { flex : 1 });
+        let unreadContainer = $E("vbox", { flex : 1 });
         popup.appendChild(unreadContainer);
 
         // ============================================================ //
 
-        let title = genElem("hbox", { id : "gpum-popup-title" });
+        let title = $E("hbox", { id : "gpum-popup-title" });
 
         // let inboxIcon = createIcon("gpum-popup-icon-inbox");
         // title.appendChild(inboxIcon);
@@ -115,7 +116,7 @@
         let inboxLabel = createDescription("", { class : "gpum-link" });
         title.appendChild(inboxLabel);
 
-            title.appendChild(genElem("spacer", { flex : 1 }));
+        title.appendChild($E("spacer", { flex : 1 }));
 
         let composeMailIcon = createIcon("gpum-popup-icon-compose", util.getLocaleString("composeMail"));
         title.appendChild(composeMailIcon);
@@ -136,7 +137,7 @@
 
         // ============================================================ //
 
-        let scrollBox = genElem("vbox", { flex : 1 });
+        let scrollBox = $E("vbox", { flex : 1 });
         unreadContainer.appendChild(scrollBox);
 
         let (previewTitle = $('gpum-popup4preview-header-title'))
@@ -248,11 +249,11 @@
         function appendEntry(scrollBox, unread) {
             let entry = unread.entry;
 
-            let entryContainer = genElem("vbox");
+            let entryContainer = $E("vbox");
 
             // ============================================================ //
 
-            let header = genElem("hbox", { class : "gpum-popup-header", align : "center" });
+            let header = $E("hbox", { class : "gpum-popup-header", align : "center" });
 
             let author = createDescription("• " + entry.author.name, {
                 class       : "gpum-popup-author gpum-link",
@@ -260,14 +261,14 @@
             });
             header.appendChild(author);
 
-            header.appendChild(genElem("spacer", { flex : 1 }));
+            header.appendChild($E("spacer", { flex : 1 }));
 
             let modifiedLabel  = createDescription(unread.time.toLocaleDateString(), {
                 tooltiptext : unread.time.toString()
             });
             header.appendChild(modifiedLabel);
 
-            let actionIconContainer = genElem("hbox", { class : "gpum-popup-action-icon-container", align : "center" });
+            let actionIconContainer = $E("hbox", { class : "gpum-popup-action-icon-container", align : "center" });
 
             let markAsReadLink = createIcon("gpum-popup-icon-markread", util.getLocaleString("markAsReadLink"));
             let deleteLink     = createIcon("gpum-popup-icon-delete", util.getLocaleString("deleteLink"));
@@ -285,7 +286,7 @@
 
             // ============================================================ //
 
-            let titleContainer = genElem("hbox", { class : "gpum-popup-title-container", align : "center" });
+            let titleContainer = $E("hbox", { class : "gpum-popup-title-container", align : "center" });
 
             let star = createIcon("gpum-popup-star", util.getLocaleString("addStar"));
             titleContainer.appendChild(star);
@@ -293,13 +294,13 @@
             let title = createDescription(entry.title, { class : "gpum-popup-title gpum-link" });
             titleContainer.appendChild(title);
 
-            titleContainer.appendChild(genElem("spacer", { flex : 1 }));
+            titleContainer.appendChild($E("spacer", { flex : 1 }));
 
             entryContainer.appendChild(titleContainer);
 
             // ============================================================ //
 
-            let bodyContainer = genElem("hbox", { align : "center" });
+            let bodyContainer = $E("hbox", { align : "center" });
 
             let summary = createDescription(entry.summary, {
                 class : "gpum-popup-summary",
@@ -488,21 +489,21 @@
             function loginWithMenu() {
                 let logins = Gmail.getLogins().filter(function (l) l.username && l.password);
 
-                let popup = genElem("menupopup");
+                let popup = $E("menupopup");
 
                 if (logins.length) {
                     for (let [, { username, password }] in Iterator(logins)) {
-                        let menuItem = genElem("menuitem", {
+                        let menuItem = $E("menuitem", {
                             label : username,
                             value : password
                         });
 
                         popup.appendChild(menuItem);
                     }
-                    popup.appendChild(genElem("menuseparator"));
+                    popup.appendChild($E("menuseparator"));
                 }
 
-                popup.appendChild(genElem("menuitem", {
+                popup.appendChild($E("menuitem", {
                     label : util.getLocaleString("openLoginPage")
                 }));
 
@@ -518,8 +519,8 @@
 
                     if (password)
                         gpum.login(username, password);
-                        else
-                            gmail.openLoginPage();
+                    else
+                        gmail.openLoginPage();
                 }, false);
 
                 popup.addEventListener("popuphidden", function (ev) {
@@ -552,7 +553,7 @@
             function loginLogout() {
                 if (gmail.unreadCount < 0) {
                     $("gpum-context-menu").hidePopup();
-                        this.loginWithMenu();
+                    this.loginWithMenu();
                 }
                 else
                     this.logout();
