@@ -128,21 +128,19 @@ Gmail.prototype = {
 
         let (reqURL = this.mailURL + "feed/atom" + this.atomLabel)
         {
-            http.get(reqURL,
-                     function (req) {
-                         if (req.status === 200)
-                             callback(req);
-                         else
-                             onerror(req);
-                     }, null,
-                     {
-                         header : {
-                             "Content-type" : "application/xml",
-                             "Cookie"       : this.cookie
-                         },
-                         username : self.username,
-                         password : self.password
-                     });
+            http.get(reqURL, function (req) {
+                if (req.status === 200)
+                    callback(req);
+                else
+                    onerror(req);
+            }, null, {
+                header : {
+                    "Content-type" : "application/xml",
+                    "Cookie"       : this.cookie
+                },
+                username : self.username,
+                password : self.password
+            });
         };
     },
 
@@ -216,8 +214,8 @@ Gmail.prototype = {
         const self = this;
 
         self.post({ "threadID" : threadID, "action" : "rd" }, function () {
-                      self.post({ "threadID" : threadID, "action" : "tr" }, next);
-                  });
+            self.post({ "threadID" : threadID, "action" : "tr" }, next);
+        });
     },
 
     spamThread:
@@ -278,14 +276,11 @@ Gmail.prototype = {
         const self = this;
 
         if (this.isLoggedIn) {
-            self.processUnreads(
-                function (req) {
-                    self.processResponse(req);
-                },
-                function (req) {
-                    util.messageDebug("UPDATE ERROR => " + req.responseText);
-                }
-            );
+            self.processUnreads(function (req) {
+                self.processResponse(req);
+            }, function (req) {
+                util.messageDebug("UPDATE ERROR => " + req.responseText);
+            });
         } else {
             // not logged in
             this.resetLoginStatus();
@@ -397,11 +392,11 @@ Gmail.prototype = {
             this.registeredWindows.push(win);
 
             win.addEventListener("unload", function () {
-                                     let pos = self.registeredWindows.indexOf(win);
+                let pos = self.registeredWindows.indexOf(win);
 
-                                     if (pos >= 0)
-                                         self.registeredWindows.splice(pos, 1);
-                                 }, false);
+                if (pos >= 0)
+                    self.registeredWindows.splice(pos, 1);
+            }, false);
         }
     },
 
