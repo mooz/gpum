@@ -346,6 +346,28 @@ const util = {
     },
 
     // ============================================================ //
+    //  Notification
+    // ============================================================ //
+
+    showPopup: function (title, message, options) {
+        try {
+            const as = Cc['@mozilla.org/alerts-service;1'].getService(Ci.nsIAlertsService);
+        } catch (x) {
+            return false;
+        }
+
+        options = options || {};
+
+        as.showAlertNotification(options.icon,
+                                 title,
+                                 message,
+                                 !!options.clickable,
+                                 options.cookie,
+                                 options.observer);
+        return true;
+    },
+
+    // ============================================================ //
     //  E4X
     // ============================================================ //
 
