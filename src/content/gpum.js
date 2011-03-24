@@ -79,9 +79,10 @@
     window.addEventListener("load", function () {
         window.removeEventListener("load", arguments.callee, false);
 
-        let popup = $("gpum-popup");
-        let icon  = $("gpum-statusbar-icon");
-        let count = $("gpum-statusbar-count");
+        let popup          = $("gpum-popup");
+        let statusbarIcon  = $("gpum-statusbar-icon");
+        let statusbarCount = $("gpum-statusbar-count");
+        let toolbarButton  = $("gpum-toolbar-button");
 
         let iconBox = $("gpum-statusbar-icon-box");
 
@@ -98,7 +99,7 @@
             gmail.startScheduler(true);
         }
 
-        refreshIconBoxTooltip();
+        updateViews();
 
         gmail.registerWindow(window);
         document.addEventListener(gmail.UPDATE_EVENT, handleUpdate, false);
@@ -196,54 +197,71 @@
             }, true);
         };
 
+        // ============================================================ //
+        // View
+        // ============================================================ //
+
+        function updateViewStatusbar({ loading, count, tooltip }) {
+            if (!statusbarIcon)
+                return;
+
+            iconBox.setAttribute("tooltiptext", tooltip);
+            statusbarCount.setAttribute("value",(count >= 0 && !loading) ? count : "-");
+
+            if (loading) {
+                statusbarIcon.setAttribute("src", "chrome://gpum/skin/icon16/loading.png");
+            } else {
+                if (count > 0)
+                    statusbarIcon.setAttribute("src", "chrome://gpum/skin/icon16/gmail.png");
+                else if (count === 0)
+                    statusbarIcon.setAttribute("src", "chrome://gpum/skin/icon16/gmail-blue.png");
+                else
+                    statusbarIcon.setAttribute("src", "chrome://gpum/skin/icon16/gmail-gray.png");
+            }
+        }
+
+        function updateViewToolbar({ loading, count, tooltip }) {
+            if (!toolbarButton)
+                return;
+
+            toolbarButton.setAttribute("data-count",(count >= 0 && !loading) ? count : "-");
+            toolbarButton.setAttribute("tooltiptext", tooltip);
+            toolbarButton.setAttribute("data-loading", loading);
+        }
+
+        // ============================================================ //
+        // Controller
+        // ============================================================ //
+
         function handleUpdate(ev) {
-            updateStatusbarCount();
+            updateViews(false);
+        };
+
+        function updateViews(loading) {
+            let count = gmail.unreadCount;
+            let tooltip = "";
+
+            if (count > 0)
+                tooltip = util.getLocaleString("thereAreUnreadMails", [count]);
+            else if (count === 0)
+                tooltip = util.getLocaleString("thereAreNoUnreadMails");
+            else
+                tooltip = util.getLocaleString("notLoggedIn");
+
+            let args = {
+                loading : !!loading,
+                count   : count,
+                tooltip : tooltip
+            };
+
+            updateViewStatusbar(args);
+            updateViewToolbar(args);
         }
 
         function openLink(url, cont) {
             util.visitLink(url);
             if (!cont)
                 popup.hidePopup();
-        }
-
-        function updateStatusbarCount() {
-            let unreadCount = gmail.unreadCount;
-
-            count.setAttribute("value", unreadCount >= 0 ? unreadCount : "-");
-            refreshIconColor();
-            refreshIconBoxTooltip();
-        }
-
-        function refreshIconBoxTooltip() {
-            let tooltip;
-
-            if (gmail.unreadCount > 0)
-                tooltip = util.getLocaleString("thereAreUnreadMails", gmail.unreadCount);
-            else if (gmail.unreadCount === 0)
-                tooltip = util.getLocaleString("thereAreNoUnreadMails");
-            else // not logged in
-                tooltip = util.getLocaleString("notLoggedIn");
-
-            iconBox.setAttribute("tooltiptext", tooltip);
-        }
-
-        function refreshIconColor() {
-            if (gmail.unreadCount > 0)
-                icon.setAttribute("src", "chrome://gpum/skin/icon16/gmail.png");
-            else if (gmail.unreadCount === 0)
-                icon.setAttribute("src", "chrome://gpum/skin/icon16/gmail-blue.png");
-            else // not logged in
-                icon.setAttribute("src", "chrome://gpum/skin/icon16/gmail-gray.png");
-        }
-
-        function refreshStatusbarIcon(loading) {
-            if (loading)
-            {
-                icon.setAttribute("src", "chrome://gpum/skin/icon16/loading.png");
-                count.setAttribute("value", "-");
-            }
-            else
-                updateStatusbarCount();
         }
 
         function appendEntry(scrollBox, unread) {
@@ -432,7 +450,7 @@
         let gpum = window.gpum = {
             _nowChecking: false,
             set nowChecking(v) {
-                refreshStatusbarIcon(v);
+                updateViews(v);
                 this._nowChecking = v;
             },
             get nowChecking() this._nowChecking,
@@ -470,7 +488,7 @@
                     if (gmail.isLoggedIn)
                         this.checkMailNow();
                     else
-                        this.loginWithMenu();
+                        this.loginWithMenu(ev);
                 }
                 else
                 {
@@ -481,12 +499,12 @@
 
                     inboxLabel.textContent = gmail.xml.title.text().toString().replace(/^Gmail - /, "");
 
-                    popup.openPopup(icon, "start_after", 0, 0, false, false);
+                    popup.openPopup(ev.originalTarget, "start_after", 0, 0, false, false);
                 }
             },
 
             loginWithMenu:
-            function loginWithMenu() {
+            function loginWithMenu(ev) {
                 let logins = Gmail.getLogins().filter(function (l) l.username && l.password);
 
                 let popup = $E("menupopup");
@@ -528,7 +546,7 @@
                     document.documentElement.removeChild(popup);
                 }, false);
 
-                popup.openPopup(icon, "after_end", 0, 0, true);
+                popup.openPopup(ev.originalTarget, "after_end", 0, 0, true);
             },
 
             login:

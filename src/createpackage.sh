@@ -10,7 +10,7 @@ rm -f chrome/gpum.jar
 zip -r -0 chrome/gpum.jar \
     content/*.{js,xul}~(*~|.svn/*) \
     locale/**/*~(*~|.svn/*) \
-    skin/**/*.*~(*~|*.svg|.svn/*)
+    skin/**/*.*~(*~|.svn/*)
 
 # create xpi file
 rm -f gpum.xpi

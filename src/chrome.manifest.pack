@@ -8,3 +8,4 @@ locale	gpum	ja	jar:chrome/gpum.jar!/locale/ja/
 resource	gpum-modules	modules/
 
 overlay	chrome://browser/content/browser.xul	chrome://gpum/content/browser.xul
+style	chrome://global/content/customizeToolbar.xul	chrome://gpum/skin/css/toolbar-button.css

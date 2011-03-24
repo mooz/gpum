@@ -1,0 +1,40 @@
+#gpum-toolbar-button {
+    list-style-image: url("../icon32/gpum.png");
+}
+
+toolbar[iconsize="small"] #gpum-toolbar-button {
+    list-style-image: url("../icon16/gmail.png");
+}
+
+#gpum-toolbar-button[data-count="0"] {
+    /* red => blue */
+    filter: url("../svg/filter.svg#hue240");
+}
+
+#gpum-toolbar-button[data-count="-"] {
+    filter: url("../svg/filter.svg#grayscale");
+}
+
+#gpum-toolbar-button[data-loading=true] {
+    opacity : 0.7;
+}
+
+#gpum-toolbar-button:after {
+    -moz-border-radius : 2px;
+    -moz-box-shadow    : inset 0 1px 3px pink, inset 0 -3px 8px maroon, 0 1px 1px black;
+    text-shadow        : 0 1px 1px black;
+    border             : 1px solid maroon;
+    padding            : 0px 1px;
+    color              : white;
+    background-color   : red;
+    /*  */
+    margin-top         : -2em;
+    margin-right       : -2em;
+    /*  */
+    font-size          : 9px;
+    z-index            : 65535;
+    position           : relative;
+    display            : inline-block;
+    content            : attr(data-count);
+    font-weight        : bold;
+}
