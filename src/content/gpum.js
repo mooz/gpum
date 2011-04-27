@@ -259,6 +259,8 @@
         }
 
         function openLink(url, cont) {
+            if (util.getBoolPref(util.getPrefKey("alwaysUseSSL"), true))
+                url = url.replace(/^http:\/\/mail\.google\.com\//, "https://mail.google.com/");
             util.visitLink(url);
             if (!cont)
                 popup.hidePopup();
