@@ -131,7 +131,7 @@
         inboxLabel.addEventListener("click", function (ev) {
             if (ev.button !== 0)
                 return;
-            openLink(gmail.xml.link.@href.toString());
+            openLink(gmail.xml.link.@href.toString().replace(/^http:/, "https:"));
         }, false);
 
         unreadContainer.appendChild(title);
