@@ -353,7 +353,16 @@ Gmail.prototype = {
 
     setupDefaultNewMailHandler:
     function setupDefaultNewMailHandler() {
+        let self = this;
+
+        self.firstTime = true;
         this.addNewMailHandler(function (newMails) {
+            let isFirstTime = self.firstTime;
+            self.firstTime = false;
+
+            if (isFirstTime && util.getBoolPref(util.getPrefKey("dontNotifyOnStartup"), true))
+                return;
+
             let browserWindows = util.getBrowserWindows().filter(function (win) win.gpum);
             if (!browserWindows.length)
                 return;
