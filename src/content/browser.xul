@@ -36,11 +36,13 @@
         <panel id="gpum-popup4preview" noautofocus="true">
             <vbox>
                 <hbox id="gpum-popup4preview-header">
-                    <label id="gpum-popup4preview-header-title" class="gpum-link" align="center"></label>
+                    <label id="gpum-popup4preview-header-title"
+                           class="gpum-link"
+                           align="center"
+                           flex="1"></label>
                     <spacer flex="1" />
                     <toolbarbutton align="center"
                                    id="gpum-popup4preview-close-button"
-                                   class="tab-close-button"
                                    tooltiptext="&preview.close;"
                                    oncommand="gpum.closePreview();" />
                 </hbox>
