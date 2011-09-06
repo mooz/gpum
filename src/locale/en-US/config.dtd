@@ -27,3 +27,5 @@
 <!ENTITY config.previewPosition.startAfter "on left">
 <!ENTITY config.previewPosition.overlap "overlap">
 <!-- }} -->
+
+<!ENTITY config.showToolbarButton "Show toolbar button">

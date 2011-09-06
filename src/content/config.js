@@ -66,6 +66,15 @@
          visitLink:
          function visitLink(elem) {
              util.visitLink(elem.getAttribute("url"));
+         },
+
+         showToolbarButton: function () {
+             util.getBrowserWindows().forEach(function (win) {
+                 try {
+                     if (!win.gpum.toolbarButtonInstalled)
+                         win.gpum.installToolbarButton();
+                 } catch ([]) {}
+             });
          }
      };
  })();

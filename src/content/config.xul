@@ -78,6 +78,9 @@
                     <checkbox id="config.markAsReadOnPreview" label="&config.markAsReadOnPreview;"
                               preference="extensions.gpum.markAsReadOnPreview" />
                 </groupbox>
+
+                <button id="config.showToolbarButton" label="&config.showToolbarButton;"
+                        oncommand="gpumConfig.showToolbarButton();" />
             </vbox>
         </groupbox>
     </prefpane>

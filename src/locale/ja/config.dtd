@@ -28,3 +28,4 @@
 <!ENTITY config.previewPosition.overlap "メッセージに重なるように">
 <!-- }} -->
 
+<!ENTITY config.showToolbarButton "ツールバーボタンを表示">
