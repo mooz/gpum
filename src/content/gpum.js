@@ -99,18 +99,6 @@
 
             gmail.setupScheduler();
             gmail.startScheduler(true);
-
-            gmail.addNewMailHandler(function (newMails) {
-                util.message("showNewMailsNotification: " + util.getBoolPref(util.getPrefKey("showNewMailsNotification"), true));
-
-                if (!util.getBoolPref(util.getPrefKey("showNewMailsNotification"), true))
-                    return;
-
-                if (util.getBoolPref(util.getPrefKey("notifyOneByOne"), true))
-                    newMails.forEach(gpum.handleNewMail, gpum);
-                else
-                    gpum.handleNewMails(newMails);
-            });
         }
 
         updateViews();

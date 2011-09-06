@@ -60,6 +60,9 @@ function Gmail(args) {
     this._schedulerInterval = args.interval || this.SCHEDULER_INTERVAL_MIN;
 
     this.unreadCount = -1;
+
+    if (!args.suppressDefaultMailHandler)
+        this.setupDefaultNewMailHandler();
 }
 
 Gmail.prototype = {
@@ -346,6 +349,26 @@ Gmail.prototype = {
                     handler(newMails);
                 } catch ([]) {}
             });
+    },
+
+    setupDefaultNewMailHandler:
+    function setupDefaultNewMailHandler() {
+        this.addNewMailHandler(function (newMails) {
+            let browserWindows = util.getBrowserWindows().filter(function (win) win.gpum);
+            if (!browserWindows.length)
+                return;
+
+            let win = browserWindows[0];
+            let { gpum } = win;
+
+            if (!util.getBoolPref(util.getPrefKey("showNewMailsNotification"), true))
+                return;
+
+            if (util.getBoolPref(util.getPrefKey("notifyOneByOne"), true))
+                newMails.forEach(gpum.handleNewMail, gpum);
+            else
+                gpum.handleNewMails(newMails);
+        });
     },
 
     addNewMailHandler:
