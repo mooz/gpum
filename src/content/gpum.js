@@ -190,14 +190,19 @@
                 if (ev.button !== 0)
                     return;
 
-                if (elem.localName.toLowerCase() === "a")
-                {
-                    let href = elem.getAttribute("href");
-                    if (/^(https?|ftp):\/\//.test(href))
-                        openLink(href, true);
-                }
+                let url = getHrefByClimbling(elem, 3);
+                if (url && /^(https?|ftp):\/\//.test(url))
+                    openLink(url, true);
             }, true);
         };
+
+        function getHrefByClimbling(elem, depth) {
+            if (elem.localName === "a")
+                return elem.href;
+            if (depth > 1 && elem.parentNode)
+                return getHrefByClimbling(elem.parentNode, depth - 1);
+            return null;
+        }
 
         // ============================================================ //
         // View
