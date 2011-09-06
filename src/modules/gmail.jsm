@@ -79,7 +79,7 @@ Gmail.prototype = {
     },
     get cookie() {
         let gx = this.cookies
-            .filter(function (cookie) cookie.name === "GX")
+            .filter(function (cookie) cookie.name === "GX" && !util.isCookieExpired(cookie))
             .reduce(function (recent, gx) (!recent ? gx :
                                            recent.expires < gx.expires ? gx : recent),
                     null);

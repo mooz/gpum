@@ -368,6 +368,16 @@ const util = {
     },
 
     // ============================================================ //
+    //  Cookie
+    // ============================================================ //
+
+    isCookieExpired: function (cookie) {
+        // nsICookie#expires returns expiration time in *seconds*
+        return cookie.expires !== 0 &&
+            Date.now() >= (new Date(cookie.expires * 1000)).getTime();
+    },
+
+    // ============================================================ //
     //  E4X
     // ============================================================ //
 
