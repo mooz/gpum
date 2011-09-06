@@ -489,6 +489,8 @@
 
             makeToolbarButtonsPersistent:
             function makeToolbarButtonsPersistent() {
+                let navBar = document.getElementById("nav-bar");
+                navBar.setAttribute("currentset", navBar.currentSet);
                 document.persist("nav-bar", "currentset");
             },
 
