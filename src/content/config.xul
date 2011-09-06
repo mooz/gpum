@@ -73,6 +73,10 @@
                        onclick="gpumConfig.visitLink(this);"
                        url="http://paularmstrongdesigns.com/projects/bwpx-icns/"
                        value="http://paularmstrongdesigns.com/projects/bwpx-icns/"></label>
+                <label class="link"
+                       onclick="gpumConfig.visitLink(this);"
+                       url="http://ncrow.deviantart.com/"
+                       value="http://ncrow.deviantart.com/"></label>
             </vbox>
         </vbox>
     </prefpane>
