@@ -32,7 +32,10 @@
 		      oncommand="gpum.checkMailNow();" />
         </menupopup>
 
-        <panel id="gpum-popup" noautofocus="true" />
+        <panel id="gpum-popup" noautofocus="true"
+               position="bottomcenter topright"
+               orient="vertical"
+               side="top" />
         <panel id="gpum-popup4preview" noautofocus="true">
             <vbox>
                 <hbox id="gpum-popup4preview-header">

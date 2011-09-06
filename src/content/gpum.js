@@ -397,7 +397,7 @@
                         }
 
                         // let popupPosition = util.getUnicharPref(util.getPrefKey("previewPosition"), "start_after");
-                        popup.openPopup(null, "after_pointer", 0, 0, false, false);
+                        popup.openPopup(null, "bottomcenter topright");
                     };
 
                     break;
@@ -501,7 +501,7 @@
 
                     inboxLabel.textContent = gmail.xml.title.text().toString().replace(/^Gmail - /, "");
 
-                    popup.openPopup(ev.originalTarget, "start_after", 0, 0, false, false);
+                    popup.openPopup(ev.originalTarget, "bottomcenter topright");
                 }
             },
 
@@ -548,7 +548,7 @@
                     document.documentElement.removeChild(popup);
                 }, false);
 
-                popup.openPopup(ev.originalTarget, "after_end", 0, 0, true);
+                popup.openPopup(ev.originalTarget, "bottomcenter topright");
             },
 
             login:
