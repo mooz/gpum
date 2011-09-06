@@ -179,7 +179,7 @@ Gmail.prototype = {
         let getURL = this.simpleModeURL + "?ui=html&zy=c";
 
         http.get(getURL, function (req) {
-            let matches = req.responseText.match(/\?at=([^"]+)/);
+            let matches = req.responseText.match(/[^a-zA-Z0-9]at=([^"]+)/);
 
             if (matches && matches.length > 0) {
                 self.gmailAt = matches[1];
