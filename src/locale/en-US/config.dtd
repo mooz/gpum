@@ -14,6 +14,13 @@
 <!-- }} -->
 
 <!-- {{ -->
+<!ENTITY config.notification "New Mail Notification">
+<!ENTITY config.showNewMailsNotification "Enable popup notification for new mails">
+<!ENTITY config.notifyOneByOne "Notify mails one by one">
+<!ENTITY config.dontNotifyOnStartup "Don't notify mails on startup">
+<!-- }} -->
+
+<!-- {{ -->
 <!ENTITY config.preview "Preview">
 <!ENTITY config.markAsReadOnPreview "Mark as read on preview">
 <!ENTITY config.previewPosition "Position of the preview">

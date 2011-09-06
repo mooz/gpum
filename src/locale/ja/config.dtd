@@ -14,6 +14,13 @@
 <!-- }} -->
 
 <!-- {{ -->
+<!ENTITY config.notification "新着通知">
+<!ENTITY config.showNewMailsNotification "ポップアップによる新着通知を有効にする">
+<!ENTITY config.notifyOneByOne "一件づつメールを新着通知する">
+<!ENTITY config.dontNotifyOnStartup "起動時には新着通知を行わない">
+<!-- }} -->
+
+<!-- {{ -->
 <!ENTITY config.preview "プレビュー">
 <!ENTITY config.markAsReadOnPreview "プレビュー時にメッセージを既読にする">
 <!ENTITY config.previewPosition "プレビューの位置">

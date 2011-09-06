@@ -25,6 +25,15 @@
             <preference id="extensions.gpum.checkAll"
                         name="extensions.gpum.checkAll"
                         type="bool" />
+            <preference id="extensions.gpum.showNewMailsNotification"
+                        name="extensions.gpum.showNewMailsNotification"
+                        type="bool" />
+            <preference id="extensions.gpum.notifyOneByOne"
+                        name="extensions.gpum.notifyOneByOne"
+                        type="bool" />
+            <preference id="extensions.gpum.dontNotifyOnStartup"
+                        name="extensions.gpum.dontNotifyOnStartup"
+                        type="bool" />
             <preference id="extensions.gpum.useSimpleModeForLink"
                         name="extensions.gpum.useSimpleModeForLink"
                         type="bool" />
@@ -52,6 +61,16 @@
                     <caption label="&config.message;" />
                     <checkbox id="config.openLinkClosePopup" label="&config.openLinkClosePopup;"
                               preference="extensions.gpum.openLinkClosePopup" />
+                </groupbox>
+
+                <groupbox orient="vertical">
+                    <caption label="&config.notification;" />
+                    <checkbox id="config.showNewMailsNotification" label="&config.showNewMailsNotification;"
+                              preference="extensions.gpum.showNewMailsNotification" />
+                    <checkbox id="config.notifyOneByOne" label="&config.notifyOneByOne;"
+                              preference="extensions.gpum.notifyOneByOne" />
+                    <checkbox id="config.dontNotifyOnStartup" label="&config.dontNotifyOnStartup;"
+                              preference="extensions.gpum.dontNotifyOnStartup" />
                 </groupbox>
 
                 <groupbox orient="vertical">

@@ -99,6 +99,18 @@
 
             gmail.setupScheduler();
             gmail.startScheduler(true);
+
+            gmail.addNewMailHandler(function (newMails) {
+                util.message("showNewMailsNotification: " + util.getBoolPref(util.getPrefKey("showNewMailsNotification"), true));
+
+                if (!util.getBoolPref(util.getPrefKey("showNewMailsNotification"), true))
+                    return;
+
+                if (util.getBoolPref(util.getPrefKey("notifyOneByOne"), true))
+                    newMails.forEach(gpum.handleNewMail, gpum);
+                else
+                    gpum.handleNewMails(newMails);
+            });
         }
 
         updateViews();
@@ -490,6 +502,44 @@
             makeToolbarButtonsPersistent:
             function makeToolbarButtonsPersistent() {
                 document.persist("nav-bar", "currentset");
+            },
+
+            handleNewMails:
+            function handleNewMails(newMails) {
+                let title = util.getLocaleString("gotMails", [newMails.length]);
+                let message = newMails.map(
+                    function (mail) mail.entry.title + " [" + mail.entry.author.name + "]"
+                ).join("\n");
+
+                gpum.showNotification(title, message, function () {
+                    openUILinkIn(gmail.mailURL, "tab");
+                });
+            },
+
+            handleNewMail:
+            function handleNewMail(newMail) {
+                let title = newMail.entry.title + " [" + newMail.entry.author.name + "]";
+                let message = newMail.entry.summary;
+
+                gpum.showNotification(title, message, function () {
+                    openUILinkIn(newMail.entry.link.@href, "tab");
+                    gmail.removeFromUnreads(newMail);
+                });
+            },
+
+            showNotification:
+            function showNotification(title, message, onClick) {
+                util.showPopup(title, message, {
+                    icon: "chrome://gpum/skin/icon64/gmail64.png",
+                    clickable: typeof onClick === "function",
+                    observer: {
+                        observe: function (subject, topic, data) {
+                            if (topic === "alertclickcallback") {
+                                onClick();
+                            }
+                        }
+                    }
+                });
             },
 
             checkMailNow:
