@@ -52,6 +52,7 @@ function Gmail(args) {
     this.mailURL = mailURL;
 
     this.unreads = [];
+    this.newMailsHandlers = [];
 
     this.registeredWindows  = [];
     this.timer              = null;
@@ -321,41 +322,43 @@ Gmail.prototype = {
 
         self.unreadCount = Number(xml.fullcount);
 
-        self.updatedUnreads = [];
-        self.unreads        = [];
+        let knownMails = { __proto__ : null };
+        self.unreads.forEach(function (unread) knownMails[unread.id] = true);
+        self.unreads = [];
+
+        let newMails = [];
 
         for each (let entry in xml.entry)
         {
             let id = entry.id.toString();
-
-            // if (self.unreads.some(function (senior) id === senior.entry.id.toString()))
-            //     continue;
-
             let modified = ISO8601DateUtils.parse(entry.modified.toString());
-            let unread   = { entry : entry, time : modified };
+            let unread   = { entry : entry, time : modified, id : id };
 
             self.unreads.push(unread);
 
-            // let unreads = self.unreads;
-            // let len     = unreads.length;
-
-            // if (len > 0)
-            // {
-            //     for (let i = 0; i < len; ++i)
-            //     {
-            //         if (modified >= unreads[i].time)
-            //         {
-            //             unreads.splice(i, 0, unread);
-            //             self.updatedUnreads.push(unread);
-            //             break;
-            //         }
-            //         else if (i === len - 1)
-            //             unreads.push(unread), self.updatedUnreads.push(unread);
-            //     }
-            // }
-            // else
-            //     unreads.push(unread), self.updatedUnreads.push(unread);
+            if (!knownMails[id])
+                newMails.push(unread);
         }
+
+        if (newMails.length)
+            this.newMailsHandlers.forEach(function (handler) {
+                try {
+                    handler(newMails);
+                } catch ([]) {}
+            });
+    },
+
+    addNewMailHandler:
+    function addNewMailHandler(handler) {
+        if (this.newMailsHandlers.indexOf(handler) < 0)
+            this.newMailsHandlers.push(handler);
+    },
+
+    removeNewMailHandler:
+    function removeNewMailHandler(handler) {
+        let handlerIndex = this.newMailsHandlers.indexOf(handler);
+        if (handlerIndex >= 0)
+            this.newMailsHandlers.splice(handlerIndex, 1);
     },
 
     removeFromUnreads:
