@@ -460,6 +460,38 @@
             },
             get nowChecking() this._nowChecking,
 
+            get toolbarButtonInstalled() !!getToolbarButton(),
+
+            installToolbarButton:
+            function installToolbarButton() {
+                if (this.toolbarButtonInstalled)
+                    return;
+
+                let navBar = document.getElementById("nav-bar");
+                navBar.insertItem(toolbarButtonId, null, null, false);
+
+                this.makeToolbarButtonsPersistent();
+            },
+
+            /* This method corrupts toolbar pallet system
+            uninstallToolbarButton:
+            function uninstallToolbarButton() {
+                if (!this.toolbarButtonInstalled)
+                    return;
+
+                let toolbarButton = getToolbarButton();
+                let navBar = document.getElementById("nav-bar");
+                navBar.removeChild(toolbarButton);
+
+                this.makeToolbarButtonsPersistent();
+            },
+             */
+
+            makeToolbarButtonsPersistent:
+            function makeToolbarButtonsPersistent() {
+                document.persist("nav-bar", "currentset");
+            },
+
             checkMailNow:
             function checkMailNow(next) {
                 this.nowChecking = true;
@@ -611,5 +643,15 @@
             modules: modules,
             gmail: gmail
         };
+
+        function onFirstRun(action) {
+            let isFirstRun = !util.getBoolPref(util.getPrefKey("installed", false));
+            if (isFirstRun) {
+                util.setBoolPref(util.getPrefKey("installed", true));
+                action();
+            }
+        }
+
+        onFirstRun(function () gpum.installToolbarButton());
     }, false);
 })();
