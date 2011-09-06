@@ -685,7 +685,7 @@
         function onFirstRun(action) {
             let isFirstRun = !util.getBoolPref(util.getPrefKey("installed", false));
             if (isFirstRun) {
-                util.setBoolPref(util.getPrefKey("installed", true));
+                util.setBoolPref(util.getPrefKey("installed"), true);
                 action();
             }
         }
