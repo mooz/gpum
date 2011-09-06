@@ -1,4 +1,4 @@
-pref("extensions.gpum.updateInterval", 3);
+pref("extensions.gpum.updateInterval", 1);
 pref("extensions.gpum.alwaysUseSSL", true);
 pref("extensions.gpum.checkAll", false);
 pref("extensions.gpum.useSimpleModeForLink", false);
