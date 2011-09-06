@@ -82,7 +82,9 @@
         let popup          = $("gpum-popup");
         let statusbarIcon  = $("gpum-statusbar-icon");
         let statusbarCount = $("gpum-statusbar-count");
-        let toolbarButton  = $("gpum-toolbar-button");
+
+        const toolbarButtonId = "gpum-toolbar-button";
+        function getToolbarButton() $(toolbarButtonId);
 
         let iconBox = $("gpum-statusbar-icon-box");
 
@@ -221,6 +223,7 @@
         }
 
         function updateViewToolbar({ loading, count, tooltip }) {
+            let toolbarButton = getToolbarButton();
             if (!toolbarButton)
                 return;
 
