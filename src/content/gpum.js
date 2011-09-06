@@ -400,7 +400,7 @@
                         }
 
                         // let popupPosition = util.getUnicharPref(util.getPrefKey("previewPosition"), "start_after");
-                        popup.openPopup(null, "bottomcenter topright");
+                        popup.openPopup(entryContainer, "bottomcenter topright");
                     };
 
                     break;
