@@ -350,7 +350,7 @@
 
             scrollBox.appendChild(entryContainer);
 
-            let id = entry.link.@href.toString().replace(/.*message_id=([\d\w]+).*/, "$1");
+            let id = Gmail.getThreadIdFromThreadURI(entry.link.@href);
 
             function handleClick(ev) {
                 if (ev.button !== 0)

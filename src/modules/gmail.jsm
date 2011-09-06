@@ -503,3 +503,7 @@ Gmail.getLogins = function getLogins() {
 
     return logins;
 };
+
+Gmail.getThreadIdFromThreadURI = function (uri) {
+    return uri.toString().replace(/.*message_id=([\d\w]+).*/, "$1");
+};
