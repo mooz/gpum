@@ -22,14 +22,14 @@
         <menupopup id="gpum-context-menu" onpopupshowing="gpum.updateContextMenu();">
 	    <menuitem id="gpum-menu-open-config"
                       label="&menu.settings;"
-		      oncommand="gpum.openConfig();" />
+		      oncommand="gpum.openConfig(event);" />
             <menuseparator/>
 	    <menuitem id="gpum-menu-login-logout"
-		      oncommand="gpum.loginLogout();" />
+		      oncommand="gpum.loginLogout(event);" />
             <menuseparator/>
 	    <menuitem id="gpum-menu-check-mail"
                       label="&menu.checkMail;"
-		      oncommand="gpum.checkMailNow();" />
+		      oncommand="gpum.checkMailNow(event);" />
         </menupopup>
 
         <panel id="gpum-popup" noautofocus="true"

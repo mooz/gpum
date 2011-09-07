@@ -650,10 +650,10 @@
             },
 
             loginLogout:
-            function loginLogout() {
+            function loginLogout(ev) {
                 if (gmail.unreadCount < 0) {
                     $("gpum-context-menu").hidePopup();
-                    this.loginWithMenu();
+                    this.loginWithMenu(ev);
                 }
                 else
                     this.logout();
