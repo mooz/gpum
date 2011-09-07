@@ -398,14 +398,22 @@
 
                         iframe.setAttribute("src", url);
 
+                        let popupOrigin = entryContainer;
+
                         if (util.getBoolPref(util.getPrefKey("markAsReadOnPreview"), false))
                         {
                             gmail.markAsReadThread(id);
+                            if (entryContainer.previousSibling)
+                                popupOrigin = entryContainer.previousSibling;
+                            else if (entryContainer.nextSibling)
+                                popupOrigin = entryContainer.nextSibling;
+                            else
+                                popupOrigin = inboxLabel;
                             destroy();
                         }
 
                         // let popupPosition = util.getUnicharPref(util.getPrefKey("previewPosition"), "start_after");
-                        popup.openPopup(entryContainer, "bottomcenter topright");
+                        popup.openPopup(popupOrigin, "bottomcenter topright");
                     };
 
                     break;
