@@ -88,11 +88,11 @@ Gmail.prototype = {
                                            recent.expires < gx.expires ? gx : recent),
                     null);
         if (!gx)
-            return gx;
+            return null;
 
         return 'GX="' + gx.value + '";';
     },
-    get isLoggedIn() this.cookies.some(function (cookie) cookie.name === "GX"),
+    get isLoggedIn() !!this.cookie,
     // get gmailAt() this.cookies.reduce(function (at, cand) {
     //     return at ? at :
     //         cand.name === "GMAIL_AT" ? cand.value : at;
