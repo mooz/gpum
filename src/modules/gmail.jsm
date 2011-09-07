@@ -343,12 +343,11 @@ Gmail.prototype = {
                 newMails.push(unread);
         }
 
-        if (newMails.length)
-            this.newMailsHandlers.forEach(function (handler) {
-                try {
-                    handler(newMails);
-                } catch ([]) {}
-            });
+        this.newMailsHandlers.forEach(function (handler) {
+            try {
+                handler(newMails);
+            } catch ([]) {}
+        });
     },
 
     setupDefaultNewMailHandler:
