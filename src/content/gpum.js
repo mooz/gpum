@@ -509,6 +509,9 @@
 
             handleNewMails:
             function handleNewMails(newMails) {
+                if (!newMails.length)
+                    return;
+
                 let title = util.getLocaleString("gotMails", [newMails.length]);
                 let message = newMails.map(
                     function (mail) mail.entry.title + " [" + mail.entry.author.name + "]"
