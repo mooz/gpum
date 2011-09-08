@@ -9,8 +9,7 @@
 }
 
 .gpum-link:hover {
-    padding-bottom  : 0px !important;
-    border-bottom   : 1px solid !important;
+    text-decoration: underline;
 }
 
 /* ============================================================
