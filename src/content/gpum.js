@@ -567,22 +567,31 @@
                         title    : title,
                         xml      : container,
                         duration : 1000 * util.getIntPref(util.getPrefKey("notificationDisplayDuration")),
-                        onClick  : function (ev) {
+                        onClick  : function (ev, notification) {
                             if (ev.button)
                                 return;
 
-                            let elem = ev.target;
-                            if (!elem.classList.contains("mail-title"))
+                            let titleElem = ev.target;
+                            if (!titleElem.classList.contains("mail-title"))
                                 return;
 
-                            let [, idx] = elem.parentNode.getAttribute("id").split("-");
+                            let entryElem = titleElem.parentNode;
+
+                            let [, idx] = entryElem.getAttribute("id").split("-");
 
                             let mail = newMails[idx];
                             if (!mail)
                                 return;
 
                             openLink(mail.entry.link.@href.toString());
+                            gmail.removeFromUnreads(mail);
                             window.focus();
+
+                            let entryContainer = entryElem.parentNode;
+                            entryContainer.removeChild(entryElem);
+
+                            if (!entryContainer.children.length)
+                                notification.close();
                         }
                     }
                 );

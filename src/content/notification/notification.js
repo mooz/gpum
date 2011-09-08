@@ -122,7 +122,7 @@ var Notification = (function () {
 
             if (context.onClick) {
                 self.messageContainerElement.addEventListener("click", function (ev) {
-                    context.onClick(ev);
+                    context.onClick(ev, self);
                 }, false);
             }
 
@@ -216,7 +216,7 @@ var Notification = (function () {
 
             if (typeof onClose === "function") {
                 try {
-                    onClose();
+                    onClose(ev, self);
                 } catch ([]) {}
             }
 
