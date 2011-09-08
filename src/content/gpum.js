@@ -580,6 +580,7 @@
                                 return;
 
                             openLink(mail.entry.link.@href.toString());
+                            window.focus();
                         }
                     }
                 );
