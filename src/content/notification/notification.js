@@ -177,7 +177,7 @@ var Notification = (function () {
 
         get locked() {
             let { container } = self;
-            return container.getAttribute("data-checked") === "true";
+            return container.getAttribute("data-locked") === "true";
         },
 
         onCloseButtonClick: function (ev) {
