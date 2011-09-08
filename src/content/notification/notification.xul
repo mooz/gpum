@@ -18,10 +18,9 @@
         <hbox id="notification-header">
             <hbox pack="center" align="center">
                 <vbox align="center"
-                      class="notification-button"
-                      id="notification-lock-button"
-                      tooltiptext="Lock Notification"
-                      onclick="Notification.onLockButtonClick(event);" />
+                      class="notification-indicator"
+                      tooltiptext="Notification is locked (Not automatically closed)"
+                      id="notification-lock-button" />
             </hbox>
 	    <hbox pack="center" align="center">
                 <label id="notification-title" align="center" flex="1" />

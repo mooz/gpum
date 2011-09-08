@@ -125,6 +125,22 @@ var Notification = (function () {
                     context.onClick(ev);
                 }, false);
             }
+
+            let isMouseIn = false;
+
+            window.addEventListener("mouseover", function (ev) {
+                if (!isMouseIn) {
+                    self.onMouseEnter();
+                    isMouseIn = true;
+                }
+            }, true);
+
+            window.addEventListener("mouseout", function (ev) {
+                if (!self.isPointInNotification(ev.clientX, ev.clientY)) {
+                    self.onMouseLeave();
+                    isMouseIn = false;
+                }
+            }, true);
         },
 
         onLoad: function () {
@@ -154,6 +170,15 @@ var Notification = (function () {
             window.resizeTo(width, height);
         },
 
+
+        onMouseEnter: function () {
+            self.locked = true;
+        },
+
+        onMouseLeave: function () {
+            self.locked = false;
+        },
+
         onLockButtonClick: function (ev) {
             if (ev.button)
                 return;
@@ -170,9 +195,9 @@ var Notification = (function () {
                 container.removeAttribute("data-locked");
 
             if (self.locked)
-                self.timer.resume();
-            else
                 self.timer.suspend();
+            else
+                self.timer.resume();
         },
 
         get locked() {
@@ -198,23 +223,15 @@ var Notification = (function () {
             window.close();
         },
 
-        onMouseOver: function (ev) {
-            if (ev.target !== self.container)
-                return;
+        isPointInNotification: function (x, y) {
+            /*
+             * (screenX, screenY)                     (screenX + outerWidth, screenY)
+             *
+             * (screenX, screenY + outerHeight)       (screenX + outerWidth, screenY + outerHeight)
+             */
 
-            // alert(ev);
-            util.log("mouse over: " + ev.target.localName);
-
-            self.locked = true;
-        },
-
-        onMouseOut: function (ev) {
-            if (ev.target !== self.container)
-                return;
-
-            // alert(ev);
-            util.log("mouse out: " + ev.target.localName);
-            self.locked = false;
+            return x >= 0 && x < window.outerWidth &&
+                y >= 0 && y < window.outerHeight;
         },
 
         /**

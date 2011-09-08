@@ -5,19 +5,20 @@ window {
 }
 
 #notification-container {
-    color            : black !important;
-    background-color : white !important;
-    border           : 1px solid #2266b3 !important;
-    -moz-box-shadow  : 0px 0px 7px #353535 !important;
+    color               : black !important;
+    background-color    : white !important;
+    border              : 1px solid #2266b3 !important;
+    -moz-box-shadow     : 0px 0px 7px #353535 !important;
 
     background-image    : url("./background.png");
     background-position : right bottom;
     background-repeat   : no-repeat;
     min-width           : 132px;  /* XXX: depends on the size of background-image */
+    opacity             : 0.9;
 }
 
 #notification-container[data-locked="true"] {
-    background-color : #FAFAFA !important;
+    opacity : 1.0;
 }
 
 #notification-message-container {
@@ -58,15 +59,18 @@ window {
 }
 
 /* ============================================================
- * Button
+ * Button / Indicator
  * ============================================================ */
 
-.notification-button {
+.notification-button, .notification-indicator {
     width   : 18px;
     height  : 18px;
+    margin  : 3px;
+}
+
+.notification-button {
     cursor  : pointer;
     opacity : 0.8;
-    margin  : 3px;
 }
 
 .notification-button:hover {
@@ -82,7 +86,7 @@ window {
 }
 
 /* ============================================================
- * Lock button
+ * Lock Indicator
  * ============================================================ */
 
 #notification-lock-button {
@@ -91,7 +95,6 @@ window {
 
 #notification-container[data-locked="true"] #notification-lock-button {
     background-image: url("chrome://gpum/content/notification/lock.gif");
-    opacity: 1.0;
 }
 
 /* ============================================================
