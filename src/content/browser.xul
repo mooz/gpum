@@ -39,15 +39,19 @@
         <panel id="gpum-popup4preview" noautofocus="true">
             <vbox>
                 <hbox id="gpum-popup4preview-header">
-                    <label id="gpum-popup4preview-header-title"
-                           class="gpum-link"
-                           align="center"
-                           flex="1"></label>
+                    <hbox align="center" pack="center">
+                        <label id="gpum-popup4preview-header-title"
+                               class="gpum-link"
+                               align="center"
+                               flex="1" />
+                    </hbox>
                     <spacer flex="1" />
-                    <toolbarbutton align="center"
-                                   id="gpum-popup4preview-close-button"
-                                   tooltiptext="&preview.close;"
-                                   oncommand="gpum.closePreview();" />
+                    <hbox pack="center" align="center">
+                        <toolbarbutton align="center"
+                                       id="gpum-popup4preview-close-button"
+                                       tooltiptext="&preview.close;"
+                                       oncommand="gpum.closePreview();" />
+                    </hbox>
                 </hbox>
                 <browser id="gpum-popup4preview-frame" type="content">
                 </browser>
