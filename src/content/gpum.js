@@ -552,7 +552,9 @@
                               tooltiptext={mail.entry.summary.text()} >
                             <description class="link mail-title">{mail.entry.title.text()}</description>
                             <spacer flex="1" />
-                            <description class="mail-author">{mail.entry.author.name.text()}</description>
+                            <description class="mail-author"
+                                         tooltiptext={mail.entry.author.email.text()}
+                                         >{mail.entry.author.name.text()}</description>
                         </hbox>;
 
                     container.appendChild(mailContainer);
