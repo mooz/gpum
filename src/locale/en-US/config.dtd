@@ -16,7 +16,7 @@
 <!-- {{ -->
 <!ENTITY config.notification "New Mail Notification">
 <!ENTITY config.showNewMailsNotification "Enable popup notification for new mails">
-<!ENTITY config.notifyOneByOne "Notify mails one by one">
+<!ENTITY config.notificationDisplayDuration "Display time of notification (second)">
 <!ENTITY config.dontNotifyOnStartup "Don't notify mails on startup">
 <!-- }} -->
 

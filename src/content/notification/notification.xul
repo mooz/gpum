@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://gpum/content/notification/notification.css" type="text/css"?>
+
+<window id="notification"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        windowtype="notification:notification"
+        xmlns:xhtml2="http://www.w3.org/TR/xhtml2"
+        xmlns:wairole="http://www.w3.org/2005/01/wai-rdf/GUIRoleTaxonomy#"
+        xhtml2:role="wairole:notification"
+        pack="start"
+	onload="Notification.onLoad();" >
+    <script type="application/x-javascript" src="./notification.js" />
+
+    <vbox id="notification-container"
+          orient="vertical"
+          flex="1">
+        <hbox id="notification-header">
+            <hbox pack="center" align="center">
+                <vbox align="center"
+                      class="notification-button"
+                      id="notification-lock-button"
+                      tooltiptext="Lock Notification"
+                      onclick="Notification.onLockButtonClick(event);" />
+            </hbox>
+	    <hbox pack="center" align="center">
+                <label id="notification-title" align="center" flex="1" />
+            </hbox>
+            <spacer flex="1" />
+            <hbox pack="center" align="center">
+                <vbox align="center"
+                      class="notification-button"
+                      id="notification-close-button"
+                      tooltiptext="Close Notification"
+                      onclick="Notification.onCloseButtonClick(event);" />
+            </hbox>
+        </hbox>
+
+        <hbox id="notification-body"
+              flex="1">
+	    <hbox id="notification-image-container" pack="center" align="center">
+	        <image id="notification-image" />
+	    </hbox>
+	    <vbox id="notification-message-container" flex="1" />
+        </hbox>
+    </vbox>
+
+    <script type="application/x-javascript">Notification.beforeOnLoad();</script>
+</window>

@@ -6,5 +6,5 @@ pref("extensions.gpum.openLinkClosePopup", true);
 pref("extensions.gpum.installed", false);
 
 pref("extensions.gpum.showNewMailsNotification", true);
-pref("extensions.gpum.notifyOneByOne", true);
 pref("extensions.gpum.dontNotifyOnStartup", true);
+pref("extensions.gpum.notificationDisplayDuration", 8);

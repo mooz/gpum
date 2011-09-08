@@ -8,7 +8,7 @@ setopt nonomatch
 # create jar file
 rm -f chrome/gpum.jar
 zip -r -0 chrome/gpum.jar \
-    content/*.{js,xul}~(*~|.svn/*) \
+    content/**/*.{js,xul,css,png,gif}~(*~|.svn/*) \
     locale/**/*~(*~|.svn/*) \
     skin/**/*.*~(*~|.svn/*)
 

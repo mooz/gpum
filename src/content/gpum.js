@@ -512,14 +512,7 @@
                 if (!newMails.length)
                     return;
 
-                let title = util.getLocaleString("gotMails", [newMails.length]);
-                let message = newMails.map(
-                    function (mail) mail.entry.title + " [" + mail.entry.author.name + "]"
-                ).join("\n");
-
-                gpum.showNotification(title, message, function () {
-                    openUILinkIn(gmail.mailURL, "tab");
-                });
+                this.showNewMailsNotification(newMails);
             },
 
             handleNewMail:
@@ -546,6 +539,50 @@
                         }
                     }
                 });
+            },
+
+            showNewMailsNotification:
+            function showNotification(newMails) {
+                let title = util.getLocaleString("gotMails", [newMails.length]);
+
+                let container = <vbox id="mail-entry-container"></vbox>;
+                newMails.forEach(function (mail, idx) {
+                    let mailContainer =
+                        <hbox id={"mail-" + idx} class="mail-entry"
+                              tooltiptext={mail.entry.summary.text()} >
+                            <description class="link mail-title">{mail.entry.title.text()}</description>
+                            <spacer flex="1" />
+                            <description class="mail-author">{mail.entry.author.name.text()}</description>
+                        </hbox>;
+
+                    container.appendChild(mailContainer);
+                });
+
+                window.openDialog(
+                    "chrome://gpum/content/notification/notification.xul",
+                    null,
+                    'chrome,dialog=yes,titlebar=no,popup=yes', {
+                        title    : title,
+                        xml      : container,
+                        duration : 1000 * util.getIntPref(util.getPrefKey("notificationDisplayDuration")),
+                        onClick  : function (ev) {
+                            if (ev.button)
+                                return;
+
+                            let elem = ev.target;
+                            if (!elem.classList.contains("mail-title"))
+                                return;
+
+                            let [, idx] = elem.parentNode.getAttribute("id").split("-");
+
+                            let mail = newMails[idx];
+                            if (!mail)
+                                return;
+
+                            openLink(mail.entry.link.@href.toString());
+                        }
+                    }
+                );
             },
 
             checkMailNow:

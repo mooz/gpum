@@ -31,6 +31,9 @@
             <preference id="extensions.gpum.notifyOneByOne"
                         name="extensions.gpum.notifyOneByOne"
                         type="bool" />
+            <preference id="extensions.gpum.notificationDisplayDuration"
+                        name="extensions.gpum.notificationDisplayDuration"
+                        type="int" />
             <preference id="extensions.gpum.dontNotifyOnStartup"
                         name="extensions.gpum.dontNotifyOnStartup"
                         type="bool" />
@@ -67,8 +70,14 @@
                     <caption label="&config.notification;" />
                     <checkbox id="config.showNewMailsNotification" label="&config.showNewMailsNotification;"
                               preference="extensions.gpum.showNewMailsNotification" />
-                    <checkbox id="config.notifyOneByOne" label="&config.notifyOneByOne;"
-                              preference="extensions.gpum.notifyOneByOne" />
+
+                    <hbox align="center">
+                        <label >&config.notificationDisplayDuration;: </label>
+                        <textbox id="config.notificationDisplayDuration"
+                                 type="number"
+                                 preference="extensions.gpum.notificationDisplayDuration" min="1" />
+                    </hbox>
+
                     <checkbox id="config.dontNotifyOnStartup" label="&config.dontNotifyOnStartup;"
                               preference="extensions.gpum.dontNotifyOnStartup" />
                 </groupbox>
