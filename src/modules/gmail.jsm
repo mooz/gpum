@@ -5,7 +5,6 @@
  * @license The MIT License
  * @requires util.jsm
  * @requires http.jsm
- * @requires ISO8601DateUtils.jsm
  */
 
 const EXPORTED_SYMBOLS = ["Gmail"];
@@ -334,7 +333,7 @@ Gmail.prototype = {
         for each (let entry in xml.entry)
         {
             let id = entry.id.toString();
-            let modified = ISO8601DateUtils.parse(entry.modified.toString());
+            let modified = util.parseISO8601(entry.modified.toString());
             let unread   = { entry : entry, time : modified, id : id };
 
             self.unreads.push(unread);
