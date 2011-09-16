@@ -65,6 +65,9 @@ const http = {
         for (let [name, value] in Iterator(opts.header || {}))
             req.setRequestHeader(name, value);
 
+        if (typeof opts.requestAdvice === "function")
+            opts.requestAdvice(req);
+
         req.send(params || null);
 
         return async ? void 0 : req;
@@ -89,6 +92,9 @@ const http = {
 
         for (let [name, value] in Iterator(opts.header || {}))
             xhr.setRequestHeader(name, value);
+
+        if (typeof opts.requestAdvice === "function")
+            opts.requestAdvice(xhr);
 
         xhr.send(params || null);
 

@@ -389,14 +389,16 @@
                         let iframe = $('gpum-popup4preview-frame');
                         let title  = $('gpum-popup4preview-header-title');
 
-                        if (title.hasChildNodes())
-                            title.removeChild(title.firstChild);
-                        title.appendChild(document.createTextNode(entry.title));
+                        iframe.setAttribute("src", "about:blank");
+
+                        title.textContent = "Loading ... " + entry.title;
+                        gmail.getPrintPageURLAnd(id, function (url) {
+                            title.textContent = entry.title;
+                            iframe.setAttribute("src", url);
+                        });
 
                         title.setAttribute("url", entry.link.@href.toString());
                         title.__gpumDestroy__ = destroy;
-
-                        iframe.setAttribute("src", url);
 
                         let popupOrigin = entryContainer;
 
@@ -412,7 +414,6 @@
                             destroy();
                         }
 
-                        // let popupPosition = util.getUnicharPref(util.getPrefKey("previewPosition"), "start_after");
                         popup.openPopup(popupOrigin, "bottomcenter topright");
                     };
 

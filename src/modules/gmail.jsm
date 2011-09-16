@@ -516,6 +516,56 @@ Gmail.prototype = {
     openLoginPage:
     function openLoginPage() {
         util.visitLink(this.mailURL);
+    },
+
+    // ============================================================ //
+    // For preview
+    // ============================================================ //
+
+    getThreadPageURL: function (threadID) {
+        return "https://mail.google.com/mail/?shva=1#all/" + threadID;
+    },
+
+    // XXX
+    internalKeyPattern: /var\s+GLOBALS\s*=\s*\[(?:.*?,){8}"(.*?)"/,
+    parseInternalKey: function (page) {
+        return page.match(this.internalKeyPattern) ?
+            RegExp.$1 : null;
+    },
+
+    getInternalKeyAnd: function (threadID, next) {
+        let url = this.getThreadPageURL(threadID);
+        let onProgressGiven = typeof onProgress === "function";
+
+        let self = this;
+        http.get(url, function (req) {
+            if (req.status === 200) {
+                var internalKey = self.parseInternalKey(req.responseText);
+                if (typeof next === "function")
+                    next(internalKey);
+            }
+        });
+        // {
+        //     requestAdvice: function (req) {
+        //         if (onProgressGiven) {
+        //             req.addEventListener("progress", function (ev) {
+        //                 onProgress(ev.position / ev.totalSize);
+        //             }, false);
+        //         }
+        // }
+    },
+
+    getPrintPageURLFor: function (threadID, internalKey) {
+        return "https://mail.google.com/mail/?ui=2&view=pt&search=all"
+            + "&th=" + threadID
+            + "&ik=" + internalKey;
+    },
+
+    getPrintPageURLAnd: function (threadID, next) {
+        let self = this;
+        this.getInternalKeyAnd(threadID, function (internalKey) {
+            next(self.getPrintPageURLFor(threadID, internalKey));
+        });
     }
 };
 
