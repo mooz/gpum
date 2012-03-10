@@ -626,6 +626,9 @@
 
                 util.killEvent(ev);
 
+                if (!gmail.isLoggedIn)
+                    gmail.resetLoginStatus();
+
                 if (gmail.unreadCount < 0)
                 {
                     if (gmail.isLoggedIn)
