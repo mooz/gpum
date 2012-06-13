@@ -322,7 +322,7 @@ Gmail.prototype = {
     function updateUnreads(xml) {
         const self = this;
 
-        self.unreadCount = Number(xml.fullcount);
+        self.unreadCount = Math.max(Number(xml.fullCount), Number(xml.entry.length()));
 
         let knownMails = { __proto__ : null };
         self.unreads.forEach(function (unread) knownMails[unread.id] = true);
