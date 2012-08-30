@@ -32,8 +32,6 @@ function loadModule(name, context) {
 loadModule("util.jsm");
 loadModule("http.jsm");
 
-loadModule("resource://gre/modules/ISO8601DateUtils.jsm");
-
 function Gmail(args) {
     args = args || {};
 

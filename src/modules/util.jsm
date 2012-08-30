@@ -381,17 +381,8 @@ const util = {
     //  ISO Date
     // ============================================================ //
 
-    get hasNativeISOParser() !!Date.prototype.toISOString,
-    get ISO8601DateUtils() {
-        if (!this._ISO8601DateUtils) {
-            this._ISO8601DateUtils =
-                Components.utils.import("resource://gre/modules/ISO8601DateUtils.jsm", {}).ISO8601DateUtils;
-        }
-        return this._ISO8601DateUtils;
-    },
     parseISO8601: function (isoString) {
-        return this.hasNativeISOParser ?
-            new Date(isoString) : this.ISO8601DateUtils.parse(isoString);
+        return new Date(isoString);
     },
 
     // ============================================================ //
