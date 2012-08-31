@@ -557,16 +557,15 @@ Gmail.prototype = {
     },
 
     getPrintPageURLFor: function (threadID, internalKey) {
-        return "https://mail.google.com/mail/?ui=2&view=pt&search=all"
-            + "&th=" + threadID
-            + "&ik=" + internalKey;
+        var pringPageURL = this.mailURL + "?ui=2&view=pt&search=all"
+                + "&th=" + threadID;
+        if (internalKey)
+            pringPageURL += "&ik=" + internalKey;
+        return pringPageURL;
     },
 
     getPrintPageURLAnd: function (threadID, next) {
-        let self = this;
-        this.getInternalKeyAnd(threadID, function (internalKey) {
-            next(self.getPrintPageURLFor(threadID, internalKey));
-        });
+        next(this.getPrintPageURLFor(threadID));
     }
 };
 
