@@ -147,8 +147,8 @@ Gmail.prototype = {
         });
     },
 
-    post:
-    function post(args, next) {
+    postCommand:
+    function postCommand(args, next) {
         let threadID = args.threadID;
         let action   = args.action;
 
@@ -202,36 +202,36 @@ Gmail.prototype = {
 
     markAsReadThread:
     function markAsReadThread(threadID, next) {
-        this.post({ "threadID" : threadID, "action" : "rd" }, next);
+        this.postCommand({ "threadID" : threadID, "action" : "rd" }, next);
     },
 
     markAsUnReadThread:
     function markAsUnReadThread(threadID, next) {
-        this.post({ "threadID" : threadID, "action" : "ur" }, next);
+        this.postCommand({ "threadID" : threadID, "action" : "ur" }, next);
     },
 
     archiveThread:
     function archiveThread(threadID, next) {
-        this.post({ "threadID" : threadID, "action" : "arch" }, next);
+        this.postCommand({ "threadID" : threadID, "action" : "arch" }, next);
     },
 
     deleteThread:
     function deleteThread(threadID, next) {
         const self = this;
 
-        self.post({ "threadID" : threadID, "action" : "rd" }, function () {
-            self.post({ "threadID" : threadID, "action" : "tr" }, next);
+        self.postCommand({ "threadID" : threadID, "action" : "rd" }, function () {
+            self.postCommand({ "threadID" : threadID, "action" : "tr" }, next);
         });
     },
 
     spamThread:
     function spamThread(threadID, next) {
-        this.post({ "threadID" : threadID, "action" : "sp" }, next);
+        this.postCommand({ "threadID" : threadID, "action" : "sp" }, next);
     },
 
     starThread:
     function spamThread(threadID, next) {
-        this.post({ "threadID" : threadID, "action" : "st" }, next);
+        this.postCommand({ "threadID" : threadID, "action" : "st" }, next);
     },
 
     getThreadBody:
