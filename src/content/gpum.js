@@ -550,6 +550,9 @@
                 function attributeValue(text) {
                     return '"' + text.replace(/[\n\r]/g, "").replace(/"/g, '\\"') + '"';
                 }
+                function crop(text) {
+                    return text.slice(0, 30);
+                }
                 let newMailsXULText = newMails.map(function (mail, idx) {
                     return util.template(
                         '<hbox id=${a_mailID} class="mail-entry" tooltiptext=${a_summary} >\
@@ -561,8 +564,8 @@
                             a_mailID        : attributeValue("mail-" + idx),
                             a_summary       : attributeValue(mail.entry.select("summary").text),
                             a_authorAddress : attributeValue(mail.entry.select("author > email").text),
-                            mailTitle       : mail.entry.select("title").text || "No title",
-                            authorName      : mail.entry.select("author > name").text
+                            mailTitle       : crop(mail.entry.select("title").text || "No title"),
+                            authorName      : crop(mail.entry.select("author > name").text)
                         }
                     );
                 }).join("\n");
