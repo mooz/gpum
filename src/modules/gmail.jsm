@@ -152,18 +152,21 @@ Gmail.prototype = {
         let postURL = this.simpleModeURL.replace("^http:", "https:");
 
         let self = this;
+        let retryCount = 3;
         function doPost() {
-            http.post(postURL, function (req) {
+            self.lastPost = http.post(postURL + "?at=" + self.gmailAt, function (req) {
                 if (req.status === 200) {
                     if (typeof next === "function") next(req);
-                } else {
+                } else if (retryCount-- > 0) {
                     self.getAt(doPost);
+                } else {
+                    util.log("gpum: Failed to post a command: " + JSON.stringify(args));
                 }
             }, {
                 t   : threadID,
                 at  : self.gmailAt,
                 act : action
-            }, { header : { "Cookie" : self.cookie } });
+            }, { header : { "Cookie" : self.cookie, "Content-length" : 0 } });
         }
 
         if (this.gmailAt)
