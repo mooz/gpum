@@ -561,7 +561,7 @@
                             a_mailID        : attributeValue("mail-" + idx),
                             a_summary       : attributeValue(mail.entry.select("summary").text),
                             a_authorAddress : attributeValue(mail.entry.select("author > email").text),
-                            mailTitle       : mail.entry.select("title").text,
+                            mailTitle       : mail.entry.select("title").text || "No title",
                             authorName      : mail.entry.select("author > name").text
                         }
                     );
