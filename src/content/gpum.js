@@ -547,41 +547,37 @@
             function showNotification(newMails) {
                 let title = util.getLocaleString("gotMails", [newMails.length]);
 
-                function attributeValue(text) {
-                    return '"' + text.replace(/[\n\r]/g, "").replace(/"/g, '\\"') + '"';
-                }
                 function crop(text) {
                     return text.slice(0, 30);
                 }
-                let newMailsXULText = newMails.map(function (mail, idx) {
-                    return util.template(
-                        '<hbox id=${a_mailID} class="mail-entry" tooltiptext=${a_summary} >\
-                            <description class="link mail-title">${mailTitle}</description>\
-                            <spacer flex="1" />\
-                            <description class="mail-author"\
-                                         tooltiptext=${a_authorAddress}>${authorName}</description>\
-                        </hbox>', {
-                            a_mailID        : attributeValue("mail-" + idx),
-                            a_summary       : attributeValue(mail.entry.select("summary").text),
-                            a_authorAddress : attributeValue(mail.entry.select("author > email").text),
-                            mailTitle       : crop(mail.entry.select("title").text || "No title"),
-                            authorName      : crop(mail.entry.select("author > name").text)
-                        }
-                    );
-                }).join("\n");
 
-                let notificationXULText = util.template(
-                    '<vbox id="mail-entry-container">${newMailsXULText}</vbox>', {
-                        newMailsXULText: newMailsXULText
-                    }
-                );
+                var mailsView = newMails.map(function (mail, idx) {
+                    return $E("hbox", {
+                        id: "mail-" + idx,
+                        class: "mail-entry",
+                        tooltiptext: mail.entry.select("summary").text
+                    }, [
+                        $E("description", {
+                            class: "link mail-title",
+                            value: crop(mail.entry.select("title").text || "No title")
+                        }),
+                        $E("spacer", { flex: 1 }),
+                        $E("description", {
+                            class: "mail-author",
+                            tooltiptext: mail.entry.select("author > email").text,
+                            value: crop(mail.entry.select("author > name").text)
+                        })
+                    ]);
+                });
+                var notification = $E("vbox", { id: "mail-entry-container" }, mailsView);
+                var notificationText = (new XMLSerializer()).serializeToString(notification);
 
                 window.openDialog(
                     "chrome://gpum/content/notification/notification.xul",
                     null,
                     'chrome,dialog=yes,titlebar=no,popup=yes', {
                         title    : title,
-                        xml      : notificationXULText,
+                        xml      : notificationText,
                         duration : 1000 * util.getIntPref(util.getPrefKey("notificationDisplayDuration")),
                         onClick  : function (ev, notification) {
                             if (ev.button)
