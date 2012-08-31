@@ -399,14 +399,22 @@ const util = {
     },
 
     // ============================================================ //
-    //  E4X
+    // XML
     // ============================================================ //
+
+    createDOMParser:
+    function () {
+        var domParser = Cc["@mozilla.org/xmlextras/domparser;1"]
+                .createInstance(Ci.nsIDOMParser);
+        return domParser;
+    },
 
     createXML:
     function createXML(src) {
         // https://bugzilla.mozilla.org/show_bug.cgi?id=336551
         src = src.replace(/^<\?xml\s+version\s*=\s*(?:"[^"]+"|'[^']+')[^?]*\?>/, "");
-        return new XML(src);
+        var domParser = util.createDOMParser();
+        return domParser.parseFromString(src, "text/xml");
     }
 };
 

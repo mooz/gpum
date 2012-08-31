@@ -133,7 +133,7 @@
         inboxLabel.addEventListener("click", function (ev) {
             if (ev.button !== 0)
                 return;
-            openLink(gmail.xml.link.@href.toString());
+            openLink(gmail.xml.select("link").attr("href"));
         }, false);
 
         unreadContainer.appendChild(title);
@@ -283,9 +283,9 @@
 
             let header = $E("hbox", { class : "gpum-popup-header", align : "center" });
 
-            let author = createDescription("• " + entry.author.name, {
+            let author = createDescription("• " + entry.select("author > name").text, {
                 class       : "gpum-popup-author gpum-link",
-                tooltiptext : entry.author.email
+                tooltiptext : entry.select("author > email").text
             });
             header.appendChild(author);
 
@@ -319,7 +319,7 @@
             let star = createIcon("gpum-popup-star", util.getLocaleString("addStar"));
             titleContainer.appendChild(star);
 
-            let title = createDescription(entry.title, { class : "gpum-popup-title gpum-link" });
+            let title = createDescription(entry.select("title").text, { class : "gpum-popup-title gpum-link" });
             titleContainer.appendChild(title);
 
             titleContainer.appendChild($E("spacer", { flex : 1 }));
@@ -330,7 +330,7 @@
 
             let bodyContainer = $E("hbox", { align : "center" });
 
-            let summary = createDescription(entry.summary, {
+            let summary = createDescription(entry.select("summary").text, {
                 class : "gpum-popup-summary",
                 tooltiptext : util.getLocaleString("displayPreview")
             });
@@ -343,7 +343,7 @@
 
             scrollBox.appendChild(entryContainer);
 
-            let id = Gmail.getThreadIdFromThreadURI(entry.link.@href);
+            let id = Gmail.getThreadIdFromThreadURI(entry.select("link").attr("href"));
 
             function handleClick(ev) {
                 if (ev.button !== 0)
@@ -356,7 +356,7 @@
                 switch (target)
                 {
                 case author:
-                    openLink(gmail.getURLRecentFor(entry.author.email));
+                    openLink(gmail.getURLRecentFor(entry.select("author > email").text));
                     break;
                 case markAsReadLink:
                     gmail.markAsReadThread(id);
@@ -378,7 +378,7 @@
                     gmail.starThread(id);
                     break;
                 case title:
-                    let (url = entry.link.@href.toString())
+                    let (url = entry.select("link").attr("href").text)
                         openLink(url, !util.getBoolPref(util.getPrefKey("openLinkClosePopup"), false));
                     destroy();
                     break;
@@ -391,13 +391,13 @@
 
                         iframe.setAttribute("src", "about:blank");
 
-                        title.textContent = "Loading ... " + entry.title;
+                        title.textContent = "Loading ... " + entry.select("title").text;
                         gmail.getPrintPageURLAnd(id, function (url) {
-                            title.textContent = entry.title;
+                            title.textContent = entry.select("title").text;
                             iframe.setAttribute("src", url);
                         });
 
-                        title.setAttribute("url", entry.link.@href.toString());
+                        title.setAttribute("url", entry.select("link").attr("href"));
                         title.__gpumDestroy__ = destroy;
 
                         let popupOrigin = entryContainer;
@@ -518,11 +518,12 @@
 
             handleNewMail:
             function handleNewMail(newMail) {
-                let title = newMail.entry.title + " [" + newMail.entry.author.name + "]";
-                let message = newMail.entry.summary;
+                let title = newMail.entry.select("title").text
+                      + " [" + newMail.entry.select("author > name").text + "]";
+                let message = newMail.entry.select("summary").text;
 
                 gpum.showNotification(title, message, function () {
-                    openUILinkIn(newMail.entry.link.@href, "tab");
+                    openUILinkIn(newMail.entry.select("link").attr("href"), "tab");
                     gmail.removeFromUnreads(newMail);
                 });
             },
@@ -546,27 +547,38 @@
             function showNotification(newMails) {
                 let title = util.getLocaleString("gotMails", [newMails.length]);
 
-                let container = <vbox id="mail-entry-container"></vbox>;
-                newMails.forEach(function (mail, idx) {
-                    let mailContainer =
-                        <hbox id={"mail-" + idx} class="mail-entry"
-                              tooltiptext={mail.entry.summary.text()} >
-                            <description class="link mail-title">{mail.entry.title.text()}</description>
-                            <spacer flex="1" />
-                            <description class="mail-author"
-                                         tooltiptext={mail.entry.author.email.text()}
-                                         >{mail.entry.author.name.text()}</description>
-                        </hbox>;
+                function attributeValue(text) {
+                    return '"' + text.replace(/[\n\r]/g, "").replace(/"/g, '\\"') + '"';
+                }
+                let newMailsXULText = newMails.map(function (mail, idx) {
+                    return util.template(
+                        '<hbox id=${a_mailID} class="mail-entry" tooltiptext=${a_summary} >\
+                            <description class="link mail-title">${mailTitle}</description>\
+                            <spacer flex="1" />\
+                            <description class="mail-author"\
+                                         tooltiptext=${a_authorAddress}>${authorName}</description>\
+                        </hbox>', {
+                            a_mailID        : attributeValue("mail-" + idx),
+                            a_summary       : attributeValue(mail.entry.select("summary").text),
+                            a_authorAddress : attributeValue(mail.entry.select("author > email").text),
+                            mailTitle       : mail.entry.select("title").text,
+                            authorName      : mail.entry.select("author > name").text
+                        }
+                    );
+                }).join("\n");
 
-                    container.appendChild(mailContainer);
-                });
+                let notificationXULText = util.template(
+                    '<vbox id="mail-entry-container">${newMailsXULText}</vbox>', {
+                        newMailsXULText: newMailsXULText
+                    }
+                );
 
                 window.openDialog(
                     "chrome://gpum/content/notification/notification.xul",
                     null,
                     'chrome,dialog=yes,titlebar=no,popup=yes', {
                         title    : title,
-                        xml      : container,
+                        xml      : notificationXULText,
                         duration : 1000 * util.getIntPref(util.getPrefKey("notificationDisplayDuration")),
                         onClick  : function (ev, notification) {
                             if (ev.button)
@@ -584,7 +596,7 @@
                             if (!mail)
                                 return;
 
-                            openLink(mail.entry.link.@href.toString());
+                            openLink(mail.entry.select("link").attr("href"));
                             gmail.removeFromUnreads(mail);
                             window.focus();
 
@@ -643,7 +655,7 @@
                     for each (let unread in gmail.unreads)
                         appendEntry(scrollBox, unread);
 
-                    inboxLabel.textContent = gmail.xml.title.text().toString().replace(/^Gmail - /, "");
+                    inboxLabel.textContent = gmail.xml.select("title").text.replace(/^Gmail - /, "");
 
                     popup.openPopup(ev.originalTarget, "bottomcenter topright");
                 }

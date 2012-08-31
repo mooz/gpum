@@ -31,6 +31,7 @@ function loadModule(name, context) {
 
 loadModule("util.jsm");
 loadModule("http.jsm");
+loadModule("dom-accessor.jsm");
 
 function Gmail(args) {
     args = args || {};
@@ -264,7 +265,7 @@ Gmail.prototype = {
     function processResponse(req) {
         let src = req.responseText;
         src = src.replace(/xmlns="[^"]*"/, "");
-        let xml = util.createXML(src);
+        let xml = new DOMAccessor(util.createXML(src));
 
         this.updateUnreads(xml);
         this.dispatchEvents(this.registeredWindows);
@@ -320,7 +321,12 @@ Gmail.prototype = {
     function updateUnreads(xml) {
         const self = this;
 
-        self.unreadCount = Math.max(Number(xml.fullCount), Number(xml.entry.length()));
+        let entries = xml.selectAll("entry");
+
+        self.unreadCount = Math.max(
+            Number(xml.select("fullcount").text),
+            entries.length
+        );
 
         let knownMails = { __proto__ : null };
         self.unreads.forEach(function (unread) knownMails[unread.id] = true);
@@ -328,23 +334,22 @@ Gmail.prototype = {
 
         let newMails = [];
 
-        for each (let entry in xml.entry)
-        {
-            let id = entry.id.toString();
-            let modified = util.parseISO8601(entry.modified.toString());
+        entries.forEach(function (entry) {
+            let id = entry.select("id").text;
+            let modified = util.parseISO8601(entry.select("modified").text);
             let unread   = { entry : entry, time : modified, id : id };
 
             self.unreads.push(unread);
 
             if (!knownMails[id])
                 newMails.push(unread);
-        }
+        }, this);
 
         this.newMailsHandlers.forEach(function (handler) {
             try {
                 handler(newMails);
             } catch ([]) {}
-        });
+        }, this);
     },
 
     setupDefaultNewMailHandler:

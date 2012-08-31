@@ -243,9 +243,11 @@ var Notification = (function () {
          */
         xmlToDom:
         function xmlToDom(xml) {
+          if (typeof xml === "xml")
+            xml = xml.toXMLString();
             let docElem = (new DOMParser).parseFromString(
                 '<root xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">'
-                    + xml.toXMLString()
+                    + xml
                     + "</root>", "application/xml"
             ).documentElement;
 
