@@ -116,9 +116,12 @@ const http = {
 
         opts = opts || {};
         opts.header = opts.header || {};
-        opts.header["Content-type"] = "application/x-www-form-urlencoded";
-        opts.header["Content-length"] = params.length;
-        opts.header["Connection"] = "close";
+        if (typeof opts.header["Content-type"] === "undefined")
+            opts.header["Content-type"] = "application/x-www-form-urlencoded";
+        if (typeof opts.header["Content-length"] === "undefined")
+            opts.header["Content-length"] = params.length;
+        if (typeof opts.header["Connection"] === "undefined")
+            opts.header["Connection"] = "close";
 
         return this.request("POST", url, callback, params, opts);
     }
