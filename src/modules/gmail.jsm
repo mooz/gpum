@@ -39,7 +39,7 @@ function Gmail(args) {
     const protocol = args.protocol || "https://";
     const base     = "mail.google.com";
 
-    let mailURL = protocol + base + (args.domain ? "/a/" + args.domain + "/" : "/mail/");
+    let mailURL = protocol + base + (args.domain ? "/a/" + args.domain + "/" : "/mail/") + "u/0/";
 
     this.checkAllMail = args.checkAllMail;
 
@@ -116,6 +116,7 @@ Gmail.prototype = {
     get simpleModeURL() this.mailURL + "h/" + ~~(1000000 * Math.random()) + "/",
     get loginURL() "https://www.google.com/accounts/ServiceLogin?service=mail",
     get authURL() "https://www.google.com/accounts/ServiceLoginAuth",
+    get atomURL() this.mailURL + "feed/atom" + this.atomLabel,
 
     getURLRecentFor:
     function getURLRecentFor(addr) {
@@ -128,22 +129,19 @@ Gmail.prototype = {
     function processUnreads(callback, onerror) {
         const self = this;
 
-        let (reqURL = this.mailURL + "feed/atom" + this.atomLabel)
-        {
-            http.get(reqURL, function (req) {
-                if (req.status === 200)
-                    callback(req);
-                else
-                    onerror(req);
-            }, null, {
-                header : {
-                    "Content-type" : "application/xml",
-                    "Cookie"       : this.cookie
-                },
-                username : self.username,
-                password : self.password
-            });
-        };
+        http.get(this.atomURL, function (req) {
+            if (req.status === 200)
+                callback(req);
+            else
+                onerror(req);
+        }, null, {
+            header : {
+                "Content-type" : "application/xml",
+                "Cookie"       : this.cookie
+            },
+            username : self.username,
+            password : self.password
+        });
     },
 
     post:
@@ -526,7 +524,7 @@ Gmail.prototype = {
     // ============================================================ //
 
     getThreadPageURL: function (threadID) {
-        return "https://mail.google.com/mail/?shva=1#all/" + threadID;
+        return this.mailURL + "?shva=1#all/" + threadID;
     },
 
     // XXX
