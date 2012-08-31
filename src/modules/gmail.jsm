@@ -39,7 +39,10 @@ function Gmail(args) {
     const protocol = args.protocol || "https://";
     const base     = "mail.google.com";
 
-    let mailURL = protocol + base + (args.domain ? "/a/" + args.domain + "/" : "/mail/") + "u/0/";
+    this.accountNumber = typeof args.accountNumber === "number" ? args.accountNumber : 0;
+
+    let mailURL = protocol + base + (args.domain ? "/a/" + args.domain + "/" : "/mail/")
+            + util.format("u/%s/", this.accountNumber);
 
     this.checkAllMail = args.checkAllMail;
 
