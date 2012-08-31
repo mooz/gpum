@@ -225,6 +225,19 @@ const util = {
         return aFormat;
     },
 
+    template:
+    function template(templateText, argValues) {
+        var formattedText = templateText;
+
+        for (var key in argValues) {
+            if (!argValues.hasOwnProperty(key))
+                continue;
+            formattedText = formattedText.replace("${" + key + "}", argValues[key]);
+        }
+
+        return formattedText;
+    },
+
     log:
     function log(aMsg) {
         let { console } = service;
