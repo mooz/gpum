@@ -662,21 +662,27 @@
 
             loginWithMenu:
             function loginWithMenu(ev) {
-                let logins = Gmail.getLogins().filter(function (l) l.username && l.password);
+                let collectedLogins = {};
+                let accounts = Gmail.getLogins().forEach(function ({ username, password }) {
+                    if (!collectedLogins.hasOwnProperty(username)) {
+                        collectedLogins[username] = password;
+                    }
+                });
 
                 let popup = $E("menupopup");
 
-                if (logins.length) {
-                    for (let [, { username, password }] in Iterator(logins)) {
-                        let menuItem = $E("menuitem", {
-                            label : username,
-                            value : password
-                        });
+                let shouldInsertSeparator = false;
+                for (let [username, password] in Iterator(collectedLogins)) {
+                    shouldInsertSeparator = true;
+                    let menuItem = $E("menuitem", {
+                        label : username,
+                        value : password
+                    });
 
-                        popup.appendChild(menuItem);
-                    }
-                    popup.appendChild($E("menuseparator"));
+                    popup.appendChild(menuItem);
                 }
+                if (shouldInsertSeparator)
+                    popup.appendChild($E("menuseparator"));
 
                 popup.appendChild($E("menuitem", {
                     label : util.getLocaleString("openLoginPage")

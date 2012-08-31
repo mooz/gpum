@@ -581,8 +581,8 @@ Gmail.prototype = {
 
 Gmail.getLogins = function getLogins() {
     let lm     = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
-    let urls   = ["http://www.google.com", "https://www.google.com",
-                  "http://accounts.google.com", "https://accounts.google.com"];
+    let urls   = ["http://accounts.google.com", "https://accounts.google.com",
+                  "http://www.google.com", "https://www.google.com"];
     let logins = urls.reduce(function (accum, url) accum.concat(lm.findLogins({}, url, url, null) || []), []);
 
     return logins;
