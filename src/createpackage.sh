@@ -6,6 +6,8 @@ setopt nonomatch
 ## ================================ ##
 
 # create jar file
+[[ -d chrome ]] || mkdir chrome
+
 rm -f chrome/gpum.jar
 zip -r -0 chrome/gpum.jar \
     content/**/*.{js,xul,css,png,gif}~(*~|.svn/*) \
