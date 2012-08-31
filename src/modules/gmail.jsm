@@ -117,8 +117,8 @@ Gmail.prototype = {
     get composeURL() this.mailURL + "#compose",
     get contacsURL() this.mailURL + "#contacts",
     get simpleModeURL() this.mailURL + "h/" + ~~(1000000 * Math.random()) + "/",
-    get loginURL() "https://www.google.com/accounts/ServiceLogin?service=mail",
-    get authURL() "https://www.google.com/accounts/ServiceLoginAuth",
+    get loginURL() "https://accounts.google.com/ServiceLogin?service=mail",
+    get authURL() "https://accounts.google.com/ServiceLoginAuth",
     get atomURL() this.mailURL + "feed/atom" + this.atomLabel,
 
     getURLRecentFor:
@@ -467,7 +467,11 @@ Gmail.prototype = {
                     });
                 else
                     if (typeof error === "function") error(req);
-            }, params);
+            }, params, {
+              header : {
+                "Content-length" : "0"
+              }
+            });
         });
     },
 
@@ -504,11 +508,17 @@ Gmail.prototype = {
             let params = ["#service",
                           "#dsh",
                           "#timeStmp",
+                          "#pstMsg",
                           "#secTok",
+                          "#dnConn",
+                          "#checkConnection",
+                          "#checkedDomains",
+                          "#timeStmp",
+                          "#secTok",
+                          "signIn",
                           "input[name=GALX]",
                           "#Email",
-                          "#Passwd",
-                          "input[name=rmShown]"]
+                          "#Passwd"]
                 .map(function (s) html.querySelector(s))
                 .filter(function (e) e)
                 .reduce(function (params, e) {
