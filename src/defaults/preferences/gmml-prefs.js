@@ -8,3 +8,5 @@ pref("extensions.gpum.installed", false);
 pref("extensions.gpum.showNewMailsNotification", true);
 pref("extensions.gpum.dontNotifyOnStartup", true);
 pref("extensions.gpum.notificationDisplayDuration", 8);
+pref("extensions.gpum.notificationCropCharacterCount", 30);
+

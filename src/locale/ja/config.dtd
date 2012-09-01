@@ -18,6 +18,7 @@
 <!ENTITY config.showNewMailsNotification "ポップアップによる新着通知を有効にする">
 <!ENTITY config.notificationDisplayDuration "ポップアップの表示時間（秒）">
 <!ENTITY config.dontNotifyOnStartup "起動時には新着通知を行わない">
+<!ENTITY config.notificationCropCharacterCount "ラベルが次の文字数を超えたら切り詰める">
 <!-- }} -->
 
 <!-- {{ -->
