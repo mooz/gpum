@@ -108,7 +108,7 @@
         <preferences></preferences>
         <vbox align="center" flex="1">
             <description id="addon-name">Google mail Popup Unread Manager</description>
-            <description class="copyright">mooz &lt;stillpedant@gmail.com&gt; &#169; 2010</description>
+            <description class="copyright">mooz &lt;stillpedant@gmail.com&gt; &#169; 2010-2012</description>
             <vbox id="special-thanks">
                 <label class="link"
                        onclick="gpumConfig.visitLink(this);"
