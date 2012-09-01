@@ -6,10 +6,11 @@
     <Description about="urn:mozilla:install-manifest">
         <em:id>gpum@mooz.github.com</em:id>
         <em:type>2</em:type>
-        <em:version>0.2.0</em:version>
+        <em:version>0.2.1</em:version>
         <em:name>gpum - Google mail Popup Unread Manager</em:name>
         <em:creator>mooz</em:creator>
         <em:developer>mooz</em:developer>
+        <em:contributor>958</em:contributor>
         <em:homepageURL>http://github.com/mooz/gpum/</em:homepageURL>
         <em:optionsURL>chrome://gpum/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://gpum/skin/icon32/gpum.png</em:iconURL>
@@ -30,7 +31,7 @@
         <em:targetApplication>
             <Description>
                 <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-                <em:minVersion>15.0</em:minVersion>
+                <em:minVersion>3.5</em:minVersion>
                 <em:maxVersion>15.*</em:maxVersion>
             </Description>
         </em:targetApplication>
