@@ -37,6 +37,9 @@
             <preference id="extensions.gpum.dontNotifyOnStartup"
                         name="extensions.gpum.dontNotifyOnStartup"
                         type="bool" />
+            <preference id="extensions.gpum.notificationCropLabel"
+                        name="extensions.gpum.notificationCropLabel"
+                        type="bool" />
             <preference id="extensions.gpum.notificationCropCharacterCount"
                         name="extensions.gpum.notificationCropCharacterCount"
                         type="int" />
@@ -85,7 +88,9 @@
                               preference="extensions.gpum.dontNotifyOnStartup" />
 
                     <hbox align="center">
-                        <label >&config.notificationCropCharacterCount;: </label>
+                        <checkbox id="config.notificationCropLabel"
+                                  label="&config.notificationCropLabel;:"
+                                  preference="extensions.gpum.notificationCropLabel" />
                         <textbox id="config.notificationCropCharacterCount"
                                  type="number"
                                  preference="extensions.gpum.notificationCropCharacterCount" min="10" />

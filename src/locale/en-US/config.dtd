@@ -18,7 +18,7 @@
 <!ENTITY config.showNewMailsNotification "Enable popup notification for new mails">
 <!ENTITY config.notificationDisplayDuration "Display time of notification (second)">
 <!ENTITY config.dontNotifyOnStartup "Don't notify mails on startup">
-<!ENTITY config.notificationCropCharacterCount "Crop labels if character count exeeds">
+<!ENTITY config.notificationCropLabel "Crop labels if character count exeeds">
 <!-- }} -->
 
 <!-- {{ -->

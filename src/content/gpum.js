@@ -547,9 +547,10 @@
             function showNotification(newMails) {
                 let title = util.getLocaleString("gotMails", [newMails.length]);
 
+                let shouldCropLabel = util.getBoolPref(util.getPrefKey("notificationCropLabel"));
                 let cropCount = util.getIntPref(util.getPrefKey("notificationCropCharacterCount"));
                 function crop(text) {
-                    if (text.length > cropCount)
+                    if (shouldCropLabel && text.length > cropCount)
                         return text.slice(0, cropCount) + "...";
                     return text;
                 }
