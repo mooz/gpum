@@ -20,16 +20,16 @@
 
     <popupset id="mainPopupSet">
         <menupopup id="gpum-context-menu" onpopupshowing="gpum.updateContextMenu();">
-	    <menuitem id="gpum-menu-open-config"
+            <menuitem id="gpum-menu-open-config"
                       label="&menu.settings;"
-		      oncommand="gpum.openConfig(event);" />
+                      oncommand="gpum.openConfig(event);" />
             <menuseparator/>
-	    <menuitem id="gpum-menu-login-logout"
-		      oncommand="gpum.loginLogout(event);" />
+            <menuitem id="gpum-menu-login-logout"
+                      oncommand="gpum.loginLogout(event);" />
             <menuseparator/>
-	    <menuitem id="gpum-menu-check-mail"
+            <menuitem id="gpum-menu-check-mail"
                       label="&menu.checkMail;"
-		      oncommand="gpum.checkMailNow(event);" />
+                      oncommand="gpum.checkMailNow(event);" />
         </menupopup>
 
         <panel id="gpum-popup" noautofocus="true"
@@ -65,7 +65,7 @@
                   id="gpum-statusbar-icon-box"
                   onclick="gpum.handleStatusBarIconClick(event);" >
                 <image id="gpum-statusbar-icon"
-	               src="chrome://gpum/skin/icon16/gmail-gray.png" />
+                       src="chrome://gpum/skin/icon16/gmail-gray.png" />
                 <label id="gpum-statusbar-count" flex="1" value="-"></label>
             </hbox>
         </statusbarpanel>
