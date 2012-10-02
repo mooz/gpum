@@ -29,4 +29,9 @@
 <!ENTITY config.previewPosition.overlap "overlap">
 <!-- }} -->
 
+<!-- {{ -->
+<!ENTITY config.others "Others">
+<!ENTITY config.markAsReadOnArchive "Mark as read on archive">
+<!-- }} -->
+
 <!ENTITY config.showToolbarButton "Show toolbar button">

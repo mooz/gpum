@@ -29,4 +29,9 @@
 <!ENTITY config.previewPosition.overlap "メッセージに重なるように">
 <!-- }} -->
 
+<!-- {{ -->
+<!ENTITY config.others "その他">
+<!ENTITY config.markAsReadOnArchive "アーカイブしたメッセージを既読にする">
+<!-- }} -->
+
 <!ENTITY config.showToolbarButton "ツールバーボタンを表示">

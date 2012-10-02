@@ -372,6 +372,8 @@
                     break;
                 case archiveLink:
                     gmail.archiveThread(id);
+                    if (util.getBoolPref(util.getPrefKey("markAsReadOnArchive"), false))
+                        gmail.markAsReadThread(id);
                     destroy();
                     break;
                 case star:

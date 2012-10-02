@@ -55,6 +55,9 @@
             <preference id="extensions.gpum.previewPosition"
                         name="extensions.gpum.previewPosition"
                         type="string" />
+            <preference id="extensions.gpum.markAsReadOnArchive"
+                        name="extensions.gpum.markAsReadOnArchive"
+                        type="bool" />
         </preferences>
         <groupbox orient="vertical">
             <caption label="&config.general;" />
@@ -101,6 +104,12 @@
                     <caption label="&config.preview;" />
                     <checkbox id="config.markAsReadOnPreview" label="&config.markAsReadOnPreview;"
                               preference="extensions.gpum.markAsReadOnPreview" />
+                </groupbox>
+
+                <groupbox orient="vertical">
+                    <caption label="&config.others;" />
+                    <checkbox id="config.markAsReadOnArchive" label="&config.markAsReadOnArchive;"
+                              preference="extensions.gpum.markAsReadOnArchive" />
                 </groupbox>
 
                 <button id="config.showToolbarButton" label="&config.showToolbarButton;"
