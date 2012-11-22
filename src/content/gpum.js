@@ -180,7 +180,7 @@
                 onSecurityChange    : function () {},
                 onLinkIconAvailable : function () {}
             };
-            iframe.addProgressListener(onLocationChange, Ci.nsIWebProgress.NOTIFY_STATE_DOCUMENT);
+            iframe.addProgressListener(onLocationChange, Ci.nsIWebProgress.NOTIFY_STATE_DOCUMENT | Ci.nsIWebProgress.NOTIFY_LOCATION);
 
             iframe.addEventListener("click", function (ev) {
                 let elem = ev.target;
