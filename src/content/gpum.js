@@ -426,29 +426,6 @@
                     gpum.closePreview();
             }
 
-            function createTMPFile(cont, name) {
-                let file = util.getSpecialDir("TmpD");
-                file.appendRelativePath(name);
-
-                if (file.exists())
-                    file.remove(true);
-                file.create(file.NORMAL_FILE_TYPE, 0666);
-
-                let stream = Cc['@mozilla.org/network/file-output-stream;1'].createInstance(Ci.nsIFileOutputStream);
-                stream.init(file, 2, 0200, false);
-
-                util.message(cont);
-
-                stream.write(cont, cont.length);
-                stream.flush();
-                stream.close();
-
-                let ios  = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
-                let path = ios.newFileURI(file).spec;
-
-                return path;
-            }
-
             function destroy() {
                 gmail.removeFromUnreads(unread);
                 removeNode();
