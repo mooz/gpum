@@ -380,7 +380,7 @@
                     gmail.starThread(id);
                     break;
                 case title:
-                    let (url = entry.select("link").attr("href").text)
+                    let (url = entry.select("link").attr("href"))
                         openLink(url, !util.getBoolPref(util.getPrefKey("openLinkClosePopup"), false));
                     destroy();
                     break;
