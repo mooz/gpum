@@ -10,7 +10,7 @@ setopt nonomatch
 
 rm -f chrome/gpum.jar
 zip -r -0 chrome/gpum.jar \
-    content/**/*.{js,xul,css,png,gif}~(*~|.svn/*) \
+    content/**/*.{js,xul,xml,css,png,gif}~(*~|.svn/*) \
     locale/**/*~(*~|.svn/*) \
     skin/**/*.*~(*~|.svn/*)
 
