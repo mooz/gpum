@@ -119,7 +119,7 @@ Gmail.prototype = {
     get simpleModeURL() this.mailURL + "h/" + ~~(1000000 * Math.random()) + "/",
     get loginURL() "https://accounts.google.com/ServiceLogin?service=mail",
     get authURL() "https://accounts.google.com/ServiceLoginAuth",
-    get atomURL() this.mailURL + "feed/atom" + this.atomLabel,
+    get atomURL() this.mailURL + "feed/atom/" + this.atomLabel,
 
     getURLRecentFor:
     function getURLRecentFor(addr) {
