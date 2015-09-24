@@ -8,7 +8,7 @@
 
     let util, http, gmail, Gmail;
 
-    function $(id) document.getElementById(id);
+    function $(id) { return document.getElementById(id); };
 
     function loadScript(path, context) {
         Cc["@mozilla.org/moz/jssubscript-loader;1"].getService(Ci.mozIJSSubScriptLoader).loadSubScript(path, context);
@@ -84,7 +84,7 @@
         let statusbarCount = $("gpum-statusbar-count");
 
         const toolbarButtonId = "gpum-toolbar-button";
-        function getToolbarButton() $(toolbarButtonId);
+        function getToolbarButton() { return $(toolbarButtonId); };
 
         let iconBox = $("gpum-statusbar-icon-box");
 
@@ -143,58 +143,56 @@
         let scrollBox = $E("vbox", { flex : 1 });
         unreadContainer.appendChild(scrollBox);
 
-        let (previewTitle = $('gpum-popup4preview-header-title'))
-            previewTitle.addEventListener("click", function (ev) {
-                if (ev.button !== 0)
-                    return;
-                gpum.closePreview();
-                openLink(previewTitle.getAttribute("url"));
+        let previewTitle = $('gpum-popup4preview-header-title');
+        previewTitle.addEventListener("click", function (ev) {
+            if (ev.button !== 0)
+                return;
+            gpum.closePreview();
+            openLink(previewTitle.getAttribute("url"));
 
-                if (typeof previewTitle.__gpumDestroy__ === "function")
-                {
-                    previewTitle.__gpumDestroy__();
-                    previewTitle.__gpumDestroy__ = null;
-                }
-            }, false);
+            if (typeof previewTitle.__gpumDestroy__ === "function")
+            {
+                previewTitle.__gpumDestroy__();
+                previewTitle.__gpumDestroy__ = null;
+            }
+        }, false);
 
-        let (iframe = $('gpum-popup4preview-frame'))
-        {
-            const onLocationChange = {
-                QueryInterface: function (aIID) {
-                    if (aIID.equals(Ci.nsIWebProgressListener)   ||
-                        aIID.equals(Ci.nsISupportsWeakReference) ||
-                        aIID.equals(Ci.nsISupports))
-                        return onLocationChange;
-                    throw Components.results.NS_NOINTERFACE;
-                },
+        let iframe = $('gpum-popup4preview-frame');
+        const onLocationChange = {
+            QueryInterface: function (aIID) {
+                if (aIID.equals(Ci.nsIWebProgressListener)   ||
+                    aIID.equals(Ci.nsISupportsWeakReference) ||
+                    aIID.equals(Ci.nsISupports))
+                    return onLocationChange;
+                throw Components.results.NS_NOINTERFACE;
+            },
 
-                onLocationChange: function (aProgress, aRequest, aURI) {
-                    let { docShell, contentWindow } = iframe;
-                    docShell.allowJavascript = docShell.allowPlugins = docShell.allowSubframes = false;
-                    contentWindow.wrappedJSObject.print = contentWindow.print = function () {};
-                },
+            onLocationChange: function (aProgress, aRequest, aURI) {
+                let { docShell, contentWindow } = iframe;
+                docShell.allowJavascript = docShell.allowPlugins = docShell.allowSubframes = false;
+                contentWindow.wrappedJSObject.print = contentWindow.print = function () {};
+            },
 
-                onStateChange       : function () {},
-                onProgressChange    : function () {},
-                onStatusChange      : function () {},
-                onSecurityChange    : function () {},
-                onLinkIconAvailable : function () {}
-            };
-            iframe.addProgressListener(onLocationChange, Ci.nsIWebProgress.NOTIFY_STATE_DOCUMENT | Ci.nsIWebProgress.NOTIFY_LOCATION);
-
-            iframe.addEventListener("click", function (ev) {
-                let elem = ev.target;
-
-                util.killEvent(ev);
-
-                if (ev.button !== 0)
-                    return;
-
-                let url = getHrefByClimbling(elem, 3);
-                if (url && /^(https?|ftp):\/\//.test(url))
-                    openLink(url, true);
-            }, true);
+            onStateChange       : function () {},
+            onProgressChange    : function () {},
+            onStatusChange      : function () {},
+            onSecurityChange    : function () {},
+            onLinkIconAvailable : function () {}
         };
+        iframe.addProgressListener(onLocationChange, Ci.nsIWebProgress.NOTIFY_STATE_DOCUMENT | Ci.nsIWebProgress.NOTIFY_LOCATION);
+
+        iframe.addEventListener("click", function (ev) {
+            let elem = ev.target;
+
+            util.killEvent(ev);
+
+            if (ev.button !== 0)
+                return;
+
+            let url = getHrefByClimbling(elem, 3);
+            if (url && /^(https?|ftp):\/\//.test(url))
+                openLink(url, true);
+        }, true);
 
         function getHrefByClimbling(elem, depth) {
             if (elem.localName === "a")
@@ -380,13 +378,15 @@
                     gmail.starThread(id);
                     break;
                 case title:
-                    let (url = entry.select("link").attr("href"))
+                    {
+                        let url = entry.select("link").attr("href");
                         openLink(url, !util.getBoolPref(util.getPrefKey("openLinkClosePopup"), false));
-                    destroy();
+                        destroy();
+                    }
                     break;
                 case summary:
-                    let (url = gmail.getThreadBodyURL(id))
                     {
+                        let url = gmail.getThreadBodyURL(id);
                         let popup  = $('gpum-popup4preview');
                         let iframe = $('gpum-popup4preview-frame');
                         let title  = $('gpum-popup4preview-header-title');
@@ -417,7 +417,7 @@
                         }
 
                         popup.openPopup(popupOrigin, "bottomcenter topright");
-                    };
+                    }
 
                     break;
                 }
@@ -442,7 +442,7 @@
         }
 
         function clearEntries() {
-            Array.map(scrollBox.childNodes, function (e) e.__gpumDestroy__).forEach(function (f) f && f());
+            Array.map(scrollBox.childNodes, e => e.__gpumDestroy__).forEach(f => f && f());
         }
 
         let gpum = window.gpum = {
@@ -451,9 +451,9 @@
                 updateViews(v);
                 this._nowChecking = v;
             },
-            get nowChecking() this._nowChecking,
+            get nowChecking() { return this._nowChecking; },
 
-            get toolbarButtonInstalled() !!getToolbarButton(),
+            get toolbarButtonInstalled() { return !!getToolbarButton(); },
 
             installToolbarButton:
             function installToolbarButton() {
@@ -761,6 +761,6 @@
             }
         }
 
-        onFirstRun(function () gpum.installToolbarButton());
+        onFirstRun(() => gpum.installToolbarButton());
     }, false);
 })();

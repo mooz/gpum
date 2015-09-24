@@ -6,7 +6,7 @@
 
      let util;
 
-     function $(id) document.getElementById(id);
+     function $(id) { return document.getElementById(id); };
 
      function loadScript(path, context) {
          Cc["@mozilla.org/moz/jssubscript-loader;1"].getService(Ci.mozIJSSubScriptLoader).loadSubScript(path, context);

@@ -23,7 +23,7 @@ var Notification = (function () {
 
     let { util } = loadModule("util.jsm", {});
 
-    function $(id) document.getElementById(id);
+    function $(id) { return document.getElementById(id); };
 
     function Timer(callback, duration) {
         var self = this;
@@ -93,11 +93,11 @@ var Notification = (function () {
         timer: null,
         duration: 3000,
 
-        get container() $("notification-container"),
-        get imageElement() $("notification-image"),
-        get titleElement() $("notification-title"),
-        get messageContainerElement() $("notification-message-container"),
-        get bodyElement() $("notification-body"),
+        get container() { return $("notification-body"); },
+        get imageElement() { return $("notification-body"); },
+        get titleElement() { return $("notification-body"); },
+        get messageContainerElement() { return $("notification-body"); },
+        get bodyElement() { return $("notification-body"); },
 
         beforeOnLoad: function () {
             let context = window.arguments[0];
