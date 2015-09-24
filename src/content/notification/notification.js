@@ -80,7 +80,7 @@ var Notification = (function () {
 
         startTimeout: function (msec) {
             this.checkpoint();
-            this.timer = setTimeout(this.callback, msec);
+            this.timer = setTimeout(() => this.callback(), msec);
         },
 
         ensureNotFinished: function () {
