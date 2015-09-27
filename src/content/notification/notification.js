@@ -93,10 +93,10 @@ var Notification = (function () {
         timer: null,
         duration: 3000,
 
-        get container() { return $("notification-body"); },
-        get imageElement() { return $("notification-body"); },
-        get titleElement() { return $("notification-body"); },
-        get messageContainerElement() { return $("notification-body"); },
+        get container() { return $("notification-container"); },
+        get imageElement() { return $("notification-image"); },
+        get titleElement() { return $("notification-title"); },
+        get messageContainerElement() { return $("notification-message-container"); },
         get bodyElement() { return $("notification-body"); },
 
         beforeOnLoad: function () {
