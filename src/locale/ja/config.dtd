@@ -1,5 +1,8 @@
 <!ENTITY config.title "GPUM の設定">
 
+<!ENTITY config.appearance "見た目">
+<!ENTITY config.notificationFontSize "ポップアップの文字サイズ (px)">
+<!ENTITY config.panelFontSize "パネルの文字サイズ (px)">
 <!ENTITY config.general "一般">
 <!ENTITY config.about "情報">
 

@@ -11,3 +11,5 @@ pref("extensions.gpum.notificationDisplayDuration", 8);
 pref("extensions.gpum.notificationCropCharacterCount", 30);
 pref("extensions.gpum.shouldCropLabel", true);
 
+pref("extensions.gpum.panelFontSize", 15);
+pref("extensions.gpum.notificationFontSize", 15);

@@ -1,5 +1,9 @@
 <!ENTITY config.title "GPUM settings">
 
+<!ENTITY config.appearance "Appearance">
+<!ENTITY config.notificationFontSize "Notification font size (px)">
+<!ENTITY config.panelFontSize "Panel font size (px)">
+
 <!ENTITY config.general "General">
 <!ENTITY config.about "About">
 

@@ -35,13 +35,13 @@ window {
 }
 
 #notification-title {
-    font-size   : x-small;
+    /* font-size   : small; */
     font-weight : bold;
     padding     : 0 4px;
 }
 
 #notification-message-container description {
-    font-size  : x-small;
+    /* font-size  : small; */
 }
 
 /* ============================================================

@@ -16,6 +16,12 @@
 
     <prefpane id="prefpane-general" label="&config.general;" flex="1" onpaneload="">
         <preferences>
+            <preference id="extensions.gpum.notificationFontSize"
+                        name="extensions.gpum.notificationFontSize"
+                        type="int" />
+            <preference id="extensions.gpum.panelFontSize"
+                        name="extensions.gpum.panelFontSize"
+                        type="int" />
             <preference id="extensions.gpum.updateInterval"
                         name="extensions.gpum.updateInterval"
                         type="int" />
@@ -59,6 +65,30 @@
                         name="extensions.gpum.markAsReadOnArchive"
                         type="bool" />
         </preferences>
+
+        <groupbox orient="vertical">
+          <caption label="&config.appearance;" />
+          <vbox flex="1">
+            <hbox align="center">
+              <label >&config.panelFontSize;: </label>
+              <textbox id="config.panelFontSize"
+                       type="number"
+                       preference="extensions.gpum.panelFontSize"
+                       min="8"
+                       max="100" />
+            </hbox>
+
+            <hbox align="center">
+              <label >&config.notificationFontSize;: </label>
+              <textbox id="config.notificationFontSize"
+                       type="number"
+                       preference="extensions.gpum.notificationFontSize"
+                       min="8"
+                       max="100" />
+            </hbox>
+          </vbox>
+        </groupbox>
+
         <groupbox orient="vertical">
             <caption label="&config.general;" />
             <vbox flex="1">

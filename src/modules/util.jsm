@@ -413,6 +413,33 @@ const util = {
         src = src.replace(/^<\?xml\s+version\s*=\s*(?:"[^"]+"|'[^']+')[^?]*\?>/, "");
         var domParser = util.createDOMParser();
         return domParser.parseFromString(src, "text/xml");
+    },
+
+    // ============================================================ //
+    // Style
+    // ============================================================ //
+
+    registeredStyles: {},
+    registerGlobalStyle:
+    function registerGlobalStyle(name, style) {
+        let styleService = Cc["@mozilla.org/content/style-sheet-service;1"]
+                .getService(Ci.nsIStyleSheetService);
+        if (this.registeredStyles.hasOwnProperty(name)) {
+            // Unregister if exists
+            styleService.unregisterSheet(this.registeredStyles[name], styleService.USER_SHEET);
+            delete this.registeredStyles[name];
+        }
+        // Register style with name
+        this.registeredStyles[name] = this.constructStyleDataURI(style);
+        styleService.loadAndRegisterSheet(this.registeredStyles[name], styleService.USER_SHEET);
+    },
+
+    constructStyleDataURI:
+    function constructStyleDataURI(style) {
+        var ios = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+        var namespace = "@namespace url('http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul');";
+        return ios.newURI("data:text/css," + encodeURIComponent(namespace + style),
+                          null, null);
     }
 };
 

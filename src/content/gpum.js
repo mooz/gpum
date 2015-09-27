@@ -387,7 +387,7 @@
                 case summary:
                     {
                         let url = gmail.getThreadBodyURL(id);
-                        let popup  = $('gpum-popup4preview');
+                        let previewWindow  = $('gpum-popup4preview');
                         let iframe = $('gpum-popup4preview-frame');
                         let title  = $('gpum-popup4preview-header-title');
 
@@ -416,7 +416,7 @@
                             destroy();
                         }
 
-                        popup.openPopup(popupOrigin, "bottomcenter topright");
+                        previewWindow.openPopup(popupOrigin, "bottomcenter topright");
                     }
 
                     break;
@@ -454,6 +454,22 @@
             get nowChecking() { return this._nowChecking; },
 
             get toolbarButtonInstalled() { return !!getToolbarButton(); },
+
+            get panelFontSize() {
+                return util.getIntPref(util.getPrefKey("panelFontSize")) + "px";
+            },
+
+            get notificationFontSize() {
+                return util.getIntPref(util.getPrefKey("notificationFontSize")) + "px";
+            },
+            openPopup:
+            function openPopup(origin) {
+                util.registerGlobalStyle("popup",
+                                         `
+#gpum-popup label { font-size : ${gpum.panelFontSize} !important; }
+                                         `);
+                popup.openPopup(origin, "bottomcenter topright");
+            },
 
             installToolbarButton:
             function installToolbarButton() {
@@ -509,6 +525,10 @@
 
             showNotification:
             function showNotification(title, message, onClick) {
+                util.registerGlobalStyle("notification",
+                                         `
+#notification-title, #notification-message-container description { font-size: ${gpum.notificationFontSize} !important; }
+                                         `);
                 util.showPopup(title, message, {
                     icon: "chrome://gpum/skin/icon64/gmail64.png",
                     clickable: typeof onClick === "function",
@@ -639,7 +659,7 @@
 
                     inboxLabel.textContent = gmail.xml.select("title").text.replace(/^Gmail - /, "");
 
-                    popup.openPopup(ev.originalTarget, "bottomcenter topright");
+                    gpum.openPopup(ev.originalTarget);
                 }
             },
 
@@ -692,7 +712,7 @@
                     document.documentElement.removeChild(popup);
                 }, false);
 
-                popup.openPopup(ev.originalTarget, "bottomcenter topright");
+                gpum.openPopup(ev.originalTarget);
             },
 
             login:
