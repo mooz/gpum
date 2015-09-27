@@ -14,7 +14,6 @@
         <em:homepageURL>http://github.com/mooz/gpum/</em:homepageURL>
         <em:optionsURL>chrome://gpum/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://gpum/skin/icon32/gpum.png</em:iconURL>
-        <em:unpack>true</em:unpack>
         <!-- en-US -->
         <em:description>Manage unread mail in the Google mail</em:description>
         <!-- ja -->
