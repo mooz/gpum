@@ -79,7 +79,7 @@
     window.addEventListener("load", function () {
         window.removeEventListener("load", arguments.callee, false);
 
-        let popup          = $("gpum-popup");
+        let mailListPopup  = $("gpum-popup");
         let statusbarIcon  = $("gpum-statusbar-icon");
         let statusbarCount = $("gpum-statusbar-count");
 
@@ -107,7 +107,7 @@
         document.addEventListener(gmail.UPDATE_EVENT, handleUpdate, false);
 
         let unreadContainer = $E("vbox", { flex : 1 });
-        popup.appendChild(unreadContainer);
+        mailListPopup.appendChild(unreadContainer);
 
         // ============================================================ //
 
@@ -269,7 +269,7 @@
                 url = url.replace(/^http:\/\/mail\.google\.com\//, "https://mail.google.com/");
             util.visitLink(url);
             if (!cont)
-                popup.hidePopup();
+                mailListPopup.hidePopup();
         }
 
         function appendEntry(scrollBox, unread) {
@@ -462,13 +462,13 @@
             get notificationFontSize() {
                 return util.getIntPref(util.getPrefKey("notificationFontSize")) + "px";
             },
-            openPopup:
-            function openPopup(origin) {
+            openMailListPopup:
+            function openMailListPopup(origin) {
                 util.registerGlobalStyle("popup",
                                          `
 #gpum-popup label { font-size : ${gpum.panelFontSize} !important; }
                                          `);
-                popup.openPopup(origin, "bottomcenter topright");
+                mailListPopup.openPopup(origin, "bottomcenter topright");
             },
 
             installToolbarButton:
@@ -659,7 +659,7 @@
 
                     inboxLabel.textContent = gmail.xml.select("title").text.replace(/^Gmail - /, "");
 
-                    gpum.openPopup(ev.originalTarget);
+                    gpum.openMailListPopup(ev.originalTarget);
                 }
             },
 
@@ -672,7 +672,7 @@
                     }
                 });
 
-                let popup = $E("menupopup");
+                let loginMenuPopup = $E("menupopup");
 
                 let shouldInsertSeparator = false;
                 for (let [username, password] in Iterator(collectedLogins)) {
@@ -682,19 +682,19 @@
                         value : password
                     });
 
-                    popup.appendChild(menuItem);
+                    loginMenuPopup.appendChild(menuItem);
                 }
                 if (shouldInsertSeparator)
-                    popup.appendChild($E("menuseparator"));
+                    loginMenuPopup.appendChild($E("menuseparator"));
 
-                popup.appendChild($E("menuitem", {
+                loginMenuPopup.appendChild($E("menuitem", {
                     label : util.getLocaleString("openLoginPage")
                 }));
 
-                document.documentElement.appendChild(popup);
+                document.documentElement.appendChild(loginMenuPopup);
 
-                popup.addEventListener("command", function (ev) {
-                    popup.removeEventListener("command", arguments.callee, false);
+                loginMenuPopup.addEventListener("command", function (ev) {
+                    loginMenuPopup.removeEventListener("command", arguments.callee, false);
 
                     let elem  = ev.target;
 
@@ -707,12 +707,12 @@
                         gmail.openLoginPage();
                 }, false);
 
-                popup.addEventListener("popuphidden", function (ev) {
-                    popup.removeEventListener("popuphidden", arguments.callee, false);
-                    document.documentElement.removeChild(popup);
+                loginMenuPopup.addEventListener("popuphidden", function (ev) {
+                    loginMenuPopup.removeEventListener("popuphidden", arguments.callee, false);
+                    document.documentElement.removeChild(loginMenuPopup);
                 }, false);
 
-                gpum.openPopup(ev.originalTarget);
+                loginMenuPopup.openPopup(ev.originalTarget);
             },
 
             login:
